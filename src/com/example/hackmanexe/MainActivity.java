@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 	private TextView textdirection, textShape, textPosition;
 	private String logDirection, logShape, logPosition;
 	private int height, width;
-	private final int tapSensitivity = 20;
+	private final int flickSensitivity = 20;
 	private Field field;
 	//private int flag = -1;
 	private Player player;
@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
 				upX = event.getX();
 				upY = event.getY();
 				// 上下左右の判定
-				if (Math.abs(downX - upX) - Math.abs(downY - upY) > tapSensitivity) { // 左右
+				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity) { // 左右
 					if (downX > upX) {
 						if (width / 2 > downX) {
 							logDirection = "left";
@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
 							logShape = "○";
 						}
 					}
-				} else if (Math.abs(downY - upY) - Math.abs(downX - upX) > tapSensitivity) { // 上下
+				} else if (Math.abs(downY - upY) - Math.abs(downX - upX) > flickSensitivity) { // 上下
 					if (downY > upY) {
 						if (width / 2 > downX) {
 							logDirection = "up";
