@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +24,8 @@ public class MainActivity extends Activity {
 	private Field field;
 	//private int flag = -1;
 	private Player player;
+	private View drawGrid;
+	public static Canvas canvas;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
 		textShape = (TextView) findViewById(R.id.log_shape);
 		textPosition = (TextView) findViewById(R.id.log_position);
 		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.root_layout);
-		View drawGrid = new DrawGrid(this);
+		drawGrid = new DrawGrid(this);
 		frameLayout.addView(drawGrid);
 		DrawingPosition.prepareDrawing(width, height);
 		field = new Field();
@@ -66,6 +67,8 @@ public class MainActivity extends Activity {
 							player.moveLeft();
 						} else {
 							logShape = "□";
+							player.addAction(new AttackAction(80, 200, "100100100")); //ex)ソードのチップを加える
+							player.action();
 							//flag *= -1;
 						}
 					} else {
@@ -105,7 +108,6 @@ public class MainActivity extends Activity {
 					textShape.setText(logShape);
 					textdirection.setText("");
 				}
-				Log.d("position", player.getCurrentFrameInfoToString());
 				textPosition.setText(player.getCurrentFrameInfoToString());
 				break;
 		}
@@ -142,16 +144,6 @@ public class MainActivity extends Activity {
 			canvas.drawLine(width * 5 / 6, 0, width * 5 / 6, height, paint);
 
 			paint.reset();
-
-//			if (flag == 1) {
-//				paint.setColor(Color.RED);
-//				paint.setStrokeWidth(20);
-//				canvas.drawLine(width / 2, 0, width / 2, height, paint);
-//				canvas.drawLine(width * 2 / 3, 0, width * 2 / 3, height, paint);
-//				canvas.drawLine(width / 2, 0, width * 2 / 3, 0, paint);
-//				canvas.drawLine(width / 2, height, width * 2 / 3, height, paint);
-//				paint.reset();
-//			}
 
 			// 自機位置描画
 			paint.setStyle(Paint.Style.STROKE);

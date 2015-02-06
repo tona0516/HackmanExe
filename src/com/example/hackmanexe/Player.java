@@ -1,10 +1,41 @@
 package com.example.hackmanexe;
 
+import java.util.ArrayList;
+
 public class Player extends FieldObject{
 	private int HP;
+	private ArrayList<Action> actionList;
 
 	public Player(FrameInfo frameInfo) {
 		super(frameInfo);
+		setActionList(new ArrayList<Action>());
+	}
+
+	public boolean action(){
+		if(actionList.get(0) instanceof AttackAction){
+			AttackAction aa = (AttackAction)actionList.get(0);
+			aa.attack();
+			actionList.remove(0);
+			return true;
+		}else if(actionList.get(0) instanceof SupportAction){
+			SupportAction sa = (SupportAction)actionList.get(0);
+			sa.support();
+			actionList.remove(0);
+			return true;
+		}
+		return false;
+	}
+
+	public void addAction(Action a){
+		actionList.add(a);
+	}
+
+	public ArrayList<Action> getActionList() {
+		return actionList;
+	}
+
+	public void setActionList(ArrayList<Action> actionList) {
+		this.actionList = actionList;
 	}
 
 	public boolean moveUp() {

@@ -1,4 +1,7 @@
 package com.example.hackmanexe;
+
+import android.util.Log;
+
 /**
  *
  * @author meem
@@ -7,5 +10,8 @@ package com.example.hackmanexe;
 public class SupportAction extends Action{
 	public SupportAction() {
 		super();
+	}
+	public void support(){
+		Log.d(this.toString(), "support");
 	}
 }
