@@ -13,9 +13,15 @@ class Field {
 		for (int i = 0; i < 9; i++) {
 			frameInfo[i] = new FrameInfo(i);
 		}
-		// 移動方向の割り当て
 		makeNode();
-		currentFrameInfo = frameInfo[4];
+	}
+
+	public void setFrameInfo(FrameInfo[] frameInfo) {
+		this.frameInfo = frameInfo;
+	}
+
+	public FrameInfo[] getFrameInfo() {
+		return frameInfo;
 	}
 
 	public FrameInfo getCurrentFrameInfo() {
@@ -26,6 +32,9 @@ class Field {
 		this.currentFrameInfo = currentFrameInfo;
 	}
 
+	/**
+	 * 各枠の位置関係を設定
+	 */
 	private void makeNode() {
 		frameInfo[0].setRight(frameInfo[1]);
 		frameInfo[0].setDown(frameInfo[3]);

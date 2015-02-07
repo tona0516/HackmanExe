@@ -2,7 +2,6 @@ package com.example.hackmanexe;
 
 import android.util.Log;
 
-
 /**
  * @author meem 攻撃の情報を
  */
@@ -19,7 +18,7 @@ public class AttackAction extends Action {
 
 	public void attack() {
 		Log.d(this.toString(), "attack");
-		}
+	}
 
 	public int getAttackPower() {
 		return power;

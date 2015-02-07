@@ -49,6 +49,19 @@ public class DrawingPosition {
 		return new Area();
 	}
 
+	/**
+	 *
+	 * @author meem
+	 * 0・・・左上
+	 * 1・・・上中央
+	 * 2・・・右上
+	 * 3・・・中段左
+	 * 4・・・中央
+	 * 5・・・中段右
+	 * 6・・・左下
+	 * 7・・・下中央
+	 * 8・・・右下
+	 */
 	public static class Area {
 		public PointF[] pointF;
 		public Area() {

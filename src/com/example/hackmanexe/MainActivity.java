@@ -22,54 +22,71 @@ public class MainActivity extends Activity {
 	private int height, width;
 	private final int flickSensitivity = 20;
 	private Field field;
-	//private int flag = -1;
 	private Player player;
 	private View drawGrid;
 	public static Canvas canvas;
 
+	/**
+	 * ここから実行
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		//画面サイズの取得
 		WindowManager wm = getWindowManager();
 		Display disp = wm.getDefaultDisplay();
 		Point point = new Point();
 		disp.getSize(point);
 		height = point.y;
 		width = point.x;
+
+		//height,widthから敵・味方エリアのの位置座標を計算
+		DrawingPosition.prepareDrawing(width, height);
+		//こんな感じで使う
+		//味方エリアの左上の座標を取得
+		float x =DrawingPosition.playerArea.pointF[0].x;
+		//敵エリアの中央の座標を取得
+		float y =DrawingPosition.enemyArea.pointF[4].y;
+
+		//画面上部に表示する情報
 		textdirection = (TextView) findViewById(R.id.log_direction);
 		textShape = (TextView) findViewById(R.id.log_shape);
 		textPosition = (TextView) findViewById(R.id.log_position);
+
+		//描画を行うViewを加える
 		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.root_layout);
 		drawGrid = new DrawGrid(this);
 		frameLayout.addView(drawGrid);
-		DrawingPosition.prepareDrawing(width, height);
+
+		//フィールドオブジェクトの生成
 		field = new Field();
-		player = new Player(field.getCurrentFrameInfo());
+
+		//枠の中央にプレイヤーオブジェクトの生成
+		player = new Player(field.getFrameInfo()[4]);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN :
+			case MotionEvent.ACTION_DOWN : //画面に触れた時
 				downX = event.getX();
 				downY = event.getY();
 				break;
-			case MotionEvent.ACTION_UP :
+			case MotionEvent.ACTION_UP : //画面から離れた時
 				upX = event.getX();
 				upY = event.getY();
 				// 上下左右の判定
-				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity) { // 左右
+				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity) { // 左右の移動量が多い
 					if (downX > upX) {
-						if (width / 2 > downX) {
+						if (width / 2 > downX) { //タッチ座標が画面左
 							logDirection = "left";
-							player.moveLeft();
+							player.moveLeft(); //プレイヤーを左に動かす
 						} else {
 							logShape = "□";
 							player.addAction(new AttackAction(80, 200, "100100100")); //ex)ソードのチップを加える
 							player.action();
-							//flag *= -1;
 						}
 					} else {
 						if (width / 2 > downX) {
