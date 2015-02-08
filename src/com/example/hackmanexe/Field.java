@@ -5,66 +5,100 @@ package com.example.hackmanexe;
  * バトルフィールドの情報を保持するクラス
  */
 class Field {
-	private FrameInfo[] frameInfo = new FrameInfo[9];
-	private FrameInfo currentFrameInfo;
+	private FrameInfo[] playerFrameInfo = new FrameInfo[9];
+	private FrameInfo[] ememyFrameInfo = new FrameInfo[9];
 
 	public Field() {
 		// FrameInfoオブジェクトの初期化
 		for (int i = 0; i < 9; i++) {
-			frameInfo[i] = new FrameInfo(i);
+			playerFrameInfo[i] = new FrameInfo(i);
+			ememyFrameInfo[i] = new FrameInfo(i);
 		}
 		makeNode();
 	}
 
-	public void setFrameInfo(FrameInfo[] frameInfo) {
-		this.frameInfo = frameInfo;
+	public void setPlayerFrameInfo(FrameInfo[] playerFrameInfo) {
+		this.playerFrameInfo = playerFrameInfo;
 	}
 
-	public FrameInfo[] getFrameInfo() {
-		return frameInfo;
+	public FrameInfo[] getPlayerFrameInfo() {
+		return playerFrameInfo;
 	}
 
-	public FrameInfo getCurrentFrameInfo() {
-		return currentFrameInfo;
+	public void setEmemyFrameInfo(FrameInfo[] ememyFrameInfo) {
+		this.ememyFrameInfo = ememyFrameInfo;
 	}
 
-	public void setCurrentFrameInfo(FrameInfo currentFrameInfo) {
-		this.currentFrameInfo = currentFrameInfo;
+	public FrameInfo[] getEmemyFrameInfo() {
+		return ememyFrameInfo;
 	}
 
 	/**
 	 * 各枠の位置関係を設定
 	 */
 	private void makeNode() {
-		frameInfo[0].setRight(frameInfo[1]);
-		frameInfo[0].setDown(frameInfo[3]);
-		frameInfo[1].setLeft(frameInfo[0]);
-		frameInfo[1].setDown(frameInfo[4]);
-		frameInfo[1].setRight(frameInfo[2]);
-		frameInfo[2].setLeft(frameInfo[1]);
-		frameInfo[2].setDown(frameInfo[5]);
-		frameInfo[3].setUp(frameInfo[0]);
-		frameInfo[3].setRight(frameInfo[4]);
-		frameInfo[3].setDown(frameInfo[6]);
-		frameInfo[4].setUp(frameInfo[1]);
-		frameInfo[4].setDown(frameInfo[7]);
-		frameInfo[4].setRight(frameInfo[5]);
-		frameInfo[4].setLeft(frameInfo[3]);
-		frameInfo[5].setUp(frameInfo[2]);
-		frameInfo[5].setLeft(frameInfo[4]);
-		frameInfo[5].setDown(frameInfo[8]);
-		frameInfo[6].setUp(frameInfo[3]);
-		frameInfo[6].setRight(frameInfo[7]);
-		frameInfo[7].setUp(frameInfo[4]);
-		frameInfo[7].setRight(frameInfo[8]);
-		frameInfo[7].setLeft(frameInfo[6]);
-		frameInfo[8].setUp(frameInfo[5]);
-		frameInfo[8].setLeft(frameInfo[7]);
+		//プレイヤーエリアのノード設定
+		playerFrameInfo[0].setRight(playerFrameInfo[1]);
+		playerFrameInfo[0].setDown(playerFrameInfo[3]);
+		playerFrameInfo[1].setLeft(playerFrameInfo[0]);
+		playerFrameInfo[1].setDown(playerFrameInfo[4]);
+		playerFrameInfo[1].setRight(playerFrameInfo[2]);
+		playerFrameInfo[2].setLeft(playerFrameInfo[1]);
+		playerFrameInfo[2].setDown(playerFrameInfo[5]);
+		playerFrameInfo[3].setUp(playerFrameInfo[0]);
+		playerFrameInfo[3].setRight(playerFrameInfo[4]);
+		playerFrameInfo[3].setDown(playerFrameInfo[6]);
+		playerFrameInfo[4].setUp(playerFrameInfo[1]);
+		playerFrameInfo[4].setDown(playerFrameInfo[7]);
+		playerFrameInfo[4].setRight(playerFrameInfo[5]);
+		playerFrameInfo[4].setLeft(playerFrameInfo[3]);
+		playerFrameInfo[5].setUp(playerFrameInfo[2]);
+		playerFrameInfo[5].setLeft(playerFrameInfo[4]);
+		playerFrameInfo[5].setDown(playerFrameInfo[8]);
+		playerFrameInfo[6].setUp(playerFrameInfo[3]);
+		playerFrameInfo[6].setRight(playerFrameInfo[7]);
+		playerFrameInfo[7].setUp(playerFrameInfo[4]);
+		playerFrameInfo[7].setRight(playerFrameInfo[8]);
+		playerFrameInfo[7].setLeft(playerFrameInfo[6]);
+		playerFrameInfo[8].setUp(playerFrameInfo[5]);
+		playerFrameInfo[8].setLeft(playerFrameInfo[7]);
+
+		//エネミーエリアのノード設定
+		ememyFrameInfo[0].setRight(ememyFrameInfo[1]);
+		ememyFrameInfo[0].setDown(ememyFrameInfo[3]);
+		ememyFrameInfo[1].setLeft(ememyFrameInfo[0]);
+		ememyFrameInfo[1].setDown(ememyFrameInfo[4]);
+		ememyFrameInfo[1].setRight(ememyFrameInfo[2]);
+		ememyFrameInfo[2].setLeft(ememyFrameInfo[1]);
+		ememyFrameInfo[2].setDown(ememyFrameInfo[5]);
+		ememyFrameInfo[3].setUp(ememyFrameInfo[0]);
+		ememyFrameInfo[3].setRight(ememyFrameInfo[4]);
+		ememyFrameInfo[3].setDown(ememyFrameInfo[6]);
+		ememyFrameInfo[4].setUp(ememyFrameInfo[1]);
+		ememyFrameInfo[4].setDown(ememyFrameInfo[7]);
+		ememyFrameInfo[4].setRight(ememyFrameInfo[5]);
+		ememyFrameInfo[4].setLeft(ememyFrameInfo[3]);
+		ememyFrameInfo[5].setUp(ememyFrameInfo[2]);
+		ememyFrameInfo[5].setLeft(ememyFrameInfo[4]);
+		ememyFrameInfo[5].setDown(ememyFrameInfo[8]);
+		ememyFrameInfo[6].setUp(ememyFrameInfo[3]);
+		ememyFrameInfo[6].setRight(ememyFrameInfo[7]);
+		ememyFrameInfo[7].setUp(ememyFrameInfo[4]);
+		ememyFrameInfo[7].setRight(ememyFrameInfo[8]);
+		ememyFrameInfo[7].setLeft(ememyFrameInfo[6]);
+		ememyFrameInfo[8].setUp(ememyFrameInfo[5]);
+		ememyFrameInfo[8].setLeft(ememyFrameInfo[7]);
+
 
 		// 描画位置設定
 		for (int i = 0; i < 9; i++) {
-			frameInfo[i].setDrawX(DrawingPosition.playerArea.pointF[i].x);
-			frameInfo[i].setDrawY(DrawingPosition.playerArea.pointF[i].y);
+			playerFrameInfo[i].setDrawX(DrawingPosition.playerArea.pointF[i].x);
+			playerFrameInfo[i].setDrawY(DrawingPosition.playerArea.pointF[i].y);
+		}
+
+		for(int j = 0;j < 9;j++){
+			ememyFrameInfo[j].setDrawX(DrawingPosition.enemyArea.pointF[j].x);
+			ememyFrameInfo[j].setDrawY(DrawingPosition.enemyArea.pointF[j].y);
 		}
 	}
 }

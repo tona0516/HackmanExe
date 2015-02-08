@@ -2,8 +2,10 @@ package com.example.hackmanexe;
 
 import java.util.ArrayList;
 
+import android.view.SurfaceHolder;
+
 public class Player extends FieldObject{
-	private int HP;
+	private int HP = 320;
 	private ArrayList<Action> actionList;
 
 	public Player(FrameInfo frameInfo) {
@@ -11,10 +13,10 @@ public class Player extends FieldObject{
 		setActionList(new ArrayList<Action>());
 	}
 
-	public boolean action(){
+	public boolean action(SurfaceHolder holder){
 		if(actionList.get(0) instanceof AttackAction){
 			AttackAction aa = (AttackAction)actionList.get(0);
-			aa.attack();
+			aa.attack(holder);
 			actionList.remove(0);
 			return true;
 		}else if(actionList.get(0) instanceof SupportAction){
@@ -106,5 +108,13 @@ public class Player extends FieldObject{
 				break;
 		}
 		return FrameInfoStr;
+	}
+
+	public int getHP() {
+		return HP;
+	}
+
+	public void setHP(int hP) {
+		HP = hP;
 	}
 }
