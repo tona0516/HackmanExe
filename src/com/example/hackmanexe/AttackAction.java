@@ -27,11 +27,8 @@ public class AttackAction extends Action {
 
 		for (int i = 0; i < 9; i++) {
 			if (range.charAt(i) == '1') {
-//				multiThread mt = new multiThread(i);
-//				mt.run();
-				MainActivity.t[i].setVisibility(View.VISIBLE);
-				MainActivity.t[i].setAnimation(aa);
-				MainActivity.t[i].setVisibility(View.INVISIBLE);
+				multiThread mt = new multiThread(i);
+				mt.run();
 				if (ObjectSurfaceView.metall.getCurrentFrameInfo().getIndex() == i) {// 当たり判定
 					if (ObjectSurfaceView.metall.getHP() - power > 0) {
 						ObjectSurfaceView.metall.setHP(ObjectSurfaceView.metall.getHP() - power);

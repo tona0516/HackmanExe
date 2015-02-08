@@ -139,24 +139,26 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 
 	private void doDraw() {
 		Canvas canvas = holder.lockCanvas();
-		canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
-		// 自機描画
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeWidth(10);
-		canvas.drawCircle(player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY(), 100, paint);
-		paint.reset();
-		// 自機HP描画
-		paint.setTextSize(100);
-		canvas.drawText("" + player.getHP(), player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY() + 200, paint);
+		if (canvas != null) {
+			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
+			// 自機描画
+			paint.setStyle(Paint.Style.STROKE);
+			paint.setStrokeWidth(10);
+			canvas.drawCircle(player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY(), 100, paint);
+			paint.reset();
+			// 自機HP描画
+			paint.setTextSize(100);
+			canvas.drawText("" + player.getHP(), player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY() + 200, paint);
 
-		// 敵描画
-		paint.setStyle(Paint.Style.FILL);
-		paint.setStrokeWidth(10);
-		canvas.drawCircle(metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY(), 100, paint);
-		paint.reset();
-		// 敵HP描画
-		paint.setTextSize(100);
-		canvas.drawText("" + metall.getHP(), metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY() + 200, paint);
-		holder.unlockCanvasAndPost(canvas);
+			// 敵描画
+			paint.setStyle(Paint.Style.FILL);
+			paint.setStrokeWidth(10);
+			canvas.drawCircle(metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY(), 100, paint);
+			paint.reset();
+			// 敵HP描画
+			paint.setTextSize(100);
+			canvas.drawText("" + metall.getHP(), metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY() + 200, paint);
+			holder.unlockCanvasAndPost(canvas);
+		}
 	}
 }
