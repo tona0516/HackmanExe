@@ -33,7 +33,7 @@ public class EffectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		Paint paint = new Paint();
 		paint.setTextSize(100);
 		Log.d(this.toString(), "run");
-		canvas.drawText("hit", DrawingPosition.enemyArea.pointF[4].x, DrawingPosition.enemyArea.pointF[4].y, paint);
+		canvas.drawText("hit", DrawingPosition.enemyArea.centerPoint[4].x, DrawingPosition.enemyArea.centerPoint[4].y, paint);
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {

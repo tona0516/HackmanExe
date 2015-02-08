@@ -92,13 +92,13 @@ class Field {
 
 		// 描画位置設定
 		for (int i = 0; i < 9; i++) {
-			playerFrameInfo[i].setDrawX(DrawingPosition.playerArea.pointF[i].x);
-			playerFrameInfo[i].setDrawY(DrawingPosition.playerArea.pointF[i].y);
+			playerFrameInfo[i].setDrawX(DrawingPosition.playerArea.centerPoint[i].x);
+			playerFrameInfo[i].setDrawY(DrawingPosition.playerArea.centerPoint[i].y);
 		}
 
 		for(int j = 0;j < 9;j++){
-			ememyFrameInfo[j].setDrawX(DrawingPosition.enemyArea.pointF[j].x);
-			ememyFrameInfo[j].setDrawY(DrawingPosition.enemyArea.pointF[j].y);
+			ememyFrameInfo[j].setDrawX(DrawingPosition.enemyArea.centerPoint[j].x);
+			ememyFrameInfo[j].setDrawY(DrawingPosition.enemyArea.centerPoint[j].y);
 		}
 	}
 }

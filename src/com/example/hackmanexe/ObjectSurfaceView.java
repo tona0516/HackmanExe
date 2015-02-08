@@ -85,7 +85,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveLeft(); // プレイヤーを左に動かす
 						} else {
 							logShape = "□";
-							player.addAction(new AttackAction(80, 200, "010010010")); // ex)敵エリアの中央に攻撃
+							player.addAction(new AttackAction(10, -1, "111001111")); // ex)ブーメラン
 							player.action(holder);
 						}
 					} else {
@@ -94,6 +94,8 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveRight();
 						} else {
 							logShape = "○";
+							player.addAction(new AttackAction(10, -1, "001001001")); // ex)バンブーランス
+							player.action(holder);
 						}
 					}
 				} else if (Math.abs(downY - upY) - Math.abs(downX - upX) > flickSensitivity) { // 上下
