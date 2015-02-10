@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import android.view.SurfaceHolder;
 
 public class Player extends FieldObject{
-	private int HP = 320;
+	private int HP;
 	private ArrayList<Action> actionList;
 
-	public Player(FrameInfo frameInfo) {
-		super(frameInfo);
+	public Player(FrameInfo currentFrameInfo, int HP) {
+		super(currentFrameInfo);
 		setActionList(new ArrayList<Action>());
+		setHP(HP);
 	}
 
 	public boolean action(SurfaceHolder holder){
@@ -114,7 +115,7 @@ public class Player extends FieldObject{
 		return HP;
 	}
 
-	public void setHP(int hP) {
-		HP = hP;
+	public void setHP(int HP) {
+		this.HP = HP;
 	}
 }

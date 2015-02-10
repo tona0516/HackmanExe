@@ -2,7 +2,7 @@ package com.example.hackmanexe;
 /**
  *
  * @author meem
- * 各枠の情報を保持するクラス
+ * 各枠の位置関係を保持するクラス
  */
 class FrameInfo {
 	private FrameInfo up = null;

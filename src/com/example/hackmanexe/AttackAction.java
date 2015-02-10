@@ -1,6 +1,5 @@
 package com.example.hackmanexe;
 
-import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -12,7 +11,6 @@ public class AttackAction extends Action {
 	private int power; // 攻撃力
 	private float msec; // 有効時間
 	private String range; // 範囲
-	private Canvas canvas;
 	private AlphaAnimation aa;
 	public AttackAction(int power, float time, String range) {
 		super();

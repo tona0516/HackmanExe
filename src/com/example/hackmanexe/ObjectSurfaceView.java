@@ -12,20 +12,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
-	private Paint paint;
 	private float width, height;
-	private float downX, downY, upX, upY;
-	// private TextView textdirection, textShape, textPosition;
-	private String logDirection, logShape, logPosition;
+	private float downX, downY, upX, upY; //タッチ座標,離れた座標
+	private String logDirection, logShape;
 	private final int flickSensitivity = 20;
-	private Field field;
 	public static Player player;
 	public static Enemy metall;
 	private Thread thread;
 	private SurfaceHolder holder;
 	public ObjectSurfaceView(Context context, float width, float height) {
 		super(context);
-		paint = new Paint();
+		this.width = width;
+		this.height = height;
 		// 半透明を設定
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		// コールバック登録
@@ -34,19 +32,13 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		setFocusable(true);
 		// このViewをトップにする
 		setZOrderOnTop(true);
-		this.width = width;
-		this.height = height;
-		Log.d(this.toString(), width + "," + height);
 
-		// textdirection = (TextView) findViewById(R.id.log_direction);
-		// textShape = (TextView) findViewById(R.id.log_shape);
-		// textPosition = (TextView) findViewById(R.id.log_position);
 		// フィールドオブジェクトの生成
-		field = new Field();
+		Field field = new Field();
 		// 中央にプレイヤーオブジェクトの生成
-		player = new Player(field.getPlayerFrameInfo()[4]);
+		player = new Player(field.getPlayerFrameInfo()[4],320);
 		// 中央にエネミーオブジェクトの生成
-		metall = new Enemy(field.getEmemyFrameInfo()[4]);
+		metall = new Enemy(field.getEmemyFrameInfo()[4],40);
 	}
 
 	@Override
@@ -98,7 +90,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.action(holder);
 						}
 					}
-				} else if (Math.abs(downY - upY) - Math.abs(downX - upX) > flickSensitivity) { // 上下
+				} else if (Math.abs(downY - upY) - Math.abs(downX - upX) > flickSensitivity) { // 上下(ry
 					if (downY > upY) {
 						if (width / 2 > downX) {
 							logDirection = "up";
@@ -125,6 +117,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 				} else {
 					Log.d(this.toString(), "" + logShape);
 				}
+				Log.d(this.toString(), player.getCurrentFrameInfoToString());
 				break;
 		}
 		return true;
@@ -132,12 +125,14 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 
 	@Override
 	public void run() {
+		Paint paint  = new Paint();
 		while (thread != null) {
-			doDraw();
+			doDraw(paint);
+			paint.reset();
 		}
 	}
 
-	private void doDraw() {
+	private void doDraw(Paint paint) {
 		Canvas canvas = holder.lockCanvas();
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす

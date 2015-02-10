@@ -12,11 +12,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
-	private ObjectSurfaceView objectSurfaceView;
-	//public static EffectSurfaceView effectSurfaceView;
-	private FieldView fieldView;
 	private FrameLayout frameLayout;
 	public static SurfaceView[] t = new SurfaceView[9];
+
 	/**
 	 * ここから実行
 	 */
@@ -24,24 +22,43 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		//t.setVisibility(View.INVISIBLE);
-		// 画面サイズの取得
-		WindowManager wm = getWindowManager();
-		Display disp = wm.getDefaultDisplay();
-		Point point = new Point();
-		disp.getSize(point);
+		Point point = getWindowSize();
 		float height = point.y;
 		float width = point.x;
 		// height,widthから敵・味方エリアの位置座標を計算
 		DrawingPosition.prepareDrawing(width, height);
-		// 描画を行うViewを加える
 		frameLayout = (FrameLayout) findViewById(R.id.root_layout);
+		// 描画を行うViewを加える
+		setView(width, height);
+	}
+
+	/**
+	 *
+	 * @return 画面の縦横サイズ
+	 */
+	private Point getWindowSize(){
+		Point p = new Point();
+		WindowManager wm = getWindowManager();
+		Display disp = wm.getDefaultDisplay();
+		disp.getSize(p);
+		return p;
+	}
+
+	/**
+	 * 各種Viewの設定
+	 * @param width
+	 * @param height
+	 */
+	private void setView(float width, float height){
+		//エリアの区切り線を描画するView
+		FieldView fieldView;
 		fieldView = new FieldView(this, width, height);
-		objectSurfaceView = new ObjectSurfaceView(this, width, height);
-		//effectSurfaceView = new EffectSurfaceView(this);
 		frameLayout.addView(fieldView);
+		//エリア上のオブジェクト(プレイヤー、敵)を描画するView
+		ObjectSurfaceView objectSurfaceView;
+		objectSurfaceView = new ObjectSurfaceView(this, width, height);
 		frameLayout.addView(objectSurfaceView);
+		//攻撃範囲を描画するView
 		for(int i = 0;i < 9;i++){
 			t[i] = new SurfaceView(this);
 			t[i].setLayoutParams(new LayoutParams((int)width/6, (int)height/3));
@@ -51,6 +68,5 @@ public class MainActivity extends Activity {
 			t[i].setVisibility(View.GONE);
 			frameLayout.addView(t[i]);
 		}
-		//frameLayout.addView(effectSurfaceView);
 	}
 }

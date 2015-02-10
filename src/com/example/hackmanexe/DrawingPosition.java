@@ -6,7 +6,7 @@ import android.graphics.PointF;
  *
  * @author meem 描画位置を定数として管理するクラス
  */
-public class DrawingPosition {
+class DrawingPosition {
 	public static float width;
 	public static float height;
 	public static Area playerArea, enemyArea;

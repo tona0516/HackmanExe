@@ -1,17 +1,18 @@
 package com.example.hackmanexe;
 
 public class Enemy extends FieldObject{
-	private int HP = 100;
+	private int HP;
 
-	public Enemy(FrameInfo frameInfo) {
+	public Enemy(FrameInfo frameInfo,int HP) {
 		super(frameInfo);
+		setHP(HP);
 	}
 
 	public int getHP() {
 		return HP;
 	}
 
-	public void setHP(int hP) {
-		HP = hP;
+	public void setHP(int HP) {
+		this.HP = HP;
 	}
 }

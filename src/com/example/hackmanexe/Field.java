@@ -5,7 +5,7 @@ package com.example.hackmanexe;
  * バトルフィールドの情報を保持するクラス
  */
 class Field {
-	private FrameInfo[] playerFrameInfo = new FrameInfo[9];
+	private FrameInfo[] playerFrameInfo = new FrameInfo[9]; //味方エリアの枠の配列,左上…0,上中央・・・1,...
 	private FrameInfo[] ememyFrameInfo = new FrameInfo[9];
 
 	public Field() {
@@ -14,6 +14,7 @@ class Field {
 			playerFrameInfo[i] = new FrameInfo(i);
 			ememyFrameInfo[i] = new FrameInfo(i);
 		}
+		//各枠を繋げる
 		makeNode();
 	}
 
