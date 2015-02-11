@@ -11,10 +11,11 @@ class Field {
 	public Field() {
 		// FrameInfoオブジェクトの初期化
 		for (int i = 0; i < 9; i++) {
+			//パネルオブジェクトの生成
 			playerFrameInfo[i] = new FrameInfo(i);
 			ememyFrameInfo[i] = new FrameInfo(i);
 		}
-		//各枠を繋げる
+		//各パネルを繋げる
 		makeNode();
 	}
 
@@ -35,7 +36,7 @@ class Field {
 	}
 
 	/**
-	 * 各枠の位置関係を設定
+	 * 各パネルの位置関係を設定
 	 */
 	private void makeNode() {
 		//プレイヤーエリアのノード設定

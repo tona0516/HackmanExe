@@ -1,5 +1,7 @@
 package com.example.hackmanexe;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,15 +13,23 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * オブジェクトを描画するクラス
+ * 実質のメインクラス
+ * @author meem
+ *
+ */
 class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 	private float width, height;
 	private float downX, downY, upX, upY; //タッチ座標,離れた座標
 	private String logDirection, logShape;
 	private final int flickSensitivity = 20;
-	public static Player player;
-	public static Enemy metall;
+    private Player player;
 	private Thread thread;
 	private SurfaceHolder holder;
+	public static Field field;
+	private ArrayList<FieldObject> objectList;
+
 	public ObjectSurfaceView(Context context, float width, float height) {
 		super(context);
 		this.width = width;
@@ -34,11 +44,16 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		setZOrderOnTop(true);
 
 		// フィールドオブジェクトの生成
-		Field field = new Field();
+		field = new Field();
 		// 中央にプレイヤーオブジェクトの生成
 		player = new Player(field.getPlayerFrameInfo()[4],320);
 		// 中央にエネミーオブジェクトの生成
-		metall = new Enemy(field.getEmemyFrameInfo()[4],40);
+		Metall metall = new Metall(field.getEmemyFrameInfo()[5],player);
+
+		//オブジェクトリストに加える(描画時に使用)
+		objectList = new ArrayList<FieldObject>();
+		objectList.add(player);
+		objectList.add(metall);
 	}
 
 	@Override
@@ -57,6 +72,9 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		thread = null;
 	}
 
+	/**
+	 * ユーザのタッチ動作の検知
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
@@ -77,7 +95,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveLeft(); // プレイヤーを左に動かす
 						} else {
 							logShape = "□";
-							player.addAction(new AttackAction(10, -1, "111001111")); // ex)ブーメラン
+							player.addAction(new AbsolutePositionAttack(10, 1000, "111001111")); // ex)ブーメラン
 							player.action(holder);
 						}
 					} else {
@@ -86,7 +104,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveRight();
 						} else {
 							logShape = "○";
-							player.addAction(new AttackAction(10, -1, "001001001")); // ex)バンブーランス
+							player.addAction(new AbsolutePositionAttack(10, 1000, "001001001")); // ex)バンブーランス
 							player.action(holder);
 						}
 					}
@@ -123,36 +141,37 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		return true;
 	}
 
+	/**
+	 * 別のスレッドで描画
+	 */
 	@Override
 	public void run() {
 		Paint paint  = new Paint();
 		while (thread != null) {
 			doDraw(paint);
-			paint.reset();
 		}
 	}
 
+	/**
+	 * オブジェクトの描画
+	 * @param paint
+	 */
 	private void doDraw(Paint paint) {
 		Canvas canvas = holder.lockCanvas();
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
-			// 自機描画
-			paint.setStyle(Paint.Style.STROKE);
-			paint.setStrokeWidth(10);
-			canvas.drawCircle(player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY(), 100, paint);
-			paint.reset();
-			// 自機HP描画
-			paint.setTextSize(100);
-			canvas.drawText("" + player.getHP(), player.getCurrentFrameInfo().getDrawX(), player.getCurrentFrameInfo().getDrawY() + 200, paint);
-
-			// 敵描画
-			paint.setStyle(Paint.Style.FILL);
-			paint.setStrokeWidth(10);
-			canvas.drawCircle(metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY(), 100, paint);
-			paint.reset();
-			// 敵HP描画
-			paint.setTextSize(100);
-			canvas.drawText("" + metall.getHP(), metall.getCurrentFrameInfo().getDrawX(), metall.getCurrentFrameInfo().getDrawY() + 200, paint);
+			for(FieldObject o : objectList){
+				paint.reset();
+				paint.setStrokeWidth(10);
+				if(o instanceof Player){
+					paint.setStyle(Paint.Style.STROKE);
+				}else if(o instanceof Enemy){
+					paint.setStyle(Paint.Style.FILL);
+				}
+				canvas.drawCircle(o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY(), 100, paint);
+				paint.setTextSize(100);
+				canvas.drawText("" + o.getHP(), o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY() + 200, paint);
+			}
 			holder.unlockCanvasAndPost(canvas);
 		}
 	}

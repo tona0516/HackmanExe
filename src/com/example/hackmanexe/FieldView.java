@@ -6,6 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+/**
+ * パネルの区切り線を描画するクラス
+ * エリアスチール作るときに改良やばい
+ * @author meem
+ *
+ */
 public class FieldView extends View{
 
 	private Paint paint;

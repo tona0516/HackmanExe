@@ -2,7 +2,7 @@ package com.example.hackmanexe;
 /**
  *
  * @author meem
- * 各枠の位置関係を保持するクラス
+ * 各パネルの情報を保持するクラス
  */
 class FrameInfo {
 	private FrameInfo up = null;
@@ -11,6 +11,8 @@ class FrameInfo {
 	private FrameInfo right = null;
 	private int index;
 	private float drawX, drawY; // 描画位置
+	private FieldObject object = null; //パネル上のオブジェクト
+
 	public FrameInfo(int index) {
 		this.setIndex(index);
 	}
@@ -57,4 +59,36 @@ class FrameInfo {
 		this.index = index;
 	}
 
+	/**
+	 *
+	 * @return 上から見て 0…上段,1…中段,2…下段
+	 */
+	public int getLine() {
+		if (getIndex() > -1 && getIndex() < 3)
+			return 0;
+		else if (getIndex() > 2 && getIndex() < 6)
+			return 1;
+		else
+			return 2;
+	}
+
+	/**
+	 *
+	 * @return 敵・味方の境界線から見て 0…1列目,1…2列目,2…3列目
+	 */
+	public int getRow() {
+		if (getIndex() > -1 && getIndex() < 3)
+			return 0;
+		else if (getIndex() > 2 && getIndex() < 6)
+			return 1;
+		else
+			return 2;
+	}
+
+	public FieldObject getObject() {
+		return object;
+	}
+	public void setObject(FieldObject o) {
+		this.object = o;
+	}
 }

@@ -3,8 +3,9 @@ package com.example.hackmanexe;
 import android.graphics.PointF;
 
 /**
+ * 描画位置を定数として管理するクラス
  *
- * @author meem 描画位置を定数として管理するクラス
+ * @author meem
  */
 class DrawingPosition {
 	public static float width;
