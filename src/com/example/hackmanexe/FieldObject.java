@@ -8,6 +8,7 @@ package com.example.hackmanexe;
 public class FieldObject {
 	protected FrameInfo currentFrameInfo;
 	protected int HP;
+	int i;
 
 	public FieldObject(FrameInfo currentFrameInfo, int HP) {
 		this.currentFrameInfo = currentFrameInfo;
