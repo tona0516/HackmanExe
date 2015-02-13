@@ -6,9 +6,8 @@ package com.example.hackmanexe;
  * @author meem
  */
 public class Enemy extends FieldObject{
-	private int HP;
 
-	public Enemy(FrameInfo frameInfo,int HP) {
+	public Enemy(PanelInfo frameInfo,int HP) {
 		super(frameInfo,HP);
 	}
 

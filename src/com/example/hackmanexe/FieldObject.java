@@ -6,16 +6,16 @@ package com.example.hackmanexe;
  *
  */
 public class FieldObject {
-	protected FrameInfo currentFrameInfo;
+	protected PanelInfo currentFrameInfo;
 	protected int HP;
 
-	public FieldObject(FrameInfo currentFrameInfo, int HP) {
+	public FieldObject(PanelInfo currentFrameInfo, int HP) {
 		this.currentFrameInfo = currentFrameInfo;
 		this.HP = HP;
 		currentFrameInfo.setObject(this);
 	}
 
-	public FrameInfo getCurrentFrameInfo() {
+	public PanelInfo getCurrentFrameInfo() {
 		return currentFrameInfo;
 	}
 

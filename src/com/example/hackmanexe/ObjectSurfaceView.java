@@ -14,21 +14,21 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * オブジェクトを描画するクラス
- * 実質のメインクラス
+ * オブジェクトを描画するクラス 実質のメインクラス
+ *
  * @author meem
  *
  */
 class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 	private float width, height;
-	private float downX, downY, upX, upY; //タッチ座標,離れた座標
+	private float downX, downY, upX, upY; // タッチ座標,離れた座標
 	private String logDirection, logShape;
 	private final int flickSensitivity = 20;
-    private Player player;
+	private Player player;
 	private Thread thread;
 	private SurfaceHolder holder;
 	public static Field field;
-	private ArrayList<FieldObject> objectList;
+	public static ArrayList<FieldObject> objectList;
 
 	public ObjectSurfaceView(Context context, float width, float height) {
 		super(context);
@@ -46,11 +46,11 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		// フィールドオブジェクトの生成
 		field = new Field();
 		// 中央にプレイヤーオブジェクトの生成
-		player = new Player(field.getPlayerFrameInfo()[4],320);
+		player = new Player(field.getPanelInfo()[7], 320);
 		// 中央にエネミーオブジェクトの生成
-		Metall metall = new Metall(field.getEmemyFrameInfo()[5],player);
+		Metall metall = new Metall(field.getPanelInfo()[11], player);
 
-		//オブジェクトリストに加える(描画時に使用)
+		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
 		objectList.add(metall);
@@ -95,7 +95,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveLeft(); // プレイヤーを左に動かす
 						} else {
 							logShape = "□";
-							player.addAction(new AbsolutePositionAttack(10, 1000, "111001111")); // ex)ブーメラン
+							player.addAction(new AbsolutePositionAttack(10, 1000, "12,13,14,15,16,17,11,5,4,3,2,1,0",200)); // ex)ブーメラン
 							player.action(holder);
 						}
 					} else {
@@ -104,7 +104,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveRight();
 						} else {
 							logShape = "○";
-							player.addAction(new AbsolutePositionAttack(10, 1000, "001001001")); // ex)バンブーランス
+							player.addAction(new AbsolutePositionAttack(10, 1000, "5,11,17",0)); // ex)バンブーランス
 							player.action(holder);
 						}
 					}
@@ -135,7 +135,6 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 				} else {
 					Log.d(this.toString(), "" + logShape);
 				}
-				Log.d(this.toString(), player.getCurrentFrameInfoToString());
 				break;
 		}
 		return true;
@@ -146,7 +145,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 	 */
 	@Override
 	public void run() {
-		Paint paint  = new Paint();
+		Paint paint = new Paint();
 		while (thread != null) {
 			doDraw(paint);
 		}
@@ -154,23 +153,27 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 
 	/**
 	 * オブジェクトの描画
+	 *
 	 * @param paint
 	 */
 	private void doDraw(Paint paint) {
 		Canvas canvas = holder.lockCanvas();
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
-			for(FieldObject o : objectList){
-				paint.reset();
-				paint.setStrokeWidth(10);
-				if(o instanceof Player){
-					paint.setStyle(Paint.Style.STROKE);
-				}else if(o instanceof Enemy){
-					paint.setStyle(Paint.Style.FILL);
+			for (FieldObject o : objectList) {
+				if (o != null) { //これやっとかないとnull参照して落ちる
+					paint.reset();
+					if (o instanceof Player) {
+						paint.setStyle(Paint.Style.STROKE);
+						paint.setStrokeWidth(10);
+					} else if (o instanceof Enemy) {
+						paint.setStyle(Paint.Style.FILL);
+					}
+					canvas.drawCircle(o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY(), 100, paint);
+					paint.reset();
+					paint.setTextSize(100);
+					canvas.drawText("" + o.getHP(), o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY() + 200, paint);
 				}
-				canvas.drawCircle(o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY(), 100, paint);
-				paint.setTextSize(100);
-				canvas.drawText("" + o.getHP(), o.getCurrentFrameInfo().getDrawX(), o.getCurrentFrameInfo().getDrawY() + 200, paint);
 			}
 			holder.unlockCanvasAndPost(canvas);
 		}

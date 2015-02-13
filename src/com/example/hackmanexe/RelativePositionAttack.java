@@ -1,6 +1,5 @@
 package com.example.hackmanexe;
 
-import android.view.SurfaceHolder;
 
 /**
  * オブジェクトの位置から攻撃場所を指定するクラス
@@ -14,6 +13,6 @@ public class RelativePositionAttack extends AttackAction{
 		super(power);
 	}
 
-	public void attack(SurfaceHolder holder){
+	public void attack(){
 	}
 }

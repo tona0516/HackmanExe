@@ -13,7 +13,7 @@ public class Metall extends Enemy {
 
 	private static int HP = 40;
 
-	public Metall(FrameInfo f,final Player player) {
+	public Metall(PanelInfo f,final Player player) {
 		super(f, 40);
 		//移動アルゴリズム
 		Timer t = new Timer();

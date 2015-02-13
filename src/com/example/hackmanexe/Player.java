@@ -11,10 +11,9 @@ import android.view.SurfaceHolder;
  *
  */
 public class Player extends FieldObject{
-	private int HP;
 	private ArrayList<Action> actionList;
 
-	public Player(FrameInfo currentFrameInfo, int HP) {
+	public Player(PanelInfo currentFrameInfo, int HP) {
 		super(currentFrameInfo,HP);
 		setActionList(new ArrayList<Action>());
 	}
@@ -22,12 +21,11 @@ public class Player extends FieldObject{
 	public boolean action(SurfaceHolder holder){
 		if(actionList.get(0) instanceof AbsolutePositionAttack){
 			AbsolutePositionAttack aa = (AbsolutePositionAttack)actionList.get(0);
-			aa.attack(holder);
+			aa.attack();
 			actionList.remove(0);
 			return true;
 		}else if(actionList.get(0) instanceof RelativePositionAttack){
 			RelativePositionAttack aa = (RelativePositionAttack)actionList.get(0);
-			aa.attack(holder);
 			actionList.remove(0);
 		}else if(actionList.get(0) instanceof SupportAction){
 			SupportAction sa = (SupportAction)actionList.get(0);
@@ -93,42 +91,5 @@ public class Player extends FieldObject{
 		} else {
 			return false;
 		}
-	}
-
-	public String getCurrentFrameInfoToString() {
-		String FrameInfoStr;
-		switch (currentFrameInfo.getIndex()) {
-			case 0 :
-				FrameInfoStr = "upperLeft";
-				break;
-			case 1 :
-				FrameInfoStr = "upperCenter";
-				break;
-			case 2 :
-				FrameInfoStr = "upperRight";
-				break;
-			case 3 :
-				FrameInfoStr = "middleLeft";
-				break;
-			case 4 :
-				FrameInfoStr = "center";
-				break;
-			case 5 :
-				FrameInfoStr = "middleRight";
-				break;
-			case 6 :
-				FrameInfoStr = "lowerLeft";
-				break;
-			case 7 :
-				FrameInfoStr = "lowerCenter";
-				break;
-			case 8 :
-				FrameInfoStr = "lowerRight";
-				break;
-			default :
-				FrameInfoStr = null;
-				break;
-		}
-		return FrameInfoStr;
 	}
 }
