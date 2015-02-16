@@ -57,13 +57,14 @@ public class MainActivity extends Activity {
 		frameLayout.addView(fieldView);
 		// エリア上のオブジェクト(プレイヤー、敵)を描画するView
 		ObjectSurfaceView objectSurfaceView;
-		objectSurfaceView = new ObjectSurfaceView(this, width, height);
+		objectSurfaceView = new ObjectSurfaceView(this, this, width, height);
 		frameLayout.addView(objectSurfaceView);
 		// 攻撃範囲を描画するView
 		for (int i = 0; i < 18; i++) {
 			t[i] = new SurfaceView(this);
 			t[i].setLayoutParams(new LayoutParams((int) width / 6, (int) height / 3));
 			t[i].setBackgroundColor(Color.YELLOW);
+			t[i].setAlpha(0.2f);
 			t[i].setX(DrawingPosition.area.upperLeftPoint[i].x);
 			t[i].setY(DrawingPosition.area.upperLeftPoint[i].y);
 			t[i].setVisibility(View.GONE);

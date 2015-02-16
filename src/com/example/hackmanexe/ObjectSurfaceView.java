@@ -29,11 +29,14 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 	private SurfaceHolder holder;
 	public static Field field;
 	public static ArrayList<FieldObject> objectList;
+	private MainActivity mainActivity;
 
-	public ObjectSurfaceView(Context context, float width, float height) {
+	public ObjectSurfaceView(Context context, MainActivity mainActivity,
+			float width, float height) {
 		super(context);
 		this.width = width;
 		this.height = height;
+		this.mainActivity = mainActivity;
 		// 半透明を設定
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		// コールバック登録
@@ -95,7 +98,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveLeft(); // プレイヤーを左に動かす
 						} else {
 							logShape = "□";
-							player.addAction(new AbsolutePositionAttack(10, 1000, "12,13,14,15,16,17,11,5,4,3,2,1,0",200)); // ex)ブーメラン
+							player.addAction(new AbsolutePositionAttack(mainActivity, 10, 1000, "12,13,14,15,16,17,11,5,4,3,2,1,0", 50)); // ex)ブーメラン
 							player.action(holder);
 						}
 					} else {
@@ -104,7 +107,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 							player.moveRight();
 						} else {
 							logShape = "○";
-							player.addAction(new AbsolutePositionAttack(10, 1000, "5,11,17",0)); // ex)バンブーランス
+							player.addAction(new AbsolutePositionAttack(mainActivity, 10, 1000, "5,11,17", 0)); // ex)バンブーランス
 							player.action(holder);
 						}
 					}
@@ -161,7 +164,7 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
 			for (FieldObject o : objectList) {
-				if (o != null) { //これやっとかないとnull参照して落ちる
+				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
 					if (o instanceof Player) {
 						paint.setStyle(Paint.Style.STROKE);
