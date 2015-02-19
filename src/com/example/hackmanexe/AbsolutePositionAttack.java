@@ -5,54 +5,50 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
 /**
- * エリアを指定して攻撃するクラス 攻撃範囲は今のところ敵エリアしか指定できない 範囲が可変・固定攻撃クラスで分けるか？インタフェースにするか？
- * 
+ * エリアを指定して攻撃するクラス
+ *
  * @author meem
  */
 public class AbsolutePositionAttack extends AttackAction {
-
-	private long msec; // 有効時間
 	private String range; // 範囲
-	private long interval; // 攻撃範囲が移動する場合のスピード
-	private int panelIndex = -1;
 	private int prePanelIndex = -1;
 	private Iterator<String> iterator;
-	private MainActivity mainActivity;
-	public AbsolutePositionAttack(MainActivity mainActivity, int power,
-			long msec, String range, long interval) {
-		super(power);
-		this.mainActivity = mainActivity;
-		this.msec = msec;
+	private Timer timer;
+
+	public AbsolutePositionAttack(Activity activity, int power, long interval,
+			String range, FieldObject fieldObject) {
+		super(activity, power, interval, fieldObject);
 		this.range = range;
-		this.interval = interval;
 	}
 
 	public void attack() {
 		String[] indexArrayStr = range.split(",");
 		iterator = Arrays.asList(indexArrayStr).iterator();
 		if (interval != 0)
-			intervalProcessing();
+			intervalProcess();
 		else
-			nonIntervalProcessing();
+			nonIntervalProcess();
 	}
-	public long getMsec() {
-		return msec;
-	}
-	public void setMsec(long msec) {
-		this.msec = msec;
-	}
-	private void intervalProcessing() {
-		Timer timer = new Timer();
+
+	@Override
+	protected void intervalProcess() {
+		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				mainActivity.runOnUiThread(new Runnable() {
+				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
+						if (!iterator.hasNext()) {
+							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
+							timer.cancel();
+							timer = null;
+						}
 						if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
 								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
@@ -60,33 +56,29 @@ public class AbsolutePositionAttack extends AttackAction {
 							MainActivity.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
 							prePanelIndex = index;
-							if (!iterator.hasNext())
-								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
 						}
 					}
 				});
 			}
 		}, 0, interval);
 	}
-	private void nonIntervalProcessing() {
+
+	@Override
+	protected void nonIntervalProcess() {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				mainActivity.runOnUiThread(new Runnable() {
+				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
+						AlphaAnimation aa = new AlphaAnimation(1, 0);
+						aa.setDuration(msec);
 						while (iterator.hasNext()) {
 							int index = Integer.valueOf(iterator.next());
 							MainActivity.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
-						}
-						String[] indexArrayStr = range.split(",");
-						AlphaAnimation aa = new AlphaAnimation(1, 0);
-						aa.setDuration(msec);
-						for (String index2 : Arrays.asList(indexArrayStr)) {
-							int index3 = Integer.valueOf(index2);
-							MainActivity.t[index3].startAnimation(aa);
-							MainActivity.t[index3].setVisibility(View.INVISIBLE);
+							MainActivity.t[index].startAnimation(aa);
+							MainActivity.t[index].setVisibility(View.INVISIBLE);
 						}
 					}
 				});
@@ -95,15 +87,14 @@ public class AbsolutePositionAttack extends AttackAction {
 		thread.run();
 	}
 
-	private void judgeConfliction(int index) {
-		FieldObject o = ObjectSurfaceView.field.getPanelInfo()[index].getObject();
-		if (o instanceof Enemy || o instanceof FieldItem) {// そのパネルに敵が存在すれば
-			if (o.getHP() - power > 0) { // HP計算
-				o.setHP(o.getHP() - power);
-			} else {
-				o.setHP(0);
-				ObjectSurfaceView.objectList.remove(o);
-			}
-		}
+	/**
+	 *
+	 * @return 攻撃中…true, 違う・・・false
+	 */
+	public boolean isAtacking() {
+		if (timer != null)
+			return true;
+		else
+			return false;
 	}
 }

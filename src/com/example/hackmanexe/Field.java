@@ -80,7 +80,34 @@ class Field {
 		panelInfo[14 + 3].setUp(panelInfo[8 + 3]);
 		panelInfo[14 + 3].setLeft(panelInfo[13 + 3]);
 
-		// エネミーエリアのノード設定
+		//プレイヤー・敵エリア境界のノード
+		panelInfo[2].setRight(panelInfo[3]);
+		panelInfo[8].setRight(panelInfo[9]);
+		panelInfo[14].setRight(panelInfo[15]);
+		panelInfo[3].setLeft(panelInfo[2]);
+		panelInfo[9].setLeft(panelInfo[8]);
+		panelInfo[15].setLeft(panelInfo[14]);
+
+		//所属エリア設定
+		panelInfo[0].setBelong(1);
+		panelInfo[1].setBelong(1);
+		panelInfo[2].setBelong(1);
+		panelInfo[6].setBelong(1);
+		panelInfo[7].setBelong(1);
+		panelInfo[8].setBelong(1);
+		panelInfo[12].setBelong(1);
+		panelInfo[13].setBelong(1);
+		panelInfo[14].setBelong(1);
+
+		panelInfo[3].setBelong(2);
+		panelInfo[4].setBelong(2);
+		panelInfo[5].setBelong(2);
+		panelInfo[9].setBelong(2);
+		panelInfo[10].setBelong(2);
+		panelInfo[11].setBelong(2);
+		panelInfo[15].setBelong(2);
+		panelInfo[16].setBelong(2);
+		panelInfo[17].setBelong(2);
 
 		// 描画位置設定
 		for (int i = 0; i < 18; i++) {

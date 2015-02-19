@@ -99,6 +99,10 @@ class PanelInfo {
 		this.object = o;
 	}
 
+	public void setBelong(int belong) {
+		this.belong = belong;
+	}
+
 	public boolean isPlayerPanel() {
 		if (belong == 1)
 			return true;

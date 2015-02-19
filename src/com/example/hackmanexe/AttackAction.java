@@ -1,23 +1,52 @@
 package com.example.hackmanexe;
 
+import android.app.Activity;
 
 /**
  * 攻撃チップの情報を保持するクラス
+ *
  * @author meem
  */
-public class AttackAction extends Action {
+abstract class AttackAction extends Action {
 	protected int power; // 攻撃力
+	protected long interval; // 攻撃範囲が移動するスピード
+	protected Activity activity; // UIを描画するActivity
+	protected FieldObject fieldObject; // 攻撃者オブジェクト
+	protected final static long msec = 1000; // 描画時間
 
-	public AttackAction(int power) {
+	public AttackAction(Activity activity, int power, long interval,
+			FieldObject fieldObject) {
 		super();
+		this.activity = activity;
 		this.power = power;
+		this.interval = interval;
+		this.fieldObject = fieldObject;
 	}
 
-	public int getAttackPower() {
-		return power;
+	/**
+	 *
+	 * @param index
+	 *            パネルインデックス 当たり判定メソッド
+	 */
+	protected void judgeConfliction(int index) {
+		FieldObject o = ObjectSurfaceView.field.getPanelInfo()[index].getObject();
+		// 攻撃者が自分自身の攻撃に当たらないようにする処理
+		if ((o instanceof Enemy || o instanceof FieldItem) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムにあたれば
+			calcurateHP(o);
+		} else if ((o instanceof Player || o instanceof FieldItem) && fieldObject instanceof Enemy) { // 攻撃者が敵でプレイヤーorアイテムにあたれば
+			calcurateHP(o);
+		}
 	}
 
-	public void setAttackPower(int attackPower) {
-		this.power = attackPower;
+	private void calcurateHP(FieldObject o) {
+		if (o.getHP() - power > 0) { // HP計算
+			o.setHP(o.getHP() - power);
+		} else {
+			o.setHP(0);
+			ObjectSurfaceView.objectList.remove(o);
+		}
 	}
+
+	abstract protected void intervalProcess();
+	abstract protected void nonIntervalProcess();
 }
