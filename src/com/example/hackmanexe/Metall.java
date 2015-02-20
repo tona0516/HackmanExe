@@ -3,6 +3,8 @@ package com.example.hackmanexe;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+
 /**
  * メットールクラス 移動はできる。攻撃はまだ
  *
@@ -16,11 +18,19 @@ public class Metall extends Enemy {
 	private int preOwnLine = -1;
 	private Metall metall;
 	private Timer timer;
+	private RelativePositionAttack rpa = null;
 
 	public Metall(final MainActivity mainActivity, PanelInfo f,
 			final Player player) {
 		super(mainActivity, f, HP);
 		metall = this;
+
+		// いきなり攻撃し始めないように
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// 動作アルゴリズム
 		// 1秒毎に処理
@@ -31,22 +41,22 @@ public class Metall extends Enemy {
 				// 自分・プレイヤーの位置を取得
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = metall.getCurrentPanelInfo().getLine();
-
-				if (prePlayerLine == currentPlayerLine && preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
-					// 攻撃！
-					RelativePositionAttack rpa = new RelativePositionAttack(mainActivity, 10, 500, "le", metall);
-					metall.addAction(rpa);
-					metall.action();
-					// 攻撃が終了するまで待機
-					while (rpa.isAtacking()) {
+				if (rpa == null || !rpa.isAtacking()) {
+					if (prePlayerLine == currentPlayerLine && preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
+						// 攻撃！
+						rpa = new RelativePositionAttack(mainActivity, 10, 500, "le", metall);
+						metall.addAction(rpa);
+						metall.action();
+					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
+						moveUp();
+						Log.d(this.toString(), "up");
+					} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
+						moveDown();
+						Log.d(this.toString(), "down");
 					}
-				} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
-					moveUp();
-				} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
-					moveDown();
+					prePlayerLine = currentPlayerLine;
+					preOwnLine = currentOwnLine;
 				}
-				prePlayerLine = currentPlayerLine;
-				preOwnLine = currentOwnLine;
 			}
 		}, 0, 1000);
 	}
@@ -56,6 +66,5 @@ public class Metall extends Enemy {
 		timer.cancel();
 		timer = null;
 	}
-
 
 }

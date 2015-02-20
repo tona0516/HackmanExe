@@ -21,6 +21,7 @@ abstract class FieldObject {
 		this.HP = HP;
 		currentFrameInfo.setObject(this);
 		setActionList(new ArrayList<Action>());
+
 	}
 
 	public PanelInfo getCurrentPanelInfo() {
