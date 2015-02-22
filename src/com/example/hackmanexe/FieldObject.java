@@ -12,11 +12,9 @@ abstract class FieldObject {
 	protected PanelInfo currentPanelInfo;
 	protected int HP;
 	protected ArrayList<Action> actionList;
-	protected MainActivity mainActivity;
 
-	public FieldObject(MainActivity mainActivity, PanelInfo currentFrameInfo,
+	public FieldObject(PanelInfo currentFrameInfo,
 			int HP) {
-		this.mainActivity = mainActivity;
 		this.currentPanelInfo = currentFrameInfo;
 		this.HP = HP;
 		currentFrameInfo.setObject(this);

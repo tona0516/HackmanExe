@@ -7,8 +7,9 @@ package com.example.hackmanexe;
  *
  */
 public class FieldItem extends FieldObject {
-	public FieldItem(MainActivity mainActivity, PanelInfo currentFrameInfo) {
-		super(mainActivity, currentFrameInfo, 1);
+
+	public FieldItem(PanelInfo _currentPanelInfo) {
+		super(_currentPanelInfo, 1);
 	}
 
 	@Override

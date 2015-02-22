@@ -19,11 +19,15 @@ public class Metall extends Enemy {
 	private Metall metall;
 	private Timer timer;
 	private RelativePositionAttack rpa = null;
+	private Player player;
+	private MainActivity mainActivity;
 
-	public Metall(final MainActivity mainActivity, PanelInfo f,
-			final Player player) {
-		super(mainActivity, f, HP);
+	public Metall(MainActivity _mainActivity, PanelInfo _panelInfo,
+			 Player _player) {
+		super(_panelInfo, HP);
 		metall = this;
+		player = _player;
+		mainActivity = _mainActivity;
 
 		// いきなり攻撃し始めないように
 		try {

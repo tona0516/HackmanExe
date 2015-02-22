@@ -8,8 +8,12 @@ package com.example.hackmanexe;
  */
 public class Player extends FieldObject {
 
-	public Player(final MainActivity mainActivity, PanelInfo currentFrameInfo, int HP) {
-		super(mainActivity, currentFrameInfo, HP);
+	private MainActivity mainActivity;
+
+	public Player(MainActivity _mainActivity, PanelInfo _currentFrameInfo,
+			int _HP) {
+		super(_currentFrameInfo, _HP);
+		this.mainActivity = _mainActivity;
 	}
 
 	@Override
