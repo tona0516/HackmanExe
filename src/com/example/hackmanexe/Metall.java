@@ -42,9 +42,11 @@ public class Metall extends Enemy {
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = metall.getCurrentPanelInfo().getLine();
 				if (rpa == null || !rpa.isAtacking()) {
-					if (prePlayerLine == currentPlayerLine && preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
+					if (prePlayerLine == currentPlayerLine
+							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
 						// 攻撃！
-						rpa = new RelativePositionAttack(mainActivity, 10, 500, "le", metall);
+						rpa = new RelativePositionAttack(mainActivity, 10, 500,
+								"le", metall);
 						metall.addAction(rpa);
 						metall.action();
 					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
@@ -63,8 +65,10 @@ public class Metall extends Enemy {
 
 	@Override
 	void deathProcess() {
-		timer.cancel();
-		timer = null;
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 }
