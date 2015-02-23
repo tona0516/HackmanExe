@@ -7,7 +7,7 @@ package com.example.hackmanexe;
  */
 abstract class Enemy extends FieldObject {
 
-	public Enemy(PanelInfo frameInfo, int HP) {
-		super(frameInfo, HP);
+	public Enemy(PanelInfo _panelInfo, int _HP) {
+		super(_panelInfo, _HP);
 	}
 }
