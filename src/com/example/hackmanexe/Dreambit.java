@@ -6,9 +6,11 @@ import java.util.TimerTask;
 public class Dreambit extends Enemy {
 	
 	private static final int HP = 200;
+	private Player player;
 
-	public Dreambit(FrameInfo f, Player player) {
+	public Dreambit(FrameInfo f, Player _player) {
 		super(f, HP);
+		this.player = _player;
 		
 		Timer t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
