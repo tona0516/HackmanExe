@@ -1,70 +1,100 @@
 package com.example.hackmanexe;
 
-import android.view.SurfaceHolder;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
 /**
  * エリアを指定して攻撃するクラス
- * 攻撃範囲は今のところ敵エリアしか指定できない
+ *
  * @author meem
  */
 public class AbsolutePositionAttack extends AttackAction {
-
-	private long msec; // 有効時間
 	private String range; // 範囲
-	private AlphaAnimation aa; // 攻撃描画のアニメーション
-	public AbsolutePositionAttack(int power, long msec, String range) {
-		super(power);
-		this.msec = msec;
+	private int prePanelIndex = -1;
+	private Iterator<String> iterator;
+	private Timer timer;
+
+	public AbsolutePositionAttack(Activity activity, int power, long interval,
+			String range, FieldObject fieldObject) {
+		super(activity, power, interval, fieldObject);
 		this.range = range;
 	}
 
-	public void attack(final SurfaceHolder holder) {
-		aa = new AlphaAnimation(0.2f, 0.2f);
-		aa.setDuration(msec);
+	public void attack() {
+		String[] indexArrayStr = range.split(",");
+		iterator = Arrays.asList(indexArrayStr).iterator();
+		if (interval != 0)
+			intervalProcess();
+		else
+			nonIntervalProcess();
+	}
 
-		for (int i = 0; i < 9; i++) {
-			if (range.charAt(i) == '1') { //もし攻撃範囲ならば
-				multiThread mt = new multiThread(i);
-				mt.run(); //描画
-				FieldObject o = ObjectSurfaceView.field.getEmemyFrameInfo()[i].getObject();
-				if (o != null) {// そのパネルにオブジェクトが存在すれば
-					if (o.getHP() - power > 0) { //HP計算
-						o.setHP(o.getHP() - power);
-					} else {
-						o.setHP(0);
+	@Override
+	protected void intervalProcess() {
+		timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (!iterator.hasNext()) {
+							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
+							timer.cancel();
+							timer = null;
+						}
+						if (iterator.hasNext()) {
+							if (prePanelIndex != -1)
+								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
+							int index = Integer.valueOf(iterator.next());
+							MainActivity.t[index].setVisibility(View.VISIBLE);
+							judgeConfliction(index);
+							prePanelIndex = index;
+						}
 					}
-				}
+				});
 			}
-		}
+		}, 0, interval);
 	}
 
-	public long getMsec() {
-		return msec;
+	@Override
+	protected void nonIntervalProcess() {
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						AlphaAnimation aa = new AlphaAnimation(1, 0);
+						aa.setDuration(msec);
+						while (iterator.hasNext()) {
+							int index = Integer.valueOf(iterator.next());
+							MainActivity.t[index].setVisibility(View.VISIBLE);
+							judgeConfliction(index);
+							MainActivity.t[index].startAnimation(aa);
+							MainActivity.t[index].setVisibility(View.INVISIBLE);
+						}
+					}
+				});
+			}
+		});
+		thread.run();
 	}
-	public void setMsec(long msec) {
-		this.msec = msec;
-	}
 
-	class multiThread extends Thread {
-		// 変数の宣言
-		private int multiThreadInt;
-
-		// スレッド作成時に実行される処理
-		public multiThread(int multiThreadInt) {
-			this.multiThreadInt = multiThreadInt;
-		}
-
-		// スレッド実行時の処理
-		public void run() {
-			MainActivity.t[multiThreadInt].setVisibility(View.VISIBLE);
-			MainActivity.t[multiThreadInt].setAnimation(aa);
-			MainActivity.t[multiThreadInt].setVisibility(View.INVISIBLE);
-		}
-
-		// スレッド終了時に呼び出し
-		public void stopThread() {
-		}
+	/**
+	 *
+	 * @return 攻撃中…true, 違う・・・false
+	 */
+	public boolean isAtacking() {
+		if (timer != null)
+			return true;
+		else
+			return false;
 	}
 }

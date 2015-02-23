@@ -10,50 +10,45 @@ import android.graphics.PointF;
 class DrawingPosition {
 	public static float width;
 	public static float height;
-	public static Area playerArea, enemyArea;
+	public static Area area;
 
 	public static void prepareDrawing(float width, float height) {
 		DrawingPosition dp = new DrawingPosition();
 		DrawingPosition.width = width;
 		DrawingPosition.height = height;
-		playerArea = dp.newArea();
-		enemyArea = dp.newArea();
+		area = dp.newArea();
 
 		// 以下画面サイズから描画位置の計算
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 18; i++) {
 			// y
-			if (i > -1 && i < 3) {
-				playerArea.centerPoint[i].y = height / 6;
-				enemyArea.centerPoint[i].y = height / 6;
-				playerArea.upperLeftPoint[i].y = 0;
-				enemyArea.upperLeftPoint[i].y = 0;
-			} else if (i > 2 && i < 6) {
-				playerArea.centerPoint[i].y = height / 2;
-				enemyArea.centerPoint[i].y = height / 2;
-				playerArea.upperLeftPoint[i].y = height / 3;
-				enemyArea.upperLeftPoint[i].y = height / 3;
+			if (i > -1 && i < 6) {
+				area.centerPoint[i].y = height / 6;
+				area.upperLeftPoint[i].y = 0;
+			} else if (i > 5 && i < 12) {
+				area.centerPoint[i].y = height / 2;
+				area.upperLeftPoint[i].y = height / 3;
 			} else {
-				playerArea.centerPoint[i].y = height * 5 / 6;
-				enemyArea.centerPoint[i].y = height * 5 / 6;
-				playerArea.upperLeftPoint[i].y = height * 2 / 3;
-				enemyArea.upperLeftPoint[i].y = height * 2 / 3;
+				area.centerPoint[i].y = height * 5 / 6;
+				area.upperLeftPoint[i].y = height * 2 / 3;
 			}
-			// x
-			if (i % 3 == 0) {
-				playerArea.centerPoint[i].x = width / 12;
-				enemyArea.centerPoint[i].x = width * 7 / 12;
-				playerArea.upperLeftPoint[i].x = 0;
-				enemyArea.upperLeftPoint[i].x = width / 2;
-			} else if ((i - 1) % 3 == 0) {
-				playerArea.centerPoint[i].x = width / 4;
-				enemyArea.centerPoint[i].x = width * 3 / 4;
-				playerArea.upperLeftPoint[i].x = width / 6;
-				enemyArea.upperLeftPoint[i].x = width * 2 / 3;
-			} else {
-				playerArea.centerPoint[i].x = width * 5 / 12;
-				enemyArea.centerPoint[i].x = width * 11 / 12;
-				playerArea.upperLeftPoint[i].x = width / 3;
-				enemyArea.upperLeftPoint[i].x = width * 5 / 6;
+			if (i % 6 == 0) {
+				area.centerPoint[i].x = width / 12;
+				area.upperLeftPoint[i].x = 0;
+			} else if ((i - 1) % 6 == 0) {
+				area.centerPoint[i].x = width / 4;
+				area.upperLeftPoint[i].x = width / 6;
+			} else if ((i - 2) % 6 == 0) {
+				area.centerPoint[i].x = width * 5 / 12;
+				area.upperLeftPoint[i].x = width / 3;
+			} else if ((i - 3) % 6 == 0) {
+				area.centerPoint[i].x = width * 7 / 12;
+				area.upperLeftPoint[i].x = width / 2;
+			} else if ((i - 4) % 6 == 0) {
+				area.centerPoint[i].x = width * 3 / 4;
+				area.upperLeftPoint[i].x = width * 2 / 3;
+			} else if ((i - 5) % 6 == 0) {
+				area.centerPoint[i].x = width * 11 / 12;
+				area.upperLeftPoint[i].x = width * 5 / 6;
 			}
 		}
 	}
@@ -64,16 +59,15 @@ class DrawingPosition {
 
 	/**
 	 *
-	 * @author meem 0・・・左上 1・・・上中央 2・・・右上 3・・・中段左 4・・・中央 5・・・中段右 6・・・左下 7・・・下中央
-	 *         8・・・右下
+	 * @author meem
 	 */
 	public static class Area {
 		public PointF[] centerPoint;
 		public PointF[] upperLeftPoint;
 		public Area() {
-			centerPoint = new PointF[9];
-			upperLeftPoint = new PointF[9];
-			for (int i = 0; i < 9; i++) {
+			centerPoint = new PointF[18];
+			upperLeftPoint = new PointF[18];
+			for (int i = 0; i < 18; i++) {
 				centerPoint[i] = new PointF();
 				upperLeftPoint[i] = new PointF();
 			}

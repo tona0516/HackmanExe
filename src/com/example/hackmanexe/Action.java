@@ -5,7 +5,5 @@ package com.example.hackmanexe;
  * チップ？の情報を保持するクラス
  * abstractクラスにするか検討中
  */
-public class Action {
-	 public Action() {
-	}
+abstract class Action {
 }
