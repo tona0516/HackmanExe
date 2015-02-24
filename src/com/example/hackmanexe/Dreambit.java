@@ -8,7 +8,7 @@ public class Dreambit extends Enemy {
 	private static final int HP = 200;
 	private Player player;
 	private Timer t;
-
+	
 	public Dreambit(PanelInfo panelinfo, Player _player) {
 		super(panelinfo, HP);
 		this.player = _player;
