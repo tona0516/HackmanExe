@@ -98,10 +98,10 @@ public class RelativePositionAttack extends AttackAction {
 		thread.run();
 	}
 
-	public boolean isAtacking() {
-		if (timer != null)
+	@Override
+	boolean isActing() {
+		if(timer != null)
 			return true;
-		else
-			return false;
+		return false;
 	}
 }

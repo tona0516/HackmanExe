@@ -14,4 +14,9 @@ public class SupportAction extends Action{
 	public void support(){
 		Log.d(this.toString(), "support");
 	}
+	@Override
+	boolean isActing() {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
 }

@@ -1,6 +1,5 @@
 package com.example.hackmanexe;
 
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 /**
@@ -9,21 +8,15 @@ import java.util.TimerTask;
  */
 public class Cannodam extends Enemy {
 
-	private Player player;
 	private MainActivity mainActivity;
 	private Cannodam cannodam;
 	private CannoTarget ct;
-	private boolean isScope; // 照準を飛ばしているかどうか
-	private LinkedList<Integer> attackRangeList;
 	Timer timer;
 
-	public Cannodam(MainActivity _mainActivity, PanelInfo _panelInfo, int _HP,
-			Player _player) {
+	public Cannodam(MainActivity _mainActivity, PanelInfo _panelInfo, int _HP) {
 		super(_panelInfo, _HP);
 		cannodam = this;
 		mainActivity = _mainActivity;
-		player = _player;
-		attackRangeList = new LinkedList<Integer>();
 
 		// いきなり攻撃し始めないように
 		try {
@@ -36,24 +29,21 @@ public class Cannodam extends Enemy {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				int ownLine = cannodam.getCurrentPanelInfo().getLine();
-				int playerLine = player.getCurrentPanelInfo().getLine();
-				if (ct == null || !ct.isAtacking()) {
+				if (ct == null || !ct.isActing()) {
 					ct = new CannoTarget(mainActivity, cannodam);
 					cannodam.addAction(ct);
 					cannodam.action();
 				}
-				// if(apa == null || !apa.isAtacking()){
-				// apa = new AbsolutePositionAttack(mainActivity, 10, 0,
-				// String.valueOf(player.getCurrentPanelInfo().getIndex()),
-				// cannodam);
-				// }
 			}
 		}, 0, 1000);
 	}
 
 	@Override
 	void deathProcess() {
+		if(timer != null){
+			timer.cancel();
+			timer = null;
+		}
 		this.getCurrentPanelInfo().setObject(null);
 	}
 

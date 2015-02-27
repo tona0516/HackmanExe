@@ -87,14 +87,10 @@ public class AbsolutePositionAttack extends AttackAction {
 		thread.run();
 	}
 
-	/**
-	 *
-	 * @return 攻撃中…true, 違う・・・false
-	 */
-	public boolean isAtacking() {
+	@Override
+	boolean isActing() {
 		if (timer != null)
 			return true;
-		else
-			return false;
+		return false;
 	}
 }

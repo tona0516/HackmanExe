@@ -8,6 +8,8 @@ import android.view.View;
 
 public class CannoTarget extends RelativePositionAttack {
 
+	private AbsolutePositionAttack apa;
+
 	public CannoTarget(Activity activity, FieldObject fieldObject) {
 		super(activity, 0, 300, "le", fieldObject);
 	}
@@ -15,8 +17,8 @@ public class CannoTarget extends RelativePositionAttack {
 	@Override
 	protected boolean judgeConfliction(int index) {
 		if (super.judgeConfliction(index)) {
-			MainActivity.t[index].setVisibility(View.INVISIBLE);
-			fieldObject.addAction(new AbsolutePositionAttack(activity, 10, 0, String.valueOf(index), fieldObject));
+			apa = new AbsolutePositionAttack(activity, 10, 0, String.valueOf(index), fieldObject);
+			fieldObject.addAction(apa);
 			fieldObject.action();
 			return true;
 		}

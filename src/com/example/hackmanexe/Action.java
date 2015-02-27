@@ -6,4 +6,5 @@ package com.example.hackmanexe;
  * abstractクラスにするか検討中
  */
 abstract class Action {
+	abstract boolean isActing();
 }

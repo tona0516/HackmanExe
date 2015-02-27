@@ -45,7 +45,7 @@ public class Metall extends Enemy {
 				// 自分・プレイヤーの位置を取得
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = metall.getCurrentPanelInfo().getLine();
-				if (rpa == null || !rpa.isAtacking()) {
+				if (rpa == null || !rpa.isActing()) {
 					if (prePlayerLine == currentPlayerLine
 							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
 						// 攻撃！
