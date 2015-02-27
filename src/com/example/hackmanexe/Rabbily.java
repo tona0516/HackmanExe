@@ -19,10 +19,13 @@ public class Rabbily extends Enemy {
 	private int prePlayerLine = -1;
 	private int preOwnLine = -1;
 	private Rabbily rabbily;
-	private Timer timer;
+	private Timer timer1, timer2;
 	private RelativePositionAttack rpa = null;
 	private Player player;
 	private MainActivity mainActivity;
+
+	private int phase = 1;
+	private int moveTime = 0;
 
 	public Rabbily(MainActivity _mainActivity, PanelInfo _panelInfo,
 			Player _player) {
@@ -40,75 +43,126 @@ public class Rabbily extends Enemy {
 		}
 
 		// 動作アルゴリズム
-		// 1秒毎に処理
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
+		timer1 = new Timer();
+		timer2 = new Timer();
+		changeTimer();
+		
+	}
+
+	private void timer1Task() {
+		timer1 = new Timer();
+		timer1.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
-				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
-				int currentOwnLine = rabbily.getCurrentPanelInfo().getLine();
+				int currentPlayerLine = player.getCurrentPanelInfo()
+						.getLine();
+				int currentOwnLine = rabbily.getCurrentPanelInfo()
+						.getLine();
 				PanelInfo pi = rabbily.getCurrentPanelInfo();
 				if (rpa == null || !rpa.isAtacking()) {
-					// ランダム移動
-					getMovableDirection(pi);
-					
+
+					randomMoveUDLR(pi); // ランダム移動
+					moveTime++;
+				}
+
+				if (moveTime >= 5) {
+					changeTimer();
 				}
 			}
 		}, 0, 1000);
+	}
+
+	private void timer2Task() {
+		timer2 = new Timer();
+		timer2.scheduleAtFixedRate(new TimerTask() { // 0.3秒ごとに実行
+			@Override
+			public void run() {
+				// 自分・プレイヤーの位置を取得
+				int currentPlayerLine = player.getCurrentPanelInfo()
+						.getLine();
+				int currentOwnLine = rabbily.getCurrentPanelInfo()
+						.getLine();
+				PanelInfo pi = rabbily.getCurrentPanelInfo();
+
+				if (rpa == null || !rpa.isAtacking()) {
+					if (prePlayerLine == currentPlayerLine
+							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
+						// 攻撃！
+						rpa = new RelativePositionAttack(mainActivity,
+								10, 100, "le", rabbily);
+						rabbily.addAction(rpa);
+						rabbily.action();
+						moveTime = 0;
+						changeTimer();
+					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
+						moveUp();
+						Log.d(this.toString(), "up");
+					} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
+						moveDown();
+						Log.d(this.toString(), "down");
+					}
+					prePlayerLine = currentPlayerLine;
+					preOwnLine = currentOwnLine;
+				}
+			}
+		}, 0, 300);
 
 	}
 
 	@Override
 	void deathProcess() {
-		if (timer != null) {
-			timer.cancel();
-			timer = null;
+		if (timer1 != null) {
+			timer1.cancel();
+			timer1 = null;
+		}
+		if (timer2 != null) {
+			timer2.cancel();
+			timer2 = null;
 		}
 	}
-	
-	//
-	void getMovableDirection(PanelInfo pi){
-		int listnum = 0;
-		int[] list = new int[4];
-			
-		if(pi.getUp()!=null){
-			if(pi.getUp().isEnemyPanel()){
-				list[listnum] = 1;
-				listnum++;
+
+	/**
+	 * ランダムに上下左右のどこかへ移動するメソッド
+	 * 
+	 * @param pi
+	 */
+	void randomMoveUDLR(PanelInfo pi) {
+		int listnum = 0; // 移動可能な方向の数（最大4）
+		int[] list = new int[4]; // 移動可能な方向のインデックスを保存（up:1 right:2 down:3
+									// left:4）
+
+		if (pi.getUp() != null) { // 上のパネルがnullじゃない場合のみ考える
+			if (pi.getUp().isEnemyPanel()) { // 上のパネルがウィルスサイドに属するパネルなら
+				list[listnum] = 1; // 移動可能な方向として、リストにインデックスを追加
+				listnum++; // 移動可能な方向の数が増える
 			}
 		}
-		if(pi.getRight()!=null){
-			if(pi.getRight().isEnemyPanel()){
+		if (pi.getRight() != null) {
+			if (pi.getRight().isEnemyPanel()) {
 				list[listnum] = 2;
 				listnum++;
 			}
 		}
-		if(pi.getDown()!=null){
-			if(pi.getDown().isEnemyPanel()){
+		if (pi.getDown() != null) {
+			if (pi.getDown().isEnemyPanel()) {
 				list[listnum] = 3;
 				listnum++;
 			}
 		}
-		if(pi.getLeft()!=null){
-			if(pi.getLeft().isEnemyPanel()){
+		if (pi.getLeft() != null) {
+			if (pi.getLeft().isEnemyPanel()) {
 				list[listnum] = 4;
 				listnum++;
 			}
 		}
-		
-		int[] list2 = new int[listnum];
-		
-		for(int i = 0; i < listnum; i++){
-			list2[i] = list[i];
-		}
-		
+
 		Random random = new Random();
-		int listind = random.nextInt(listnum); // 移動する方向をランダムで設定
-		int directnum = list2[listind];
-		Log.d(this.toString(), "" + directnum);
+		int listind = random.nextInt(listnum); // 移動可能な方向の数が、乱数の候補の数
+		int directnum = list[listind]; // 方向を決定
+
 		switch (directnum) {
-		case 1:
+		case 1: // 選ばれたインデックスに応じて移動
 			moveUp();
 			break;
 		case 2:
@@ -123,6 +177,19 @@ public class Rabbily extends Enemy {
 		default:
 			Log.d(this.toString(), "move error");
 			break;
+		}
+	}
+
+	private void changeTimer() {
+		if (timer2 != null) {
+			timer2.cancel();
+			timer2 = null;
+			timer1Task();
+		} else if (timer1 != null) {
+			timer1.cancel();
+			timer1 = null;
+			timer1 = new Timer();
+			timer2Task();
 		}
 	}
 
