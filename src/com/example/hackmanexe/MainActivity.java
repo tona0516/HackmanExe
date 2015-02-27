@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
 	public static SurfaceView[] t = new SurfaceView[18]; //攻撃範囲を描画するViewをパネル数作成
+	public static SurfaceView[] t2 = new SurfaceView[18]; //攻撃範囲を描画するViewをパネル数作成
 
 	/**
 	 * ここから実行
@@ -72,6 +73,18 @@ public class MainActivity extends Activity {
 			t[i].setY(DrawingPosition.area.upperLeftPoint[i].y);
 			t[i].setVisibility(View.GONE); //普段は非表示に
 			frameLayout.addView(t[i]);
+		}
+
+		for (int i = 0; i < 18; i++) {
+			t2[i] = new SurfaceView(this);
+			t2[i].setLayoutParams(new LayoutParams((int) width / 6, (int) height / 3)); //パネルの大きさにする
+			t2[i].setBackgroundColor(Color.CYAN); //黄色で描画
+			t2[i].setAlpha(0.5f); //半透明に
+			//描画位置を設定
+			t2[i].setX(DrawingPosition.area.upperLeftPoint[i].x);
+			t2[i].setY(DrawingPosition.area.upperLeftPoint[i].y);
+			t2[i].setVisibility(View.GONE); //普段は非表示に
+			frameLayout.addView(t2[i]);
 		}
 	}
 }

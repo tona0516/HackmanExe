@@ -16,10 +16,10 @@ import android.view.animation.AlphaAnimation;
  *
  */
 public class RelativePositionAttack extends AttackAction {
-	private String range; // 範囲
-	private int prePanelIndex = -1;
-	private Iterator<String> iterator;
-	private Timer timer;
+	protected String range; // 範囲
+	protected int prePanelIndex = -1;
+	protected Iterator<String> iterator;
+	protected Timer timer;
 
 	public RelativePositionAttack(Activity activity, int power, long interval,
 			String range, FieldObject fieldObject) {

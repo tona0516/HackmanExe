@@ -34,7 +34,7 @@ abstract class FieldObject {
 		if(this.HP == 0){
 			deathProcess();
 			try {
-				this.finalize();
+				finalize();
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}

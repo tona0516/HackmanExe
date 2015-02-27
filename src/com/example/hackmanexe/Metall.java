@@ -73,6 +73,7 @@ public class Metall extends Enemy {
 			timer.cancel();
 			timer = null;
 		}
+		this.getCurrentPanelInfo().setObject(null);
 	}
 
 }
