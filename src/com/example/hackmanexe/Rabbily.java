@@ -46,10 +46,13 @@ public class Rabbily extends Enemy {
 		// 動作アルゴリズム
 		timer1 = new Timer();
 		timer2 = new Timer();
-		changeTimer();
+		changeTimer();	//Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
 		
 	}
 
+	/**
+	 * ランダム移動動作を行うタイマーをセット
+	 */
 	private void timer1Task() {
 		timer1 = new Timer();
 		timer1.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
@@ -64,16 +67,19 @@ public class Rabbily extends Enemy {
 				if (rpa == null || !rpa.isAtacking()) {
 
 					randomMoveUDLR(pi); // ランダム移動
-					moveTime++;
+					moveTime++;			//移動回数が増加
 				}
 
-				if (moveTime >= 5) {
-					changeTimer();
+				if (moveTime >= 5) {	//一定回数移動したら
+					changeTimer();		//追跡＆攻撃動作に切り替え
 				}
 			}
 		}, 0, 1000);
 	}
 
+	/**
+	 * 追跡動作と攻撃動作を行うタイマーをセット
+	 */
 	private void timer2Task() {
 		timer2 = new Timer();
 		timer2.scheduleAtFixedRate(new TimerTask() { // 0.3秒ごとに実行
@@ -87,20 +93,21 @@ public class Rabbily extends Enemy {
 				PanelInfo pi = rabbily.getCurrentPanelInfo();
 
 				if (rpa == null || !rpa.isAtacking()) {
-					if (currentPlayerLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
-						// 攻撃！
+					if (currentPlayerLine == currentOwnLine) {	//相手が同じラインに居れば
 						try {
-							TimeUnit.MILLISECONDS.sleep(300);
+							TimeUnit.MILLISECONDS.sleep(300);	//振りかぶって（少し待って）
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						//攻撃!!
 						rpa = new RelativePositionAttack(mainActivity,
 								10, 100, "le", rabbily);
 						rabbily.addAction(rpa);
 						rabbily.action();
-						moveTime = 0;
-						changeTimer();
+						moveTime = 0;	//移動回数をリセットして
+						changeTimer();	//ランダム移動動作に切り替え
+						
 					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
 						moveUp();
 						Log.d(this.toString(), "up");
@@ -186,11 +193,14 @@ public class Rabbily extends Enemy {
 		}
 	}
 
+	/**
+	 * 実行するタイマーの切り替えを行う
+	 */
 	private void changeTimer() {
-		if (timer2 != null) {
-			timer2.cancel();
-			timer2 = null;
-			timer1Task();
+		if (timer2 != null) {	//タイマー2が起動しているなら
+			timer2.cancel();	//タイマー2をキャンセル
+			timer2 = null;		//タイマー2を未セット状態に
+			timer1Task();		//代わりにタイマー1をセット
 		} else if (timer1 != null) {
 			timer1.cancel();
 			timer1 = null;
