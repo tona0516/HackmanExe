@@ -3,6 +3,7 @@ package com.example.hackmanexe;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
 
@@ -86,9 +87,14 @@ public class Rabbily extends Enemy {
 				PanelInfo pi = rabbily.getCurrentPanelInfo();
 
 				if (rpa == null || !rpa.isAtacking()) {
-					if (prePlayerLine == currentPlayerLine
-							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
+					if (currentPlayerLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
 						// 攻撃！
+						try {
+							TimeUnit.MILLISECONDS.sleep(300);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						rpa = new RelativePositionAttack(mainActivity,
 								10, 100, "le", rabbily);
 						rabbily.addAction(rpa);
@@ -106,7 +112,7 @@ public class Rabbily extends Enemy {
 					preOwnLine = currentOwnLine;
 				}
 			}
-		}, 0, 300);
+		}, 300, 300);
 
 	}
 
