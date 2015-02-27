@@ -49,12 +49,14 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		// 中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// 中央にエネミーオブジェクトの生成
-		Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
+		//Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
+		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[10], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		objectList.add(metall);
+		//objectList.add(metall);
+		objectList.add(rabbily);
 	}
 
 	@Override
