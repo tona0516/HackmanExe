@@ -19,7 +19,6 @@ public class AbsolutePositionAttack extends AttackAction {
 	private int prePanelIndex = -1;
 	private Iterator<String> iterator;
 	private Timer timer;
-	private int niki;
 
 	public AbsolutePositionAttack(Activity activity, int power, long interval,
 			String range, FieldObject fieldObject) {
