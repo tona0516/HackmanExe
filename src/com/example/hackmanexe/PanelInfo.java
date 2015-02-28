@@ -12,6 +12,8 @@ class PanelInfo {
 	private float drawX, drawY; // 描画位置
 	private FieldObject object = null; // パネル上のオブジェクト
 	private int belong = 0; // 1・・・playerエリア,2・・・enemyエリア
+	
+	private int frontrowindex = 2; // プレイヤーの最前列を保持しておく(デフォは2)、敵はこれに+1だけでよい
 
 	public PanelInfo(int index) {
 		this.setIndex(index);
@@ -59,6 +61,12 @@ class PanelInfo {
 		this.index = index;
 	}
 
+	public int getFrontrowindex() {
+		return frontrowindex;
+	}
+	public void setFrontrowindex(int frontrowindex) {
+		this.frontrowindex = frontrowindex;
+	}
 	/**
 	 *
 	 * @return 上から見て 0…上段,1…中段,2…下段

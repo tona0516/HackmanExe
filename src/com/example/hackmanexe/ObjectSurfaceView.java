@@ -51,12 +51,14 @@ class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, R
 		// 中央にエネミーオブジェクトの生成
 		//Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
 		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[11], 40);
+		//Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[10], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		objectList.add(cannodam);
 		//objectList.add(metall);
+		objectList.add(cannodam);
+		//objectList.add(rabbily);
 	}
 
 	@Override
