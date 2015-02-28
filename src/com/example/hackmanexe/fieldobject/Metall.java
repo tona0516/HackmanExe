@@ -1,9 +1,13 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.util.Log;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.RelativePositionAttack;
 
 /**
  * メットールクラス 移動はできる。攻撃はまだ
@@ -68,7 +72,7 @@ public class Metall extends Enemy {
 	}
 
 	@Override
-	void deathProcess() {
+	protected void deathProcess() {
 		if (timer != null) {
 			timer.cancel();
 			timer = null;

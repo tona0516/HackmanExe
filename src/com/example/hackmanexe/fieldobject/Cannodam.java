@@ -1,7 +1,11 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.CannoTarget;
 /**
  *
  * @author meem キャノーダム。常に照準を飛ばしてそれに引っかかったプレイヤーを打つ
@@ -32,7 +36,7 @@ public class Cannodam extends Enemy {
 	}
 
 	@Override
-	void deathProcess() {
+	protected void deathProcess() {
 		if(timer != null){
 			timer.cancel();
 			timer = null;

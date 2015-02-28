@@ -7,7 +7,7 @@ import android.graphics.PointF;
  *
  * @author meem
  */
-class DrawingPosition {
+public class DrawingPosition {
 	public static float width;
 	public static float height;
 	public static Area area;

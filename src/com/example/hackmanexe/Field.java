@@ -3,7 +3,7 @@ package com.example.hackmanexe;
  *
  * @author meem バトルフィールドの情報を保持するクラス
  */
-class Field {
+public class Field {
 	private PanelInfo[] panelInfo = new PanelInfo[18];
 
 	public Field() {

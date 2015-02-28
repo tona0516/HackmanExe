@@ -1,9 +1,12 @@
 package com.example.hackmanexe;
+
+import com.example.hackmanexe.fieldobject.FieldObject;
+
 /**
  *
  * @author meem 各パネルの情報を保持するクラス
  */
-class PanelInfo {
+public class PanelInfo {
 	private PanelInfo up = null;
 	private PanelInfo down = null;
 	private PanelInfo left = null;
@@ -12,7 +15,7 @@ class PanelInfo {
 	private float drawX, drawY; // 描画位置
 	private FieldObject object = null; // パネル上のオブジェクト
 	private int belong = 0; // 1・・・playerエリア,2・・・enemyエリア
-	
+
 	private int frontrowindex = 2; // プレイヤーの最前列を保持しておく(デフォは2)、敵はこれに+1だけでよい
 
 	public PanelInfo(int index) {

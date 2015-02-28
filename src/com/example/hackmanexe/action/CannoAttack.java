@@ -1,7 +1,10 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.action;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 import android.app.Activity;
 import android.view.View;

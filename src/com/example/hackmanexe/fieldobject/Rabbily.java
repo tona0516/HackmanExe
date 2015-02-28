@@ -1,4 +1,4 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
 
 import java.util.Random;
 import java.util.Timer;
@@ -6,6 +6,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.RelativePositionAttack;
 
 /**
  * メットールクラス 移動はできる。攻撃はまだ
@@ -124,7 +128,7 @@ public class Rabbily extends Enemy {
 	}
 
 	@Override
-	void deathProcess() {
+	protected void deathProcess() {
 		if (timer1 != null) {
 			timer1.cancel();
 			timer1 = null;

@@ -1,4 +1,4 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.action;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -8,6 +8,9 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
  * エリアを指定して攻撃するクラス
@@ -88,7 +91,7 @@ public class AbsolutePositionAttack extends AttackAction {
 	}
 
 	@Override
-	boolean isActing() {
+	protected boolean isActing() {
 		if (timer != null)
 			return true;
 		return false;

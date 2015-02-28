@@ -1,4 +1,7 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
 
 /**
  * プレイヤークラス 自エリアにプレイヤー以外のオブジェクトがある場合を考慮していない
@@ -17,7 +20,7 @@ public class Player extends FieldObject {
 	}
 
 	@Override
-	void deathProcess() {
+	protected void deathProcess() {
 		this.getCurrentPanelInfo().setObject(null);
 	}
 }

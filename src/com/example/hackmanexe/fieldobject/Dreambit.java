@@ -1,18 +1,20 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.example.hackmanexe.PanelInfo;
+
 public class Dreambit extends Enemy {
-	
+
 	private static final int HP = 200;
 	private Player player;
 	private Timer t;
-	
+
 	public Dreambit(PanelInfo panelinfo, Player _player) {
 		super(panelinfo, HP);
 		this.player = _player;
-		
+
 		t = new Timer();
 		t.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -28,7 +30,7 @@ public class Dreambit extends Enemy {
 	}
 
 	@Override
-	void deathProcess() {
+	protected void deathProcess() {
 		// TODO 自動生成されたメソッド・スタブ
 		if (t != null) {
 			t.cancel();

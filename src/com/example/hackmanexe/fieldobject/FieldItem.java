@@ -1,4 +1,6 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
+
+import com.example.hackmanexe.PanelInfo;
 
 /**
  * エリア上のアイテムを保持するクラス 破壊せずにバトルに勝つとアイテムがゲットできるアレに使用
@@ -6,13 +8,9 @@ package com.example.hackmanexe;
  * @author meem
  *
  */
-public class FieldItem extends FieldObject {
+abstract public class FieldItem extends FieldObject {
 
 	public FieldItem(PanelInfo _currentPanelInfo) {
 		super(_currentPanelInfo, 1);
-	}
-
-	@Override
-	void deathProcess() {
 	}
 }

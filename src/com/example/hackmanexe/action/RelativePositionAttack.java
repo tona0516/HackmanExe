@@ -1,9 +1,13 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.action;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 import android.app.Activity;
 import android.view.View;
@@ -99,7 +103,7 @@ public class RelativePositionAttack extends AttackAction {
 	}
 
 	@Override
-	boolean isActing() {
+	public boolean isActing() {
 		if(timer != null)
 			return true;
 		return false;

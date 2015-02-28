@@ -12,13 +12,20 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.hackmanexe.action.AbsolutePositionAttack;
+import com.example.hackmanexe.action.RelativePositionAttack;
+import com.example.hackmanexe.fieldobject.Cannodam;
+import com.example.hackmanexe.fieldobject.Enemy;
+import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Player;
+
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
  *
  * @author meem
  *
  */
-class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 	private float width, height;
 	private float downX, downY, upX, upY; // タッチ座標,離れた座標
 	private final int flickSensitivity = 20;

@@ -1,4 +1,4 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.action;
 
 import android.util.Log;
 
@@ -15,7 +15,7 @@ public class SupportAction extends Action{
 		Log.d(this.toString(), "support");
 	}
 	@Override
-	boolean isActing() {
+	protected boolean isActing() {
 		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}

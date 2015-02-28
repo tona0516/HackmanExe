@@ -1,6 +1,12 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.fieldobject;
 
 import java.util.ArrayList;
+
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.AbsolutePositionAttack;
+import com.example.hackmanexe.action.Action;
+import com.example.hackmanexe.action.RelativePositionAttack;
+import com.example.hackmanexe.action.SupportAction;
 
 /**
  * エリア上のオブジェクトを保持するスーパークラス
@@ -8,7 +14,7 @@ import java.util.ArrayList;
  * @author meem
  *
  */
-abstract class FieldObject {
+abstract public class FieldObject {
 	protected PanelInfo currentPanelInfo;
 	protected int HP;
 	protected ArrayList<Action> actionList;
@@ -29,6 +35,7 @@ abstract class FieldObject {
 	public int getHP() {
 		return HP;
 	}
+
 	public void setHP(int HP) {
 		this.HP = HP;
 		if(this.HP == 0){
@@ -75,7 +82,7 @@ abstract class FieldObject {
 	/**
 	 * 死んだ時の処理
 	 */
-	abstract void deathProcess();
+	abstract protected void deathProcess();
 
 	public boolean moveUp() {
 		if (currentPanelInfo.getUp() == null)

@@ -1,4 +1,10 @@
-package com.example.hackmanexe;
+package com.example.hackmanexe.action;
+
+import com.example.hackmanexe.ObjectSurfaceView;
+import com.example.hackmanexe.fieldobject.Enemy;
+import com.example.hackmanexe.fieldobject.FieldItem;
+import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Player;
 
 import android.app.Activity;
 
