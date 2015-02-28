@@ -6,9 +6,14 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.view.View;
 
+/**
+ *
+ * @author meem 照準を飛ばしてオブジェクトと重なったらそれに攻撃する
+ */
 public class CannoTarget extends RelativePositionAttack {
 
-	private AbsolutePositionAttack apa;
+	private CannoAttack ca;
+	private boolean lockOnFlag = false;
 
 	public CannoTarget(Activity activity, FieldObject fieldObject) {
 		super(activity, 0, 300, "le", fieldObject);
@@ -17,8 +22,8 @@ public class CannoTarget extends RelativePositionAttack {
 	@Override
 	protected boolean judgeConfliction(int index) {
 		if (super.judgeConfliction(index)) {
-			apa = new AbsolutePositionAttack(activity, 10, 0, String.valueOf(index), fieldObject);
-			fieldObject.addAction(apa);
+			ca = new CannoAttack(activity, 10, String.valueOf(index), fieldObject);
+			fieldObject.addAction(ca);
 			fieldObject.action();
 			return true;
 		}
@@ -34,22 +39,19 @@ public class CannoTarget extends RelativePositionAttack {
 				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (!iterator.hasNext()) {
+						if (!iterator.hasNext() || lockOnFlag) {
 							MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							timer.cancel();
 							timer = null;
-						}
-						if (iterator.hasNext()) {
+						}else if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
 								MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							int index = Integer.valueOf(iterator.next());
 							MainActivity.t2[index].setVisibility(View.VISIBLE);
-							if(judgeConfliction(index)){
-								timer.cancel();
-								timer = null;
-							}else{
-								prePanelIndex = index;
+							if (judgeConfliction(index)) {
+								lockOnFlag = true;
 							}
+							prePanelIndex = index;
 						}
 					}
 				});

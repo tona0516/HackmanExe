@@ -18,13 +18,6 @@ public class Cannodam extends Enemy {
 		cannodam = this;
 		mainActivity = _mainActivity;
 
-		// いきなり攻撃し始めないように
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -35,7 +28,7 @@ public class Cannodam extends Enemy {
 					cannodam.action();
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 1000);
 	}
 
 	@Override
