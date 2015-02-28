@@ -73,11 +73,10 @@ public class Metall extends Enemy {
 
 	@Override
 	protected void deathProcess() {
+		super.deathProcess();
 		if (timer != null) {
 			timer.cancel();
 			timer = null;
 		}
-		this.getCurrentPanelInfo().setObject(null);
 	}
-
 }

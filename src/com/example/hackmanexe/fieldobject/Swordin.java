@@ -68,8 +68,7 @@ public class Swordin extends Enemy {
 
 	@Override
 	protected void deathProcess() {
-		// TODO 自動生成されたメソッド・スタブ
-
+		super.deathProcess();
 	}
 
 }

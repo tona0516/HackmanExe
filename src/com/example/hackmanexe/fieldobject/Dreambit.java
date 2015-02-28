@@ -31,7 +31,7 @@ public class Dreambit extends Enemy {
 
 	@Override
 	protected void deathProcess() {
-		// TODO 自動生成されたメソッド・スタブ
+		super.deathProcess();
 		if (t != null) {
 			t.cancel();
 			t = null;

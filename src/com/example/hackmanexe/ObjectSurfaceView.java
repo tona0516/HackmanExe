@@ -15,9 +15,10 @@ import android.view.SurfaceView;
 import com.example.hackmanexe.action.AbsolutePositionAttack;
 import com.example.hackmanexe.action.RelativePositionAttack;
 import com.example.hackmanexe.fieldobject.Cannodam;
-import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
+import com.example.hackmanexe.fieldobject.Rabbily;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -34,38 +35,44 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	private SurfaceHolder holder;
 	public static Field field;
 	public static ArrayList<FieldObject> objectList;
+	// public static ArrayList<Pair<FieldObject, Integer>> objectList = new
+	// ArrayList<Pair<FieldObject, Integer>>();
 	private MainActivity mainActivity;
+	private int[] colorArray = {Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.YELLOW};
 
 	public ObjectSurfaceView(Context context, MainActivity mainActivity,
 			float width, float height) {
 		super(context);
-		this.width = width;
-		this.height = height;
-		this.mainActivity = mainActivity;
-		// 半透明を設定
-		getHolder().setFormat(PixelFormat.TRANSLUCENT);
-		// コールバック登録
-		getHolder().addCallback(this);
-		// フォーカス可
-		setFocusable(true);
-		// このViewをトップにする
-		setZOrderOnTop(true);
+		setup(mainActivity, width, height);
 
-		// フィールドオブジェクトの生成
+		// 3×6のフィールドオブジェクトの生成
 		field = new Field();
-		// 中央にプレイヤーオブジェクトの生成
+		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
-		// 中央にエネミーオブジェクトの生成
-		//Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
-		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[11], 40);
-		//Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[10], player);
+		// エネミーフィールドにエネミーオブジェクトの生成
+		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
+		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[4], 40);
+		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		//objectList.add(metall);
+		objectList.add(metall);
 		objectList.add(cannodam);
-		//objectList.add(rabbily);
+		objectList.add(rabbily);
+
+		// Pair<FieldObject, Integer> p1 = new Pair<FieldObject,
+		// Integer>(player, 1);
+		// Pair<FieldObject, Integer> p2 = new Pair<FieldObject,
+		// Integer>(metall, 2);
+		// Pair<FieldObject, Integer> p3 = new Pair<FieldObject,
+		// Integer>(cannodam, 3);
+		// Pair<FieldObject, Integer> p4 = new Pair<FieldObject,
+		// Integer>(rabbily, 4);
+		// objectList.add(p1);
+		// objectList.add(p2);
+		// objectList.add(p3);
+		// objectList.add(p4);
 	}
 
 	@Override
@@ -98,7 +105,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 				upX = event.getX();
 				upY = event.getY();
 				// 上下左右の判定
-				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity ) { // 左右の移動量が多い
+				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity) { // 左右の移動量が多い
 					if (downX > upX) {
 						if (width / 2 > downX) { // タッチ座標が画面左
 							onLeftFlickOnLeftSide();
@@ -139,6 +146,20 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		return true;
 	}
 
+	private void setup(MainActivity mainActivity, float width, float height) {
+		this.width = width;
+		this.height = height;
+		this.mainActivity = mainActivity;
+		// 半透明を設定
+		getHolder().setFormat(PixelFormat.TRANSLUCENT);
+		// コールバック登録
+		getHolder().addCallback(this);
+		// フォーカス可
+		setFocusable(true);
+		// このViewをトップにする
+		setZOrderOnTop(true);
+	}
+
 	private void onUpFlickOnRightSide() {
 
 	}
@@ -154,7 +175,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onLeftFlickOnRightSide() {
-		player.addAction(new AbsolutePositionAttack(mainActivity, 10, 100, "12,13,14,15,16,17,11,5,4,3,2,1,0", player));
+		player.addAction(new AbsolutePositionAttack(mainActivity, 10, 100, "12,13,14,15,16,17,11,5,4,3,2,1,0", player)); // ブーメラン
 		player.action();
 	}
 
@@ -205,12 +226,8 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 			for (FieldObject o : objectList) {
 				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
-					if (o instanceof Player) {
-						paint.setStyle(Paint.Style.STROKE);
-						paint.setStrokeWidth(10);
-					} else if (o instanceof Enemy) {
-						paint.setStyle(Paint.Style.FILL);
-					}
+					paint.setStyle(Paint.Style.FILL);
+					paint.setColor(colorArray[objectList.indexOf(o)]);
 					canvas.drawCircle(o.getCurrentPanelInfo().getDrawX(), o.getCurrentPanelInfo().getDrawY(), 100, paint);
 					paint.reset();
 					paint.setTextSize(100);

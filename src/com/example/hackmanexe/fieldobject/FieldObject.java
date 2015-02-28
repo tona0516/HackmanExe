@@ -82,10 +82,14 @@ abstract public class FieldObject {
 	/**
 	 * 死んだ時の処理
 	 */
-	abstract protected void deathProcess();
+	protected void deathProcess(){
+		this.getCurrentPanelInfo().setObject(null); //死ぬときはパネル上から自分の存在を消す
+	}
 
 	public boolean moveUp() {
 		if (currentPanelInfo.getUp() == null)
+			return false;
+		if(currentPanelInfo.getUp().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getUp().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getUp().isEnemyPanel() && this instanceof Enemy)) {
 			FieldObject o = currentPanelInfo.getObject();
@@ -100,6 +104,8 @@ abstract public class FieldObject {
 	public boolean moveDown() {
 		if (currentPanelInfo.getDown() == null)
 			return false;
+		if(currentPanelInfo.getDown().getObject() != null)
+			return false;
 		if ((currentPanelInfo.getDown().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getDown().isEnemyPanel() && this instanceof Enemy)) {
 			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
@@ -113,6 +119,8 @@ abstract public class FieldObject {
 	public boolean moveRight() {
 		if (currentPanelInfo.getRight() == null)
 			return false;
+		if(currentPanelInfo.getRight().getObject() != null)
+			return false;
 		if ((currentPanelInfo.getRight().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getRight().isEnemyPanel() && this instanceof Enemy)) {
 			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
@@ -125,6 +133,8 @@ abstract public class FieldObject {
 	}
 	public boolean moveLeft() {
 		if (currentPanelInfo.getLeft() == null)
+			return false;
+		if(currentPanelInfo.getLeft().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getLeft().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getLeft().isEnemyPanel() && this instanceof Enemy)) {
 			FieldObject o = currentPanelInfo.getObject();

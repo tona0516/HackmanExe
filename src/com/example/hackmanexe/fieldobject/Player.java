@@ -21,6 +21,6 @@ public class Player extends FieldObject {
 
 	@Override
 	protected void deathProcess() {
-		this.getCurrentPanelInfo().setObject(null);
+		super.deathProcess();
 	}
 }
