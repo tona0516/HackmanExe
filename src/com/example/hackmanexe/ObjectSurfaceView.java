@@ -35,8 +35,6 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	private SurfaceHolder holder;
 	public static Field field;
 	public static ArrayList<FieldObject> objectList;
-	// public static ArrayList<Pair<FieldObject, Integer>> objectList = new
-	// ArrayList<Pair<FieldObject, Integer>>();
 	private MainActivity mainActivity;
 	private int[] colorArray = {Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.YELLOW};
 
@@ -60,19 +58,6 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		objectList.add(metall);
 		objectList.add(cannodam);
 		objectList.add(rabbily);
-
-		// Pair<FieldObject, Integer> p1 = new Pair<FieldObject,
-		// Integer>(player, 1);
-		// Pair<FieldObject, Integer> p2 = new Pair<FieldObject,
-		// Integer>(metall, 2);
-		// Pair<FieldObject, Integer> p3 = new Pair<FieldObject,
-		// Integer>(cannodam, 3);
-		// Pair<FieldObject, Integer> p4 = new Pair<FieldObject,
-		// Integer>(rabbily, 4);
-		// objectList.add(p1);
-		// objectList.add(p2);
-		// objectList.add(p3);
-		// objectList.add(p4);
 	}
 
 	@Override
