@@ -44,9 +44,11 @@ public class CannoTarget extends RelativePositionAttack {
 					public void run() {
 						if (!iterator.hasNext() || lockOnFlag) {
 							MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
-							timer.cancel();
-							timer = null;
-						}else if (iterator.hasNext()) {
+							if (timer != null) {
+								timer.cancel();
+								timer = null;
+							}
+						} else if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
 								MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							int index = Integer.valueOf(iterator.next());

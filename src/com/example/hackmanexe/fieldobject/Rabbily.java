@@ -40,13 +40,6 @@ public class Rabbily extends Enemy {
 		player = _player;
 		mainActivity = _mainActivity;
 
-		// いきなり攻撃し始めないように
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// 動作アルゴリズム
 		timer1 = new Timer();
 		timer2 = new Timer();
@@ -78,7 +71,7 @@ public class Rabbily extends Enemy {
 					changeTimer();		//追跡＆攻撃動作に切り替え
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 1000);
 	}
 
 	/**

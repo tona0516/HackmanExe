@@ -49,8 +49,10 @@ public class AbsolutePositionAttack extends AttackAction {
 					public void run() {
 						if (!iterator.hasNext()) {
 							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
-							timer.cancel();
-							timer = null;
+							if (timer != null) {
+								timer.cancel();
+								timer = null;
+							}
 						}
 						if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
@@ -96,4 +98,5 @@ public class AbsolutePositionAttack extends AttackAction {
 			return true;
 		return false;
 	}
+
 }

@@ -13,7 +13,7 @@ import android.app.Activity;
  *
  * @author meem
  */
-abstract class AttackAction extends Action {
+abstract class AttackAction extends Action{
 	protected int power; // 攻撃力
 	protected long interval; // 攻撃範囲が移動するスピード
 	protected Activity activity; // UIを描画するActivity

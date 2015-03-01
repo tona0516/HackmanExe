@@ -61,8 +61,10 @@ public class RelativePositionAttack extends AttackAction {
 					public void run() {
 						if (!iterator.hasNext()) {
 							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
-							timer.cancel();
-							timer = null;
+							if (timer != null) {
+								timer.cancel();
+								timer = null;
+							}
 						}
 						if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
@@ -104,7 +106,7 @@ public class RelativePositionAttack extends AttackAction {
 
 	@Override
 	public boolean isActing() {
-		if(timer != null)
+		if (timer != null)
 			return true;
 		return false;
 	}

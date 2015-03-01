@@ -33,13 +33,6 @@ public class Metall extends Enemy {
 		player = _player;
 		mainActivity = _mainActivity;
 
-		// いきなり攻撃し始めないように
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// 動作アルゴリズム
 		// 1秒毎に処理
 		timer = new Timer();
@@ -68,7 +61,7 @@ public class Metall extends Enemy {
 					preOwnLine = currentOwnLine;
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 1000);
 	}
 
 	@Override

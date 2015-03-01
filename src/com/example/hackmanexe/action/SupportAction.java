@@ -11,9 +11,10 @@ public class SupportAction extends Action{
 	public SupportAction() {
 		super();
 	}
+
 	public void support(){
-		Log.d(this.toString(), "support");
 	}
+
 	@Override
 	protected boolean isActing() {
 		// TODO 自動生成されたメソッド・スタブ
