@@ -1,12 +1,12 @@
 package com.example.hackmanexe.action;
 
+import android.app.Activity;
+
 import com.example.hackmanexe.ObjectSurfaceView;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Player;
-
-import android.app.Activity;
 
 /**
  * 攻撃チップの情報を保持するクラス
