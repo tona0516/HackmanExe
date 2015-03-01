@@ -1,7 +1,7 @@
 package com.example.hackmanexe.action;
 
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,7 +20,7 @@ import com.example.hackmanexe.fieldobject.FieldObject;
 public class AbsolutePositionAttack extends AttackAction {
 	protected String range; // 範囲
 	protected int prePanelIndex = -1;
-	protected Iterator<String> iterator;
+	protected Iterator<Integer> iterator;
 	protected Timer timer;
 
 	public AbsolutePositionAttack(Activity activity, int power, long interval,
@@ -31,11 +31,17 @@ public class AbsolutePositionAttack extends AttackAction {
 
 	public void attack() {
 		String[] indexArrayStr = range.split(",");
-		iterator = Arrays.asList(indexArrayStr).iterator();
-		if (interval != 0)
-			intervalProcess();
-		else
-			nonIntervalProcess();
+		LinkedList<Integer> rangeList = new LinkedList<>();
+		for(String str : indexArrayStr){
+			rangeList.add(Integer.valueOf(str));
+		}
+		if(rangeList != null){
+			iterator = rangeList.iterator();
+			if (interval != 0)
+				intervalProcess();
+			else
+				nonIntervalProcess();
+		}
 	}
 
 	@Override

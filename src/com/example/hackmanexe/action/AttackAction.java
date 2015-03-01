@@ -38,16 +38,16 @@ abstract class AttackAction extends Action{
 		FieldObject o = ObjectSurfaceView.field.getPanelInfo()[index].getObject();
 		// 攻撃者が自分自身の攻撃に当たらないようにする処理
 		if ((o instanceof Enemy || o instanceof FieldItem) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムにあたれば
-			calcurateHP(o);
+			calculateHP(o);
 			return true;
 		} else if ((o instanceof Player || o instanceof FieldItem) && fieldObject instanceof Enemy) { // 攻撃者が敵でプレイヤーorアイテムにあたれば
-			calcurateHP(o);
+			calculateHP(o);
 			return true;
 		}
 		return false;
 	}
 
-	private void calcurateHP(FieldObject o) {
+	private void calculateHP(FieldObject o) {
 		if (o.getHP() - power > 0) { // HP計算
 			o.setHP(o.getHP() - power);
 		} else {

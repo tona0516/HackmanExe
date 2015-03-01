@@ -22,7 +22,7 @@ import com.example.hackmanexe.fieldobject.FieldObject;
 public class RelativePositionAttack extends AttackAction {
 	protected String range; // 範囲
 	protected int prePanelIndex = -1;
-	protected Iterator<String> iterator;
+	protected Iterator<Integer> iterator;
 	protected Timer timer;
 
 	public RelativePositionAttack(Activity activity, int power, long interval,
@@ -32,22 +32,15 @@ public class RelativePositionAttack extends AttackAction {
 	}
 
 	public void attack() {
-		LinkedList<String> rangeList = new LinkedList<String>();
-		PanelInfo pi = fieldObject.getCurrentPanelInfo();
-		if (range.equals("RightToEnd")) {
-			while ((pi = pi.getRight()) != null) {
-				rangeList.add(String.valueOf(pi.getIndex()));
-			}
-		} else if (range.equals("LeftToEnd")) {
-			while ((pi = pi.getLeft()) != null) {
-				rangeList.add(String.valueOf(pi.getIndex()));
-			}
+
+		LinkedList<Integer> rangeList = calculateRange(range);
+		if (rangeList != null) {
+			iterator = rangeList.iterator();
+			if (interval != 0)
+				intervalProcess();
+			else
+				nonIntervalProcess();
 		}
-		iterator = rangeList.iterator();
-		if (interval != 0)
-			intervalProcess();
-		else
-			nonIntervalProcess();
 	}
 
 	@Override
@@ -70,7 +63,7 @@ public class RelativePositionAttack extends AttackAction {
 						if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
 								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
-							int index = Integer.valueOf(iterator.next());
+							int index = iterator.next();
 							MainActivity.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
 							prePanelIndex = index;
@@ -92,7 +85,7 @@ public class RelativePositionAttack extends AttackAction {
 						AlphaAnimation aa = new AlphaAnimation(1, 0);
 						aa.setDuration(msec);
 						while (iterator.hasNext()) {
-							int index = Integer.valueOf(iterator.next());
+							int index = iterator.next();
 							MainActivity.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
 							MainActivity.t[index].startAnimation(aa);
@@ -103,6 +96,77 @@ public class RelativePositionAttack extends AttackAction {
 			}
 		});
 		thread.run();
+	}
+
+	private LinkedList<Integer> calculateRange(String range) {
+		LinkedList<Integer> rangeList = new LinkedList<Integer>();
+		PanelInfo pi = fieldObject.getCurrentPanelInfo();
+		switch (range) {
+			case "RightToEnd" :
+				while ((pi = pi.getRight()) != null) {
+					rangeList.add(pi.getIndex());
+				}
+				return rangeList;
+			case "LeftToEnd" :
+				while ((pi = pi.getLeft()) != null) {
+					rangeList.add(pi.getIndex());
+				}
+				return rangeList;
+			case "pSword" :
+				if (pi.getRight() != null)
+					rangeList.add(pi.getRight().getIndex());
+				return rangeList;
+			case "eSword" :
+				if (pi.getLeft() != null)
+					rangeList.add(pi.getLeft().getIndex());
+				return rangeList;
+			case "pWideSword" :
+				if (pi.getRight() != null)
+					rangeList.add(pi.getRight().getIndex());
+				if (pi.getRight().getUp() != null)
+					rangeList.add(pi.getRight().getUp().getIndex());
+				if (pi.getRight().getDown() != null)
+					rangeList.add(pi.getRight().getDown().getIndex());
+				return rangeList;
+			case "eWideSword" :
+				if (pi.getLeft() != null)
+					rangeList.add(pi.getLeft().getIndex());
+				if (pi.getLeft().getUp() != null)
+					rangeList.add(pi.getLeft().getUp().getIndex());
+				if (pi.getLeft().getDown() != null)
+					rangeList.add(pi.getLeft().getDown().getIndex());
+				return rangeList;
+			case "pLongSword" :
+				if (pi.getRight() != null)
+					rangeList.add(pi.getRight().getIndex());
+				if (pi.getRight().getRight() != null)
+					rangeList.add(pi.getRight().getRight().getIndex());
+				return rangeList;
+			case "eLongSword" :
+				if (pi.getLeft() != null)
+					rangeList.add(pi.getLeft().getIndex());
+				if (pi.getLeft().getLeft() != null)
+					rangeList.add(pi.getLeft().getLeft().getIndex());
+				return rangeList;
+			case "pPaladinSword" :
+				if (pi.getRight() != null)
+					rangeList.add(pi.getRight().getIndex());
+				if (pi.getRight().getRight() != null)
+					rangeList.add(pi.getRight().getRight().getIndex());
+				if (pi.getRight().getRight().getRight() != null)
+					rangeList.add(pi.getRight().getRight().getRight().getIndex());
+				return rangeList;
+			case "ePaladinSword" :
+				if (pi.getLeft() != null)
+					rangeList.add(pi.getLeft().getIndex());
+				if (pi.getLeft().getLeft() != null)
+					rangeList.add(pi.getLeft().getLeft().getIndex());
+				if (pi.getLeft().getLeft().getLeft() != null)
+					rangeList.add(pi.getLeft().getLeft().getLeft().getIndex());
+				return rangeList;
+			default :
+				return null;
+		}
 	}
 
 	@Override

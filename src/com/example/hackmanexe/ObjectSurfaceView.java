@@ -12,9 +12,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.hackmanexe.action.BambooLance;
-import com.example.hackmanexe.action.Boomerang;
-import com.example.hackmanexe.action.Shockwave;
+import com.example.hackmanexe.action.LongSword;
+import com.example.hackmanexe.action.PaladinSword;
+import com.example.hackmanexe.action.Sword;
+import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.Cannodam;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Metall;
@@ -162,21 +163,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onUpFlickOnRightSide() {
-
+		player.addAction(new Sword(mainActivity, player)); // ソード
+		player.action();
 	}
 
 	private void onDownFlickOnRightSide() {
-		player.addAction(new Shockwave(mainActivity, player)); // ex)ショックウェーブ
+		player.addAction(new LongSword(mainActivity, player)); // ロングソード
 		player.action();
 	}
 
 	private void onRightFlickOnRightSide() {
-		player.addAction(new BambooLance(mainActivity, player)); // ex)バンブーランス
+		player.addAction(new WideSword(mainActivity, player)); // ワイドソード
 		player.action();
 	}
 
 	private void onLeftFlickOnRightSide() {
-		player.addAction(new Boomerang(mainActivity, player)); // ブーメラン
+		player.addAction(new PaladinSword(mainActivity, player)); // パラディンソード
 		player.action();
 	}
 
