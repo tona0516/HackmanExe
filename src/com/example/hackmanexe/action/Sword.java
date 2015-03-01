@@ -11,8 +11,8 @@ public class Sword extends RelativePositionAttack {
 	public Sword(Activity activity, FieldObject fieldObject) {
 		super(activity, 10, 0, null, fieldObject);
 		if (this.fieldObject instanceof Player)
-			this.range = "pSword";
+			this.range = "pSword"; //Player攻撃時の攻撃範囲
 		else if (this.fieldObject instanceof Enemy)
-			this.range = "eSword";
+			this.range = "eSword"; //Enemy攻撃時の攻撃範囲
 	}
 }
