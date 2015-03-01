@@ -12,8 +12,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.hackmanexe.action.AbsolutePositionAttack;
-import com.example.hackmanexe.action.RelativePositionAttack;
+import com.example.hackmanexe.action.LongSword;
+import com.example.hackmanexe.action.PaladinSword;
+import com.example.hackmanexe.action.Sword;
+import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.Cannodam;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Metall;
@@ -146,21 +148,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onUpFlickOnRightSide() {
-
+		player.addAction(new Sword(mainActivity, player)); // ソード
+		player.action();
 	}
 
 	private void onDownFlickOnRightSide() {
-		player.addAction(new RelativePositionAttack(mainActivity, 10, 500, "re", player)); // ex)ショックウェーブ
+		player.addAction(new LongSword(mainActivity, player)); // ロングソード
 		player.action();
 	}
 
 	private void onRightFlickOnRightSide() {
-		player.addAction(new AbsolutePositionAttack(mainActivity, 10, 0, "5,11,17", player)); // ex)バンブーランス
+		player.addAction(new WideSword(mainActivity, player)); // ワイドソード
 		player.action();
 	}
 
 	private void onLeftFlickOnRightSide() {
-		player.addAction(new AbsolutePositionAttack(mainActivity, 10, 100, "12,13,14,15,16,17,11,5,4,3,2,1,0", player)); // ブーメラン
+		player.addAction(new PaladinSword(mainActivity, player)); // パラディンソード
 		player.action();
 	}
 

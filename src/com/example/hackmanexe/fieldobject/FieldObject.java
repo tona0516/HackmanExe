@@ -2,6 +2,8 @@ package com.example.hackmanexe.fieldobject;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.AbsolutePositionAttack;
 import com.example.hackmanexe.action.Action;

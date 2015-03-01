@@ -3,11 +3,11 @@ package com.example.hackmanexe.action;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.MainActivity;
-import com.example.hackmanexe.fieldobject.FieldObject;
-
 import android.app.Activity;
 import android.view.View;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
  *
@@ -19,7 +19,7 @@ public class CannoTarget extends RelativePositionAttack {
 	private boolean lockOnFlag = false;
 
 	public CannoTarget(Activity activity, FieldObject fieldObject) {
-		super(activity, 0, 300, "le", fieldObject);
+		super(activity, 0, 300, "LeftToEnd", fieldObject);
 	}
 
 	@Override
@@ -44,9 +44,11 @@ public class CannoTarget extends RelativePositionAttack {
 					public void run() {
 						if (!iterator.hasNext() || lockOnFlag) {
 							MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
-							timer.cancel();
-							timer = null;
-						}else if (iterator.hasNext()) {
+							if (timer != null) {
+								timer.cancel();
+								timer = null;
+							}
+						} else if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
 								MainActivity.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							int index = Integer.valueOf(iterator.next());

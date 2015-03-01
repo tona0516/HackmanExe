@@ -1,19 +1,19 @@
 package com.example.hackmanexe.action;
 
+import android.app.Activity;
+
 import com.example.hackmanexe.ObjectSurfaceView;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Player;
 
-import android.app.Activity;
-
 /**
  * 攻撃チップの情報を保持するクラス
  *
  * @author meem
  */
-abstract class AttackAction extends Action {
+abstract class AttackAction extends Action{
 	protected int power; // 攻撃力
 	protected long interval; // 攻撃範囲が移動するスピード
 	protected Activity activity; // UIを描画するActivity
@@ -38,16 +38,16 @@ abstract class AttackAction extends Action {
 		FieldObject o = ObjectSurfaceView.field.getPanelInfo()[index].getObject();
 		// 攻撃者が自分自身の攻撃に当たらないようにする処理
 		if ((o instanceof Enemy || o instanceof FieldItem) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムにあたれば
-			calcurateHP(o);
+			calculateHP(o);
 			return true;
 		} else if ((o instanceof Player || o instanceof FieldItem) && fieldObject instanceof Enemy) { // 攻撃者が敵でプレイヤーorアイテムにあたれば
-			calcurateHP(o);
+			calculateHP(o);
 			return true;
 		}
 		return false;
 	}
 
-	private void calcurateHP(FieldObject o) {
+	private void calculateHP(FieldObject o) {
 		if (o.getHP() - power > 0) { // HP計算
 			o.setHP(o.getHP() - power);
 		} else {

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
-import com.example.hackmanexe.action.RelativePositionAttack;
+import com.example.hackmanexe.action.Shockwave;
 
 /**
  * メットールクラス 移動はできる。攻撃はまだ
@@ -22,7 +22,7 @@ public class Metall extends Enemy {
 	private int preOwnLine = -1;
 	private Metall metall;
 	private Timer timer;
-	private RelativePositionAttack rpa = null;
+	private Shockwave shockWave =null;
 	private Player player;
 	private MainActivity mainActivity;
 
@@ -33,13 +33,6 @@ public class Metall extends Enemy {
 		player = _player;
 		mainActivity = _mainActivity;
 
-		// いきなり攻撃し始めないように
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// 動作アルゴリズム
 		// 1秒毎に処理
 		timer = new Timer();
@@ -49,13 +42,12 @@ public class Metall extends Enemy {
 				// 自分・プレイヤーの位置を取得
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = metall.getCurrentPanelInfo().getLine();
-				if (rpa == null || !rpa.isActing()) {
+				if (shockWave == null || !shockWave.isActing()) {
 					if (prePlayerLine == currentPlayerLine
 							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
 						// 攻撃！
-						rpa = new RelativePositionAttack(mainActivity, 10, 500,
-								"le", metall);
-						metall.addAction(rpa);
+						shockWave = new Shockwave(mainActivity, metall);
+						metall.addAction(shockWave);
 						metall.action();
 					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
 						moveUp();
@@ -68,7 +60,7 @@ public class Metall extends Enemy {
 					preOwnLine = currentOwnLine;
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 1000);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
-import com.example.hackmanexe.action.RelativePositionAttack;
+import com.example.hackmanexe.action.Rabbiling;
 
 /**
  * メットールクラス 移動はできる。攻撃はまだ
@@ -25,7 +25,7 @@ public class Rabbily extends Enemy {
 	private int preOwnLine = -1;
 	private Rabbily rabbily;
 	private Timer timer1, timer2;
-	private RelativePositionAttack rpa = null;
+	private Rabbiling rabbiling;
 	private Player player;
 	private MainActivity mainActivity;
 
@@ -40,17 +40,10 @@ public class Rabbily extends Enemy {
 		player = _player;
 		mainActivity = _mainActivity;
 
-		// いきなり攻撃し始めないように
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// 動作アルゴリズム
 		timer1 = new Timer();
 		timer2 = new Timer();
-		changeTimer();	//Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
+		changeTimer(); // Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
 
 	}
 
@@ -63,22 +56,20 @@ public class Rabbily extends Enemy {
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
-				int currentPlayerLine = player.getCurrentPanelInfo()
-						.getLine();
-				int currentOwnLine = rabbily.getCurrentPanelInfo()
-						.getLine();
+				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
+				int currentOwnLine = rabbily.getCurrentPanelInfo().getLine();
 				PanelInfo pi = rabbily.getCurrentPanelInfo();
-				if (rpa == null || !rpa.isActing()) {
+				if (rabbiling == null || !rabbiling.isActing()) {
 
 					randomMoveUDLR(pi); // ランダム移動
-					moveTime++;			//移動回数が増加
+					moveTime++; // 移動回数が増加
 				}
 
-				if (moveTime >= 5) {	//一定回数移動したら
-					changeTimer();		//追跡＆攻撃動作に切り替え
+				if (moveTime >= 5) { // 一定回数移動したら
+					changeTimer(); // 追跡＆攻撃動作に切り替え
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 1000);
 	}
 
 	/**
@@ -90,27 +81,24 @@ public class Rabbily extends Enemy {
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
-				int currentPlayerLine = player.getCurrentPanelInfo()
-						.getLine();
-				int currentOwnLine = rabbily.getCurrentPanelInfo()
-						.getLine();
+				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
+				int currentOwnLine = rabbily.getCurrentPanelInfo().getLine();
 				PanelInfo pi = rabbily.getCurrentPanelInfo();
 
-				if (rpa == null || !rpa.isActing()) {
-					if (currentPlayerLine == currentOwnLine) {	//相手が同じラインに居れば
+				if (rabbiling == null || !rabbiling.isActing()) {
+					if (currentPlayerLine == currentOwnLine) { // 相手が同じラインに居れば
 						try {
-							TimeUnit.MILLISECONDS.sleep(300);	//振りかぶって（少し待って）
+							TimeUnit.MILLISECONDS.sleep(300); // 振りかぶって（少し待って）
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						//攻撃!!
-						rpa = new RelativePositionAttack(mainActivity,
-								10, 100, "le", rabbily);
-						rabbily.addAction(rpa);
+						// 攻撃!!
+						rabbiling = new Rabbiling(mainActivity, rabbily);
+						rabbily.addAction(rabbiling);
 						rabbily.action();
-						moveTime = 0;	//移動回数をリセットして
-						changeTimer();	//ランダム移動動作に切り替え
+						moveTime = 0; // 移動回数をリセットして
+						changeTimer(); // ランダム移動動作に切り替え
 
 					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
 						moveUp();
@@ -180,21 +168,21 @@ public class Rabbily extends Enemy {
 		int directnum = list[listind]; // 方向を決定
 
 		switch (directnum) {
-		case 1: // 選ばれたインデックスに応じて移動
-			moveUp();
-			break;
-		case 2:
-			moveRight();
-			break;
-		case 3:
-			moveDown();
-			break;
-		case 4:
-			moveLeft();
-			break;
-		default:
-			Log.d(this.toString(), "move error");
-			break;
+			case 1 : // 選ばれたインデックスに応じて移動
+				moveUp();
+				break;
+			case 2 :
+				moveRight();
+				break;
+			case 3 :
+				moveDown();
+				break;
+			case 4 :
+				moveLeft();
+				break;
+			default :
+				Log.d(this.toString(), "move error");
+				break;
 		}
 	}
 
@@ -202,10 +190,10 @@ public class Rabbily extends Enemy {
 	 * 実行するタイマーの切り替えを行う
 	 */
 	private void changeTimer() {
-		if (timer2 != null) {	//タイマー2が起動しているなら
-			timer2.cancel();	//タイマー2をキャンセル
-			timer2 = null;		//タイマー2を未セット状態に
-			timer1Task();		//代わりにタイマー1をセット
+		if (timer2 != null) { // タイマー2が起動しているなら
+			timer2.cancel(); // タイマー2をキャンセル
+			timer2 = null; // タイマー2を未セット状態に
+			timer1Task(); // 代わりにタイマー1をセット
 		} else if (timer1 != null) {
 			timer1.cancel();
 			timer1 = null;
