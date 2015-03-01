@@ -48,7 +48,8 @@ public class AbsolutePositionAttack extends AttackAction {
 					@Override
 					public void run() {
 						if (!iterator.hasNext()) {
-							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
+							if (prePanelIndex != -1)
+								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
 							if (timer != null) {
 								timer.cancel();
 								timer = null;

@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.MainActivity;
-import com.example.hackmanexe.PanelInfo;
-import com.example.hackmanexe.fieldobject.FieldObject;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+
+import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
  * オブジェクトの位置から攻撃場所を指定するクラス パラディンソードとかの実装にこれをextends
@@ -34,11 +34,11 @@ public class RelativePositionAttack extends AttackAction {
 	public void attack() {
 		LinkedList<String> rangeList = new LinkedList<String>();
 		PanelInfo pi = fieldObject.getCurrentPanelInfo();
-		if (range.equals("re")) {
+		if (range.equals("RightToEnd")) {
 			while ((pi = pi.getRight()) != null) {
 				rangeList.add(String.valueOf(pi.getIndex()));
 			}
-		} else if (range.equals("le")) {
+		} else if (range.equals("LeftToEnd")) {
 			while ((pi = pi.getLeft()) != null) {
 				rangeList.add(String.valueOf(pi.getIndex()));
 			}
@@ -60,7 +60,8 @@ public class RelativePositionAttack extends AttackAction {
 					@Override
 					public void run() {
 						if (!iterator.hasNext()) {
-							MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
+							if (prePanelIndex != -1)
+								MainActivity.t[prePanelIndex].setVisibility(View.INVISIBLE);
 							if (timer != null) {
 								timer.cancel();
 								timer = null;
