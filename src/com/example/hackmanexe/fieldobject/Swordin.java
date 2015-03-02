@@ -56,11 +56,20 @@ public class Swordin extends Enemy {
 					else if(currentPlayerLine > currentOwnLine){
 						moveDown();
 					}
-					moveLeft(); // 1マス前進
+					try {
+						Thread.sleep(300); // 少し遅れて前進したい
+						moveLeft(); // 1マス前進
+					} catch (InterruptedException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					}
 				}
 				else if(swordin.getCurrentPanelInfo().getRow()
 						== swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // 最前列なら
-
+					if(player.getCurrentPanelInfo().getRow()
+							== player.getCurrentPanelInfo().getFrontrowindex()){
+						
+					}
 				}
 			}
 		}, 0, 1000);
