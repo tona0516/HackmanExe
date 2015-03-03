@@ -88,7 +88,7 @@ public class Rabbily extends Enemy {
 				if (rabbiling == null || !rabbiling.isActing()) {
 					if (currentPlayerLine == currentOwnLine) { // 相手が同じラインに居れば
 						try {
-							TimeUnit.MILLISECONDS.sleep(300); // 振りかぶって（少し待って）
+							TimeUnit.MILLISECONDS.sleep(150); // 振りかぶって（少し待って）
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
