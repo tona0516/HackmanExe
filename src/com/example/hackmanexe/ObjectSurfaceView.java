@@ -16,11 +16,9 @@ import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.PaladinSword;
 import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
-import com.example.hackmanexe.fieldobject.Cannodam;
 import com.example.hackmanexe.fieldobject.FieldObject;
-import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
-import com.example.hackmanexe.fieldobject.Rabbily;
+import com.example.hackmanexe.fieldobject.TestObject;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -50,16 +48,18 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
-		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[4], 40);
-		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
+//		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
+//		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[4], 40);
+//		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
+		TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		objectList.add(metall);
-		objectList.add(cannodam);
-		objectList.add(rabbily);
+		// objectList.add(metall);
+		// objectList.add(cannodam);
+		// objectList.add(rabbily);
+		objectList.add(testObject);
 	}
 
 	@Override

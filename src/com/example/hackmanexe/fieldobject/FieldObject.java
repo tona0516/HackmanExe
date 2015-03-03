@@ -2,8 +2,7 @@ package com.example.hackmanexe.fieldobject;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
+import com.example.hackmanexe.ObjectSurfaceView;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.AbsolutePositionAttack;
 import com.example.hackmanexe.action.Action;
@@ -21,8 +20,7 @@ abstract public class FieldObject {
 	protected int HP;
 	protected ArrayList<Action> actionList;
 
-	public FieldObject(PanelInfo currentFrameInfo,
-			int HP) {
+	public FieldObject(PanelInfo currentFrameInfo, int HP) {
 		this.currentPanelInfo = currentFrameInfo;
 		this.HP = HP;
 		currentFrameInfo.setObject(this);
@@ -40,7 +38,7 @@ abstract public class FieldObject {
 
 	public void setHP(int HP) {
 		this.HP = HP;
-		if(this.HP == 0){
+		if (this.HP == 0) {
 			deathProcess();
 			try {
 				finalize();
@@ -84,19 +82,18 @@ abstract public class FieldObject {
 	/**
 	 * 死んだ時の処理
 	 */
-	protected void deathProcess(){
-		this.getCurrentPanelInfo().setObject(null); //死ぬときはパネル上から自分の存在を消す
+	protected void deathProcess() {
+		this.getCurrentPanelInfo().setObject(null); // 死ぬときはパネル上から自分の存在を消す
 	}
 
 	public boolean moveUp() {
 		if (currentPanelInfo.getUp() == null)
 			return false;
-		if(currentPanelInfo.getUp().getObject() != null)
+		if (currentPanelInfo.getUp().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getUp().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getUp().isEnemyPanel() && this instanceof Enemy)) {
-			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getUp().setObject(o);
+			currentPanelInfo.getUp().setObject(this);
 			currentPanelInfo = currentPanelInfo.getUp();
 			return true;
 		} else {
@@ -106,12 +103,11 @@ abstract public class FieldObject {
 	public boolean moveDown() {
 		if (currentPanelInfo.getDown() == null)
 			return false;
-		if(currentPanelInfo.getDown().getObject() != null)
+		if (currentPanelInfo.getDown().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getDown().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getDown().isEnemyPanel() && this instanceof Enemy)) {
-			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getDown().setObject(o);
+			currentPanelInfo.getDown().setObject(this);
 			currentPanelInfo = currentPanelInfo.getDown();
 			return true;
 		} else {
@@ -121,12 +117,11 @@ abstract public class FieldObject {
 	public boolean moveRight() {
 		if (currentPanelInfo.getRight() == null)
 			return false;
-		if(currentPanelInfo.getRight().getObject() != null)
+		if (currentPanelInfo.getRight().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getRight().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getRight().isEnemyPanel() && this instanceof Enemy)) {
-			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getRight().setObject(o);
+			currentPanelInfo.getRight().setObject(this);
 			currentPanelInfo = currentPanelInfo.getRight();
 			return true;
 		} else {
@@ -136,16 +131,35 @@ abstract public class FieldObject {
 	public boolean moveLeft() {
 		if (currentPanelInfo.getLeft() == null)
 			return false;
-		if(currentPanelInfo.getLeft().getObject() != null)
+		if (currentPanelInfo.getLeft().getObject() != null)
 			return false;
 		if ((currentPanelInfo.getLeft().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getLeft().isEnemyPanel() && this instanceof Enemy)) {
-			FieldObject o = currentPanelInfo.getObject();
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getLeft().setObject(o);
+			currentPanelInfo.getLeft().setObject(this);
 			currentPanelInfo = currentPanelInfo.getLeft();
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 *
+	 * @param panelIndex
+	 * @return 指定したインデックスのパネルにオブジェクトを移動させる
+	 */
+	public boolean warp(int panelIndex) {
+		if (!(panelIndex > -1 && panelIndex < 18)) // 不正な値ならはじく
+			return false;
+		PanelInfo pi = ObjectSurfaceView.field.getPanelInfo()[panelIndex]; // 移動先のpanelInfoを取得
+		if (pi == null) // nullでもはじく
+			return false;
+		if (pi.getObject() != null) // 移動先に何かいてもはじく
+			return false;
+		// 晴れて移動
+		currentPanelInfo.setObject(null);
+		pi.setObject(this);
+		currentPanelInfo = pi;
+		return true;
 	}
 }
