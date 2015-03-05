@@ -5,6 +5,8 @@ import java.util.TimerTask;
 
 import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.LongSword;
+import com.example.hackmanexe.action.WideSword;
 
 public class Swordin extends Enemy {
 
@@ -13,6 +15,8 @@ public class Swordin extends Enemy {
 	private Timer timer;
 	private MainActivity mainactivity;
 	private Swordin swordin;
+	private LongSword ls = null;
+	private WideSword ws = null;
 
 	private int prePlayerLine = -1;
 	private int preOwnLine = -1;
@@ -47,32 +51,64 @@ public class Swordin extends Enemy {
 			public void run(){
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = swordin.getCurrentPanelInfo().getLine();
+				if(ws == null || !ws.isActing() || ls == null || !ls.isActing()){ // 行動の前提
+					if(swordin.getCurrentPanelInfo().getRow()
+							!= swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // こいつが最前列にいないなら
+						if(currentPlayerLine < currentOwnLine){
+							moveUp();
+						}
+						else if(currentPlayerLine > currentOwnLine){
+							moveDown();
+						}
+						try {
+							Thread.sleep(500);
+							moveLeft(); // 1マス前進
+						} catch (InterruptedException e) {
+							// TODO 自動生成された catch ブロック
+							e.printStackTrace();
+						}
+					}
+					else if(swordin.getCurrentPanelInfo().getRow()
+							== swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // こいつが最前列にいるなら
+						if(player.getCurrentPanelInfo().getRow()
+								== player.getCurrentPanelInfo().getFrontrowindex()){ // プレイヤーが最前列なら
+							if(Math.abs(currentPlayerLine - currentOwnLine) > 1){ // widesword の布石
+								if(currentPlayerLine == 0){ // 相手に行を合わせる
+									moveUp();
+								}
+								else if(currentPlayerLine == 2){ // 行を合わせる
+									moveDown();
+								}
+								else{
+									ws = new WideSword(mainactivity, swordin);
+									swordin.addAction(ws);
+									swordin.action();
+								}
+							}
+						}
+						else{														// プレイヤーが最前列でない、ロングソードの布石
+							if(currentPlayerLine != currentOwnLine){				// 行一致でない
+								if(currentPlayerLine < currentOwnLine){ // 相手に行を合わせる
+									moveUp();
+								}
+								else if(currentPlayerLine > currentOwnLine){ // 行を合わせる
+									moveDown();
+								}
+							}
+							else{													// 行一致
+								ls = new LongSword(mainactivity, swordin);
+								swordin.addAction(ls);
+								swordin.action();
+							}
+						}
+					}
+				}
 
-				if(swordin.getCurrentPanelInfo().getRow()
-						!= swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // 最前列にいないなら
-					if(currentPlayerLine < currentOwnLine){
-						moveUp();
-					}
-					else if(currentPlayerLine > currentOwnLine){
-						moveDown();
-					}
-					try {
-						Thread.sleep(300); // 少し遅れて前進したい
-						moveLeft(); // 1マス前進
-					} catch (InterruptedException e) {
-						// TODO 自動生成された catch ブロック
-						e.printStackTrace();
-					}
-				}
-				else if(swordin.getCurrentPanelInfo().getRow()
-						== swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // 最前列なら
-					if(player.getCurrentPanelInfo().getRow()
-							== player.getCurrentPanelInfo().getFrontrowindex()){
-						
-					}
-				}
+				prePlayerLine = currentPlayerLine;
+				preOwnLine = currentOwnLine;
 			}
-		}, 0, 1000);
+		}
+		, 0, 1000);
 	}
 
 	@Override
