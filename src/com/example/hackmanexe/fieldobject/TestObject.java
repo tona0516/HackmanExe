@@ -11,7 +11,7 @@ import com.example.hackmanexe.PanelInfo;
  * @author meem
  *
  */
-public class TestObject extends FieldObject {
+public class TestObject extends Enemy {
 
 	Timer timer;
 	Random random;
