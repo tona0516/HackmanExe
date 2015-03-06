@@ -61,7 +61,7 @@ public class Swordin extends Enemy {
 							moveDown();
 						}
 						try {
-							Thread.sleep(500);
+							Thread.sleep(1000);
 							moveLeft(); // 1マス前進
 						} catch (InterruptedException e) {
 							// TODO 自動生成された catch ブロック
@@ -79,7 +79,10 @@ public class Swordin extends Enemy {
 								else if(currentPlayerLine == 2){ // 行を合わせる
 									moveDown();
 								}
-								else{
+							}
+							else{
+								if(prePlayerLine == currentPlayerLine
+										&& preOwnLine == currentOwnLine){
 									ws = new WideSword(mainactivity, swordin);
 									swordin.addAction(ws);
 									swordin.action();
@@ -96,9 +99,12 @@ public class Swordin extends Enemy {
 								}
 							}
 							else{													// 行一致
-								ls = new LongSword(mainactivity, swordin);
-								swordin.addAction(ls);
-								swordin.action();
+								if(prePlayerLine == currentPlayerLine
+										&& preOwnLine == currentOwnLine){
+									ls = new LongSword(mainactivity, swordin);
+									swordin.addAction(ls);
+									swordin.action();
+								}
 							}
 						}
 					}
@@ -108,12 +114,16 @@ public class Swordin extends Enemy {
 				preOwnLine = currentOwnLine;
 			}
 		}
-		, 0, 1000);
+		, 1000, 1000);
 	}
 
 	@Override
 	protected void deathProcess() {
 		super.deathProcess();
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 }
