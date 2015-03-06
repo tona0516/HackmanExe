@@ -1,6 +1,8 @@
 package com.example.hackmanexe.fieldobject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.example.hackmanexe.ObjectSurfaceView;
 import com.example.hackmanexe.PanelInfo;
@@ -19,11 +21,16 @@ abstract public class FieldObject {
 	protected PanelInfo currentPanelInfo;
 	protected int HP;
 	protected ArrayList<Action> actionList;
+	protected float x, y; // 現在座標
+	protected Timer timer; // smoothlyに使うタイマー
+	protected DummyObject dummyObject;
 
-	public FieldObject(PanelInfo currentFrameInfo, int HP) {
-		this.currentPanelInfo = currentFrameInfo;
+	public FieldObject(PanelInfo currentPanelInfo, int HP) {
+		this.currentPanelInfo = currentPanelInfo;
+		x = currentPanelInfo.getDrawX();
+		y = currentPanelInfo.getDrawY();
 		this.HP = HP;
-		currentFrameInfo.setObject(this);
+		currentPanelInfo.setObject(this);
 		setActionList(new ArrayList<Action>());
 
 	}
@@ -46,6 +53,22 @@ abstract public class FieldObject {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public float getX() {
+		return x;
+	}
+
+	public void setY(float y) {
+		this.y = y;
+	}
+
+	public float getY() {
+		return y;
 	}
 
 	public boolean action() {
@@ -95,6 +118,7 @@ abstract public class FieldObject {
 			currentPanelInfo.setObject(null);
 			currentPanelInfo.getUp().setObject(this);
 			currentPanelInfo = currentPanelInfo.getUp();
+			y = currentPanelInfo.getDrawY();
 			return true;
 		} else {
 			return false;
@@ -109,6 +133,7 @@ abstract public class FieldObject {
 			currentPanelInfo.setObject(null);
 			currentPanelInfo.getDown().setObject(this);
 			currentPanelInfo = currentPanelInfo.getDown();
+			y = currentPanelInfo.getDrawY();
 			return true;
 		} else {
 			return false;
@@ -123,6 +148,7 @@ abstract public class FieldObject {
 			currentPanelInfo.setObject(null);
 			currentPanelInfo.getRight().setObject(this);
 			currentPanelInfo = currentPanelInfo.getRight();
+			x = currentPanelInfo.getDrawX();
 			return true;
 		} else {
 			return false;
@@ -137,6 +163,187 @@ abstract public class FieldObject {
 			currentPanelInfo.setObject(null);
 			currentPanelInfo.getLeft().setObject(this);
 			currentPanelInfo = currentPanelInfo.getLeft();
+			x = currentPanelInfo.getDrawX();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean moveUpSmoothly(long durationMillis) {
+		if (dummyObject != null)
+			return false;
+		if (currentPanelInfo.getUp() == null)
+			return false;
+		if (currentPanelInfo.getUp().getObject() != null)
+			return false;
+		if ((currentPanelInfo.getUp().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getUp().isEnemyPanel() && this instanceof Enemy)) {
+			final PanelInfo up = currentPanelInfo.getUp();
+			dummyObject = new DummyObject(up);
+			currentPanelInfo.getUp().setObject(dummyObject);
+			long dt = durationMillis / 100;
+			final float startY = currentPanelInfo.getDrawY();
+			final float endY = up.getDrawY();
+			final float dy = (endY - startY) / 100;
+			final FieldObject o = this;
+			timer = new Timer();
+			timer.schedule(new TimerTask() {
+				int count = 0;
+				@Override
+				public void run() {
+					y += dy;
+					if (count == 49) {
+						dummyObject.moveDown();
+						currentPanelInfo.setObject(dummyObject);
+						up.setObject(o);
+						currentPanelInfo = up;
+					}
+					if (count == 99) {
+						currentPanelInfo.getDown().setObject(null);
+						dummyObject = null;
+						if (timer != null) {
+							timer.cancel();
+							timer = null;
+						}
+					}
+					count++;
+				}
+			}, 0, dt);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean moveDownSmoothly(long durationMillis) {
+		if (dummyObject != null)
+			return false;
+		if (currentPanelInfo.getDown() == null)
+			return false;
+		if (currentPanelInfo.getDown().getObject() != null)
+			return false;
+		if ((currentPanelInfo.getDown().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getDown().isEnemyPanel() && this instanceof Enemy)) {
+			final PanelInfo down = currentPanelInfo.getDown();
+			dummyObject = new DummyObject(down);
+			currentPanelInfo.getDown().setObject(dummyObject);
+			long dt = durationMillis / 100;
+			final float startY = currentPanelInfo.getDrawY();
+			final float endY = down.getDrawY();
+			final float dy = (endY - startY) / 100;
+			final FieldObject o = this;
+			timer = new Timer();
+			timer.schedule(new TimerTask() {
+				int count = 0;
+				@Override
+				public void run() {
+					y += dy;
+					if (count == 49) {
+						dummyObject.moveDown();
+						currentPanelInfo.setObject(dummyObject);
+						down.setObject(o);
+						currentPanelInfo = down;
+					}
+					if (count == 99) {
+						currentPanelInfo.getUp().setObject(null);
+						dummyObject = null;
+						if (timer != null) {
+							timer.cancel();
+							timer = null;
+						}
+					}
+					count++;
+				}
+			}, 0, dt);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean moveRightSmoothly(long durationMillis) {
+		if (dummyObject != null)
+			return false;
+		if (currentPanelInfo.getRight() == null)
+			return false;
+		if (currentPanelInfo.getRight().getObject() != null)
+			return false;
+		if ((currentPanelInfo.getRight().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getRight().isEnemyPanel() && this instanceof Enemy)) {
+			final PanelInfo right = currentPanelInfo.getRight();
+			dummyObject = new DummyObject(right);
+			currentPanelInfo.getRight().setObject(dummyObject);
+			long dt = durationMillis / 100;
+			final float startX = currentPanelInfo.getDrawX();
+			final float endX = right.getDrawX();
+			final float dx = (endX - startX) / 100;
+			final FieldObject o = this;
+			timer = new Timer();
+			timer.schedule(new TimerTask() {
+				int count = 0;
+				@Override
+				public void run() {
+					x += dx;
+					if (count == 49) {
+						dummyObject.moveLeft();
+						currentPanelInfo.setObject(dummyObject);
+						right.setObject(o);
+						currentPanelInfo = right;
+					}
+					if (count == 99) {
+						currentPanelInfo.getLeft().setObject(null);
+						dummyObject = null;
+						if (timer != null) {
+							timer.cancel();
+							timer = null;
+						}
+					}
+					count++;
+				}
+			}, 0, dt);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean moveLeftSmoothly(long durationMillis) {
+		if (dummyObject != null)
+			return false;
+		if (currentPanelInfo.getLeft() == null)
+			return false;
+		if (currentPanelInfo.getLeft().getObject() != null)
+			return false;
+		if ((currentPanelInfo.getLeft().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getLeft().isEnemyPanel() && this instanceof Enemy)) {
+			final PanelInfo left = currentPanelInfo.getLeft();
+			dummyObject = new DummyObject(left);
+			currentPanelInfo.getLeft().setObject(dummyObject);
+			long dt = durationMillis / 100;
+			final float startX = currentPanelInfo.getDrawX();
+			final float endX = left.getDrawX();
+			final float dx = (endX - startX) / 100;
+			final FieldObject o = this;
+			timer = new Timer();
+			timer.schedule(new TimerTask() {
+				int count = 0;
+				@Override
+				public void run() {
+					x += dx;
+					if (count == 49) {
+						dummyObject.moveRight();
+						currentPanelInfo.setObject(dummyObject);
+						left.setObject(o);
+						currentPanelInfo = left;
+					}
+					if (count == 99) {
+						currentPanelInfo.getRight().setObject(null);
+						dummyObject = null;
+						if (timer != null) {
+							timer.cancel();
+							timer = null;
+						}
+					}
+					count++;
+				}
+			}, 0, dt);
 			return true;
 		} else {
 			return false;
@@ -160,6 +367,8 @@ abstract public class FieldObject {
 		currentPanelInfo.setObject(null);
 		pi.setObject(this);
 		currentPanelInfo = pi;
+		x = currentPanelInfo.getDrawX();
+		y = currentPanelInfo.getDrawY();
 		return true;
 	}
 }
