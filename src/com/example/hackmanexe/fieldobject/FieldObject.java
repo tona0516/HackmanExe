@@ -110,8 +110,6 @@ abstract public class FieldObject {
 	}
 
 	public boolean moveUp() {
-		if (dummyObject != null)
-			return false;
 		if (currentPanelInfo.getUp() == null)
 			return false;
 		if (currentPanelInfo.getUp().getObject() != null)
@@ -127,8 +125,6 @@ abstract public class FieldObject {
 		}
 	}
 	public boolean moveDown() {
-		if (dummyObject != null)
-			return false;
 		if (currentPanelInfo.getDown() == null)
 			return false;
 		if (currentPanelInfo.getDown().getObject() != null)
@@ -144,8 +140,6 @@ abstract public class FieldObject {
 		}
 	}
 	public boolean moveRight() {
-		if (dummyObject != null)
-			return false;
 		if (currentPanelInfo.getRight() == null)
 			return false;
 		if (currentPanelInfo.getRight().getObject() != null)
@@ -161,8 +155,6 @@ abstract public class FieldObject {
 		}
 	}
 	public boolean moveLeft() {
-		if (dummyObject != null)
-			return false;
 		if (currentPanelInfo.getLeft() == null)
 			return false;
 		if (currentPanelInfo.getLeft().getObject() != null)
