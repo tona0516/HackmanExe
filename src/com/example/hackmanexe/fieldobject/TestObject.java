@@ -30,7 +30,7 @@ public class TestObject extends Enemy {
 				int rnd = random.nextInt(18);
 				warp(rnd);
 			}
-		}, 2000, 500);
+		}, 2000, 1000);
 	}
 
 	@Override

@@ -177,23 +177,23 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onUpFlickOnLeftSide() {
-		// player.moveUp();
-		player.moveUpSmoothly(500);
+		player.moveUp();
+		//player.moveUpSmoothly(250);
 	}
 
 	private void onDownFlickOnLeftSide() {
-		// player.moveDown();
-		player.moveDownSmoothly(500);
+		player.moveDown();
+		//player.moveDownSmoothly(250);
 	}
 
 	private void onRightFlickOnLeftSide() {
-		// player.moveRight();
-		player.moveRightSmoothly(500);
+		player.moveRight();
+		//player.moveRightSmoothly(250);
 	}
 
 	private void onLeftFlickOnLeftSide() {
-		// player.moveLeft();
-		player.moveLeftSmoothly(500);
+		player.moveLeft();
+		//player.moveLeftSmoothly(250);
 	}
 
 	private void onTapOnLeftSide() {
@@ -225,13 +225,6 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					paint.reset();
 					paint.setStyle(Paint.Style.FILL);
 					paint.setColor(colorArray[objectList.indexOf(o)]);
-					// canvas.drawCircle(o.getCurrentPanelInfo().getDrawX(),
-					// o.getCurrentPanelInfo().getDrawY(), 100, paint);
-					// paint.reset();
-					// paint.setTextSize(100);
-					// canvas.drawText("" + o.getHP(),
-					// o.getCurrentPanelInfo().getDrawX(),
-					// o.getCurrentPanelInfo().getDrawY() + 200, paint);
 					canvas.drawCircle(o.getX(), o.getY(), 100, paint);
 					paint.reset();
 					paint.setTextSize(100);

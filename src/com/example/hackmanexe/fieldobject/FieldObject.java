@@ -21,18 +21,17 @@ abstract public class FieldObject {
 	protected PanelInfo currentPanelInfo;
 	protected int HP;
 	protected ArrayList<Action> actionList;
-	protected float x, y; // 現在座標
-	protected Timer timer; // smoothlyに使うタイマー
+	protected float x, y;
+	protected Timer smoothMovementTimer;
 	protected DummyObject dummyObject;
 
 	public FieldObject(PanelInfo currentPanelInfo, int HP) {
 		this.currentPanelInfo = currentPanelInfo;
+		this.HP = HP;
 		x = currentPanelInfo.getDrawX();
 		y = currentPanelInfo.getDrawY();
-		this.HP = HP;
 		currentPanelInfo.setObject(this);
 		setActionList(new ArrayList<Action>());
-
 	}
 
 	public PanelInfo getCurrentPanelInfo() {
@@ -47,24 +46,11 @@ abstract public class FieldObject {
 		this.HP = HP;
 		if (this.HP == 0) {
 			deathProcess();
-			try {
-				finalize();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
 		}
-	}
-
-	public void setX(float x) {
-		this.x = x;
 	}
 
 	public float getX() {
 		return x;
-	}
-
-	public void setY(float y) {
-		this.y = y;
 	}
 
 	public float getY() {
@@ -102,68 +88,68 @@ abstract public class FieldObject {
 		this.actionList = actionList;
 	}
 
-	/**
-	 * 死んだ時の処理
-	 */
 	protected void deathProcess() {
 		this.getCurrentPanelInfo().setObject(null); // 死ぬときはパネル上から自分の存在を消す
 	}
 
+	private boolean canMove(PanelInfo destination) {
+		if (destination == null) // 移動先のパネルがnull
+			return false;
+		if (destination.getObject() != null) // 移動先にオブジェクトがいる
+			return false;
+		if ((destination.isPlayerPanel() && this instanceof Player)) // 移動先がプレイヤーパネルかつ自分がプレイヤー
+			return true;
+		else if ((destination.isEnemyPanel() && this instanceof Enemy)) // 移動先がエネミーパネルかつ自分がエネミー
+			return true;
+		else if ((this instanceof FieldItem)) // 自分がアイテムなら
+			return true;
+		else
+			return false;
+	}
+
 	public boolean moveUp() {
-		if (currentPanelInfo.getUp() == null)
-			return false;
-		if (currentPanelInfo.getUp().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getUp().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getUp().isEnemyPanel() && this instanceof Enemy)) {
+		PanelInfo p = currentPanelInfo.getUp();
+		if (canMove(p)) {
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getUp().setObject(this);
-			currentPanelInfo = currentPanelInfo.getUp();
-			y = currentPanelInfo.getDrawY();
+			p.setObject(this);
+			currentPanelInfo = p;
+			y = p.getDrawY();
 			return true;
 		} else {
 			return false;
 		}
 	}
 	public boolean moveDown() {
-		if (currentPanelInfo.getDown() == null)
-			return false;
-		if (currentPanelInfo.getDown().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getDown().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getDown().isEnemyPanel() && this instanceof Enemy)) {
+		PanelInfo p = currentPanelInfo.getDown();
+		if (canMove(p)) {
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getDown().setObject(this);
-			currentPanelInfo = currentPanelInfo.getDown();
-			y = currentPanelInfo.getDrawY();
+			p.setObject(this);
+			currentPanelInfo = p;
+			y = p.getDrawY();
 			return true;
 		} else {
 			return false;
 		}
 	}
 	public boolean moveRight() {
-		if (currentPanelInfo.getRight() == null)
-			return false;
-		if (currentPanelInfo.getRight().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getRight().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getRight().isEnemyPanel() && this instanceof Enemy)) {
+		PanelInfo p = currentPanelInfo.getRight();
+		if (canMove(p)) {
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getRight().setObject(this);
-			currentPanelInfo = currentPanelInfo.getRight();
-			x = currentPanelInfo.getDrawX();
+			p.setObject(this);
+			currentPanelInfo = p;
+			x = p.getDrawX();
 			return true;
 		} else {
 			return false;
 		}
 	}
 	public boolean moveLeft() {
-		if (currentPanelInfo.getLeft() == null)
-			return false;
-		if (currentPanelInfo.getLeft().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getLeft().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getLeft().isEnemyPanel() && this instanceof Enemy)) {
+		PanelInfo p = currentPanelInfo.getLeft();
+		if (canMove(p)) {
 			currentPanelInfo.setObject(null);
-			currentPanelInfo.getLeft().setObject(this);
-			currentPanelInfo = currentPanelInfo.getLeft();
-			x = currentPanelInfo.getDrawX();
+			p.setObject(this);
+			currentPanelInfo = p;
+			x = p.getDrawX();
 			return true;
 		} else {
 			return false;
@@ -173,37 +159,32 @@ abstract public class FieldObject {
 	public boolean moveUpSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
-		if (currentPanelInfo.getUp() == null)
-			return false;
-		if (currentPanelInfo.getUp().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getUp().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getUp().isEnemyPanel() && this instanceof Enemy)) {
-			final PanelInfo up = currentPanelInfo.getUp();
-			dummyObject = new DummyObject(up);
-			currentPanelInfo.getUp().setObject(dummyObject);
+		final PanelInfo p = currentPanelInfo.getUp();
+		if (canMove(p)) {
+			dummyObject = new DummyObject(p);
+			p.setObject(dummyObject);
 			long dt = durationMillis / 100;
 			final float startY = currentPanelInfo.getDrawY();
-			final float endY = up.getDrawY();
+			final float endY = p.getDrawY();
 			final float dy = (endY - startY) / 100;
 			final FieldObject o = this;
-			timer = new Timer();
-			timer.schedule(new TimerTask() {
+			smoothMovementTimer = new Timer();
+			smoothMovementTimer.scheduleAtFixedRate(new TimerTask() {
 				int count = 0;
 				@Override
 				public void run() {
 					y += dy;
 					if (count == 49) {
-						dummyObject.moveDown();
-						currentPanelInfo.setObject(dummyObject);
-						up.setObject(o);
-						currentPanelInfo = up;
+						p.setObject(o);
+						currentPanelInfo = p;
+						currentPanelInfo.getDown().setObject(dummyObject);
 					}
 					if (count == 99) {
 						currentPanelInfo.getDown().setObject(null);
 						dummyObject = null;
-						if (timer != null) {
-							timer.cancel();
-							timer = null;
+						if (smoothMovementTimer != null) {
+							smoothMovementTimer.cancel();
+							smoothMovementTimer = null;
 						}
 					}
 					count++;
@@ -218,37 +199,32 @@ abstract public class FieldObject {
 	public boolean moveDownSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
-		if (currentPanelInfo.getDown() == null)
-			return false;
-		if (currentPanelInfo.getDown().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getDown().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getDown().isEnemyPanel() && this instanceof Enemy)) {
-			final PanelInfo down = currentPanelInfo.getDown();
-			dummyObject = new DummyObject(down);
-			currentPanelInfo.getDown().setObject(dummyObject);
+		final PanelInfo p = currentPanelInfo.getDown();
+		if (canMove(p)) {
+			dummyObject = new DummyObject(p);
+			p.setObject(dummyObject);
 			long dt = durationMillis / 100;
 			final float startY = currentPanelInfo.getDrawY();
-			final float endY = down.getDrawY();
+			final float endY = p.getDrawY();
 			final float dy = (endY - startY) / 100;
 			final FieldObject o = this;
-			timer = new Timer();
-			timer.schedule(new TimerTask() {
+			smoothMovementTimer = new Timer();
+			smoothMovementTimer.scheduleAtFixedRate(new TimerTask() {
 				int count = 0;
 				@Override
 				public void run() {
 					y += dy;
 					if (count == 49) {
-						dummyObject.moveDown();
-						currentPanelInfo.setObject(dummyObject);
-						down.setObject(o);
-						currentPanelInfo = down;
+						p.setObject(o);
+						currentPanelInfo = p;
+						currentPanelInfo.getUp().setObject(dummyObject);
 					}
 					if (count == 99) {
 						currentPanelInfo.getUp().setObject(null);
 						dummyObject = null;
-						if (timer != null) {
-							timer.cancel();
-							timer = null;
+						if (smoothMovementTimer != null) {
+							smoothMovementTimer.cancel();
+							smoothMovementTimer = null;
 						}
 					}
 					count++;
@@ -263,37 +239,32 @@ abstract public class FieldObject {
 	public boolean moveRightSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
-		if (currentPanelInfo.getRight() == null)
-			return false;
-		if (currentPanelInfo.getRight().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getRight().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getRight().isEnemyPanel() && this instanceof Enemy)) {
-			final PanelInfo right = currentPanelInfo.getRight();
-			dummyObject = new DummyObject(right);
-			currentPanelInfo.getRight().setObject(dummyObject);
+		final PanelInfo p = currentPanelInfo.getRight();
+		if (canMove(p)) {
+			dummyObject = new DummyObject(p);
+			p.setObject(dummyObject);
 			long dt = durationMillis / 100;
 			final float startX = currentPanelInfo.getDrawX();
-			final float endX = right.getDrawX();
+			final float endX = p.getDrawX();
 			final float dx = (endX - startX) / 100;
 			final FieldObject o = this;
-			timer = new Timer();
-			timer.schedule(new TimerTask() {
+			smoothMovementTimer = new Timer();
+			smoothMovementTimer.scheduleAtFixedRate(new TimerTask() {
 				int count = 0;
 				@Override
 				public void run() {
 					x += dx;
 					if (count == 49) {
-						dummyObject.moveLeft();
-						currentPanelInfo.setObject(dummyObject);
-						right.setObject(o);
-						currentPanelInfo = right;
+						p.setObject(o);
+						currentPanelInfo = p;
+						currentPanelInfo.getLeft().setObject(dummyObject);
 					}
 					if (count == 99) {
 						currentPanelInfo.getLeft().setObject(null);
 						dummyObject = null;
-						if (timer != null) {
-							timer.cancel();
-							timer = null;
+						if (smoothMovementTimer != null) {
+							smoothMovementTimer.cancel();
+							smoothMovementTimer = null;
 						}
 					}
 					count++;
@@ -308,37 +279,32 @@ abstract public class FieldObject {
 	public boolean moveLeftSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
-		if (currentPanelInfo.getLeft() == null)
-			return false;
-		if (currentPanelInfo.getLeft().getObject() != null)
-			return false;
-		if ((currentPanelInfo.getLeft().isPlayerPanel() && this instanceof Player) || (currentPanelInfo.getLeft().isEnemyPanel() && this instanceof Enemy)) {
-			final PanelInfo left = currentPanelInfo.getLeft();
-			dummyObject = new DummyObject(left);
-			currentPanelInfo.getLeft().setObject(dummyObject);
+		final PanelInfo p = currentPanelInfo.getLeft();
+		if (canMove(p)) {
+			dummyObject = new DummyObject(p);
+			p.setObject(dummyObject);
 			long dt = durationMillis / 100;
 			final float startX = currentPanelInfo.getDrawX();
-			final float endX = left.getDrawX();
+			final float endX = p.getDrawX();
 			final float dx = (endX - startX) / 100;
 			final FieldObject o = this;
-			timer = new Timer();
-			timer.schedule(new TimerTask() {
+			smoothMovementTimer = new Timer();
+			smoothMovementTimer.scheduleAtFixedRate(new TimerTask() {
 				int count = 0;
 				@Override
 				public void run() {
 					x += dx;
 					if (count == 49) {
-						dummyObject.moveRight();
-						currentPanelInfo.setObject(dummyObject);
-						left.setObject(o);
-						currentPanelInfo = left;
+						p.setObject(o);
+						currentPanelInfo = p;
+						currentPanelInfo.getRight().setObject(dummyObject);
 					}
 					if (count == 99) {
 						currentPanelInfo.getRight().setObject(null);
 						dummyObject = null;
-						if (timer != null) {
-							timer.cancel();
-							timer = null;
+						if (smoothMovementTimer != null) {
+							smoothMovementTimer.cancel();
+							smoothMovementTimer = null;
 						}
 					}
 					count++;
@@ -358,15 +324,15 @@ abstract public class FieldObject {
 	public boolean warp(int panelIndex) {
 		if (!(panelIndex > -1 && panelIndex < 18)) // 不正な値ならはじく
 			return false;
-		PanelInfo pi = ObjectSurfaceView.field.getPanelInfo()[panelIndex]; // 移動先のpanelInfoを取得
-		if (pi == null) // nullでもはじく
+		PanelInfo p = ObjectSurfaceView.field.getPanelInfo()[panelIndex]; // 移動先のpanelInfoを取得
+		if (p == null) // nullでもはじく
 			return false;
-		if (pi.getObject() != null) // 移動先に何かいてもはじく
+		if (p.getObject() != null) // 移動先に何かいてもはじく
 			return false;
 		// 晴れて移動
 		currentPanelInfo.setObject(null);
-		pi.setObject(this);
-		currentPanelInfo = pi;
+		p.setObject(this);
+		currentPanelInfo = p;
 		x = currentPanelInfo.getDrawX();
 		y = currentPanelInfo.getDrawY();
 		return true;
