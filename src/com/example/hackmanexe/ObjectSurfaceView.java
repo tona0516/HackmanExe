@@ -18,7 +18,6 @@ import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
-import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
 import com.example.hackmanexe.fieldobject.Rabbily;
 
@@ -38,7 +37,6 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	public static Field field;
 	public static ArrayList<FieldObject> objectList;
 	private MainActivity mainActivity;
-	private int[] colorArray = {Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.YELLOW};
 
 	public ObjectSurfaceView(Context context, MainActivity mainActivity,
 			float width, float height) {
@@ -50,7 +48,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
+		//Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
 		// Cannodam cannodam = new
 		// Cannodam(mainActivity,field.getPanelInfo()[4], 40);
 		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
@@ -224,8 +222,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 			for (FieldObject o : objectList) {
 				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
-					paint.setStyle(Paint.Style.FILL);
-					paint.setColor(colorArray[objectList.indexOf(o)]);
+					paint.setStyle(Paint.Style.STROKE);
 					if (o instanceof FieldItem) {
 						float left = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x + width / 24;
 						float top = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
@@ -235,8 +232,9 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					} else {
 						canvas.drawCircle(o.getX(), o.getY(), 100, paint);
 					}
-					paint.reset();
+					paint.setStyle(Paint.Style.FILL);
 					paint.setTextSize(100);
+					canvas.drawText(String.valueOf(o.getClass().getSimpleName().charAt(0)), o.getX(), o.getY(), paint);
 					canvas.drawText("" + o.getHP(), o.getX(), o.getY() + 200, paint);
 				}
 			}
