@@ -19,6 +19,7 @@ import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Player;
 import com.example.hackmanexe.fieldobject.Rabbily;
+import com.example.hackmanexe.fieldobject.Ghosler;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -52,18 +53,20 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// player);
 		// Cannodam cannodam = new Cannodam(mainActivity,
 		// field.getPanelInfo()[4], 40);
-		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
+		//Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
 		// TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
 		//Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[17], player);
+		Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
 		// objectList.add(metall);
 		// objectList.add(cannodam);
-		 objectList.add(rabbily);
+		// objectList.add(rabbily);
 		// objectList.add(testObject);
 		// objectList.add(swordin);
+		objectList.add(ghosler);
 	}
 
 	@Override
