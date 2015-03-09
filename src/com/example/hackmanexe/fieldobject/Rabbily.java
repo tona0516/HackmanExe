@@ -138,29 +138,21 @@ public class Rabbily extends Enemy {
 		int[] list = new int[4]; // 移動可能な方向のインデックスを保存（up:1 right:2 down:3
 									// left:4）
 
-		if (canMove(pi.getUp())) { // 上のパネルがnullじゃない場合のみ考える
-			//if (pi.getUp().isEnemyPanel()) { // 上のパネルがウィルスサイドに属するパネルなら
-				list[listnum] = 1; // 移動可能な方向として、リストにインデックスを追加
-				listnum++; // 移動可能な方向の数が増える
-			//}
+		if (rabbily.canMove(pi.getUp())) { // 上のパネルがnullじゃない場合のみ考える
+			list[listnum] = 1; // 移動可能な方向として、リストにインデックスを追加
+			listnum++; // 移動可能な方向の数が増える
 		}
-		if (pi.getRight() != null) {
-			if (pi.getRight().isEnemyPanel()) {
-				list[listnum] = 2;
-				listnum++;
-			}
+		if (rabbily.canMove(pi.getRight())) { // 下のパネルがnullじゃない場合のみ考える
+			list[listnum] = 2; // 移動可能な方向として、リストにインデックスを追加
+			listnum++; // 移動可能な方向の数が増える
 		}
-		if (pi.getDown() != null) {
-			if (pi.getDown().isEnemyPanel()) {
-				list[listnum] = 3;
-				listnum++;
-			}
+		if (rabbily.canMove(pi.getDown())) { // 上のパネルがnullじゃない場合のみ考える
+			list[listnum] = 3; // 移動可能な方向として、リストにインデックスを追加
+			listnum++; // 移動可能な方向の数が増える
 		}
-		if (pi.getLeft() != null) {
-			if (pi.getLeft().isEnemyPanel()) {
-				list[listnum] = 4;
-				listnum++;
-			}
+		if (rabbily.canMove(pi.getLeft())) { // 上のパネルがnullじゃない場合のみ考える
+			list[listnum] = 4; // 移動可能な方向として、リストにインデックスを追加
+			listnum++; // 移動可能な方向の数が増える
 		}
 
 		Random random = new Random();

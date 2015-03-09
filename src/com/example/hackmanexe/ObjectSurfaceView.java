@@ -61,7 +61,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		objectList.add(metall);
+		// objectList.add(metall);
 		// objectList.add(cannodam);
 		objectList.add(rabbily);
 		// objectList.add(testObject);
@@ -227,10 +227,10 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					paint.setStyle(Paint.Style.FILL);
 					paint.setColor(colorArray[objectList.indexOf(o)]);
 					if (o instanceof FieldItem) {
-						float left =DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x+width/24;
-						float top =DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y+height/12;
-						float right =DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].x+width/24;
-						float bottom =DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].y+height/12;
+						float left = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x + width / 24;
+						float top = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
+						float right = DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].x + width / 24;
+						float bottom = DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
 						canvas.drawRect(left, top, right, bottom, paint);
 					} else {
 						canvas.drawCircle(o.getX(), o.getY(), 100, paint);
