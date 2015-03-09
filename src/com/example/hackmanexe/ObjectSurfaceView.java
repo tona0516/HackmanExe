@@ -18,8 +18,8 @@ import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Ghosler;
 import com.example.hackmanexe.fieldobject.Player;
-import com.example.hackmanexe.fieldobject.Rabbily;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -48,22 +48,12 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		//Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
-		// Cannodam cannodam = new
-		// Cannodam(mainActivity,field.getPanelInfo()[4], 40);
-		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
-		// TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
-		// Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[17],
-		// player);
+		Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		// objectList.add(metall);
-		// objectList.add(cannodam);
-		objectList.add(rabbily);
-		// objectList.add(testObject);
-		// objectList.add(swordin);
+		objectList.add(ghosler);
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -79,6 +69,9 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread = null;
+		for(FieldObject f: objectList){
+			f = null;
+		}
 	}
 
 	/**
