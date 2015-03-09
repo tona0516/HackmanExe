@@ -20,7 +20,7 @@ public class Player extends FieldObject {
 	}
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 	}
 }

@@ -116,7 +116,7 @@ public class Rabbily extends Enemy {
 	}
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 		if (timer1 != null) {
 			timer1.cancel();

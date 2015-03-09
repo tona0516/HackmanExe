@@ -51,8 +51,8 @@ abstract class AttackAction extends Action{
 		if (o.getHP() - power > 0) { // HP計算
 			o.setHP(o.getHP() - power);
 		} else {
-			ObjectSurfaceView.objectList.remove(o);
 			o.setHP(0);
+			o.deathProcess();
 		}
 	}
 
