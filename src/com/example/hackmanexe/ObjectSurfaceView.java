@@ -12,13 +12,15 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.PaladinSword;
+import com.example.hackmanexe.action.StoneCube;
 import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
+import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
-import com.example.hackmanexe.fieldobject.Swordin;
+import com.example.hackmanexe.fieldobject.Rabbily;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -48,25 +50,23 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		// Metall metall = new Metall(mainActivity, field.getPanelInfo()[9],
-		// player);
-		// Cannodam cannodam = new Cannodam(mainActivity,
-		// field.getPanelInfo()[4], 40);
-		// Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11],
-		// player);
+		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
+		// Cannodam cannodam = new
+		// Cannodam(mainActivity,field.getPanelInfo()[4], 40);
+		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
 		// TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
-		Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[17], player);
+		// Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[17],
+		// player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		// objectList.add(metall);
+		objectList.add(metall);
 		// objectList.add(cannodam);
-		// objectList.add(rabbily);
+		objectList.add(rabbily);
 		// objectList.add(testObject);
-		objectList.add(swordin);
+		// objectList.add(swordin);
 	}
-
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		thread = new Thread(this);
@@ -158,7 +158,8 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onDownFlickOnRightSide() {
-		player.addAction(new LongSword(mainActivity, player)); // ロングソード
+		// player.addAction(new LongSword(mainActivity, player)); // ロングソード
+		player.addAction(new StoneCube(player));
 		player.action();
 	}
 
@@ -178,22 +179,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
 	private void onUpFlickOnLeftSide() {
 		player.moveUp();
-		//player.moveUpSmoothly(250);
+		// player.moveUpSmoothly(250);
 	}
 
 	private void onDownFlickOnLeftSide() {
 		player.moveDown();
-		//player.moveDownSmoothly(250);
+		// player.moveDownSmoothly(250);
 	}
 
 	private void onRightFlickOnLeftSide() {
 		player.moveRight();
-		//player.moveRightSmoothly(250);
+		// player.moveRightSmoothly(250);
 	}
 
 	private void onLeftFlickOnLeftSide() {
 		player.moveLeft();
-		//player.moveLeftSmoothly(250);
+		// player.moveLeftSmoothly(250);
 	}
 
 	private void onTapOnLeftSide() {
@@ -225,7 +226,15 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					paint.reset();
 					paint.setStyle(Paint.Style.FILL);
 					paint.setColor(colorArray[objectList.indexOf(o)]);
-					canvas.drawCircle(o.getX(), o.getY(), 100, paint);
+					if (o instanceof FieldItem) {
+						float left =DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x+width/24;
+						float top =DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y+height/12;
+						float right =DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].x+width/24;
+						float bottom =DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].y+height/12;
+						canvas.drawRect(left, top, right, bottom, paint);
+					} else {
+						canvas.drawCircle(o.getX(), o.getY(), 100, paint);
+					}
 					paint.reset();
 					paint.setTextSize(100);
 					canvas.drawText("" + o.getHP(), o.getX(), o.getY() + 200, paint);

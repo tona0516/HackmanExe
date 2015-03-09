@@ -88,7 +88,7 @@ public class Rabbily extends Enemy {
 				if (rabbiling == null || !rabbiling.isActing()) {
 					if (currentPlayerLine == currentOwnLine) { // 相手が同じラインに居れば
 						try {
-							TimeUnit.MILLISECONDS.sleep(300); // 振りかぶって（少し待って）
+							TimeUnit.MILLISECONDS.sleep(/*300*/5000); // 振りかぶって（少し待って
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -138,11 +138,11 @@ public class Rabbily extends Enemy {
 		int[] list = new int[4]; // 移動可能な方向のインデックスを保存（up:1 right:2 down:3
 									// left:4）
 
-		if (pi.getUp() != null) { // 上のパネルがnullじゃない場合のみ考える
-			if (pi.getUp().isEnemyPanel()) { // 上のパネルがウィルスサイドに属するパネルなら
+		if (canMove(pi.getUp())) { // 上のパネルがnullじゃない場合のみ考える
+			//if (pi.getUp().isEnemyPanel()) { // 上のパネルがウィルスサイドに属するパネルなら
 				list[listnum] = 1; // 移動可能な方向として、リストにインデックスを追加
 				listnum++; // 移動可能な方向の数が増える
-			}
+			//}
 		}
 		if (pi.getRight() != null) {
 			if (pi.getRight().isEnemyPanel()) {

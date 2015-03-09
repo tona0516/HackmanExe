@@ -92,7 +92,7 @@ abstract public class FieldObject {
 		this.getCurrentPanelInfo().setObject(null); // 死ぬときはパネル上から自分の存在を消す
 	}
 
-	private boolean canMove(PanelInfo destination) {
+	public boolean canMove(PanelInfo destination) {
 		if (destination == null) // 移動先のパネルがnull
 			return false;
 		if (destination.getObject() != null) // 移動先にオブジェクトがいる
