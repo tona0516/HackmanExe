@@ -81,6 +81,9 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread = null;
+		for(FieldObject f: objectList){
+			f = null;
+		}
 	}
 
 	/**
