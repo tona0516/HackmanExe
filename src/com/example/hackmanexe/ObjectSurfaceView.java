@@ -18,7 +18,7 @@ import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Player;
-import com.example.hackmanexe.fieldobject.TestObject;
+import com.example.hackmanexe.fieldobject.Rabbily;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -48,18 +48,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-//		Metall metall = new Metall(mainActivity, field.getPanelInfo()[9], player);
-//		Cannodam cannodam = new Cannodam(mainActivity, field.getPanelInfo()[4], 40);
-//		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
-		TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
+		// Metall metall = new Metall(mainActivity, field.getPanelInfo()[9],
+		// player);
+		// Cannodam cannodam = new Cannodam(mainActivity,
+		// field.getPanelInfo()[4], 40);
+		Rabbily rabbily = new Rabbily(mainActivity, field.getPanelInfo()[11], player);
+		// TestObject testObject = new TestObject(field.getPanelInfo()[10], 99);
+		//Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[17], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
 		// objectList.add(metall);
 		// objectList.add(cannodam);
-		// objectList.add(rabbily);
-		objectList.add(testObject);
+		 objectList.add(rabbily);
+		// objectList.add(testObject);
+		// objectList.add(swordin);
 	}
 
 	@Override
@@ -173,18 +177,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
 	private void onUpFlickOnLeftSide() {
 		player.moveUp();
+		//player.moveUpSmoothly(250);
 	}
 
 	private void onDownFlickOnLeftSide() {
 		player.moveDown();
+		//player.moveDownSmoothly(250);
 	}
 
 	private void onRightFlickOnLeftSide() {
 		player.moveRight();
+		//player.moveRightSmoothly(250);
 	}
 
 	private void onLeftFlickOnLeftSide() {
 		player.moveLeft();
+		//player.moveLeftSmoothly(250);
 	}
 
 	private void onTapOnLeftSide() {
@@ -216,10 +224,10 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 					paint.reset();
 					paint.setStyle(Paint.Style.FILL);
 					paint.setColor(colorArray[objectList.indexOf(o)]);
-					canvas.drawCircle(o.getCurrentPanelInfo().getDrawX(), o.getCurrentPanelInfo().getDrawY(), 100, paint);
+					canvas.drawCircle(o.getX(), o.getY(), 100, paint);
 					paint.reset();
 					paint.setTextSize(100);
-					canvas.drawText("" + o.getHP(), o.getCurrentPanelInfo().getDrawX(), o.getCurrentPanelInfo().getDrawY() + 200, paint);
+					canvas.drawText("" + o.getHP(), o.getX(), o.getY() + 200, paint);
 				}
 			}
 			holder.unlockCanvasAndPost(canvas);
