@@ -9,8 +9,7 @@ import com.example.hackmanexe.PanelInfo;
  *
  */
 abstract public class FieldItem extends FieldObject {
-
-	public FieldItem(PanelInfo _currentPanelInfo) {
-		super(_currentPanelInfo, 1);
+	public FieldItem(PanelInfo _currentPanelInfo, int HP) {
+		super(_currentPanelInfo, HP);
 	}
 }

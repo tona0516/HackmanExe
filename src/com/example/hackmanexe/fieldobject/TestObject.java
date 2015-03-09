@@ -34,7 +34,7 @@ public class TestObject extends Enemy {
 	}
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 		if (timer != null) {
 			timer.cancel();

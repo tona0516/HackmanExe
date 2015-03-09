@@ -39,11 +39,6 @@ public class Swordin extends Enemy {
 		this.player = _player;
 		swordin = this;
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask(){
@@ -114,11 +109,11 @@ public class Swordin extends Enemy {
 				preOwnLine = currentOwnLine;
 			}
 		}
-		, 1000, 1000);
+		, 2000, 1000);
 	}
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 		if (timer != null) {
 			timer.cancel();

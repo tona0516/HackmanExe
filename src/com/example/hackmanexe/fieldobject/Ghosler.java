@@ -20,15 +20,15 @@ import com.example.hackmanexe.PanelInfo;
 public class Ghosler extends Enemy {
 
 	private final static int HP = 40;
-	private int prePlayerLine = -1;
-	private int preOwnLine = -1;
+	//private int prePlayerLine = -1;
+	//private int preOwnLine = -1;
 	private Ghosler ghosler;
 	private Timer timer1, timer2;
 	
 	private Player player;
 	private MainActivity mainActivity;
 
-	private int phase = 1;
+	//private int phase = 1;
 	private int sameLineTime = 0;
 
 	public Ghosler(MainActivity _mainActivity, PanelInfo _panelInfo,
@@ -124,7 +124,7 @@ public class Ghosler extends Enemy {
 	}*/
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 		if (timer1 != null) {
 			timer1.cancel();

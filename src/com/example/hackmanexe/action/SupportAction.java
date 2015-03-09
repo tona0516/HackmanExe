@@ -1,23 +1,26 @@
 package com.example.hackmanexe.action;
 
-import android.util.Log;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
  *
- * @author meem
- * 回復・補助技の情報を保持するクラス
+ * @author meem 回復・補助技の情報を保持するクラス
  */
-public class SupportAction extends Action{
-	public SupportAction() {
+abstract public class SupportAction extends Action {
+	protected FieldObject fieldObject;
+	public SupportAction(FieldObject o) {
 		super();
+		fieldObject = o;
 	}
 
+	/**
+	 * 動作処理はこのメソッドをOverrideして実装してください！
+	 */
 	public void support(){
 	}
 
 	@Override
 	protected boolean isActing() {
-		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}
 }

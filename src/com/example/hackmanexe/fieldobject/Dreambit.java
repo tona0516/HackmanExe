@@ -30,7 +30,7 @@ public class Dreambit extends Enemy {
 	}
 
 	@Override
-	protected void deathProcess() {
+	public void deathProcess() {
 		super.deathProcess();
 		if (t != null) {
 			t.cancel();

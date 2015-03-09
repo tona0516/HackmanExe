@@ -88,7 +88,8 @@ abstract public class FieldObject {
 		this.actionList = actionList;
 	}
 
-	protected void deathProcess() {
+	public void deathProcess() {
+		ObjectSurfaceView.objectList.remove(this);
 		this.getCurrentPanelInfo().setObject(null); // 死ぬときはパネル上から自分の存在を消す
 	}
 
