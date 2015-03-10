@@ -20,6 +20,7 @@ import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
 import com.example.hackmanexe.fieldobject.Ghosler;
 import com.example.hackmanexe.fieldobject.Player;
+import com.example.hackmanexe.fieldobject.Swordin;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -48,12 +49,14 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11], player);
+		// Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11], player);
+		Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[11],player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
 		objectList.add(player);
-		objectList.add(ghosler);
+		// objectList.add(ghosler);
+		objectList.add(swordin);
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -69,9 +72,6 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread = null;
-		for(FieldObject f: objectList){
-			f = null;
-		}
 	}
 
 	/**

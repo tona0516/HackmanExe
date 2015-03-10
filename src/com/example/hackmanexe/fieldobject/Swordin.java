@@ -2,6 +2,7 @@ package com.example.hackmanexe.fieldobject;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
@@ -56,7 +57,7 @@ public class Swordin extends Enemy {
 							moveDown();
 						}
 						try {
-							Thread.sleep(1000);
+							TimeUnit.MILLISECONDS.sleep(1000);
 							moveLeft(); // 1マス前進
 						} catch (InterruptedException e) {
 							// TODO 自動生成された catch ブロック
@@ -65,6 +66,13 @@ public class Swordin extends Enemy {
 					}
 					else if(swordin.getCurrentPanelInfo().getRow()
 							== swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // こいつが最前列にいるなら
+						
+						try {
+							TimeUnit.MILLISECONDS.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if(player.getCurrentPanelInfo().getRow()
 								== player.getCurrentPanelInfo().getFrontrowindex()){ // プレイヤーが最前列なら
 							if(Math.abs(currentPlayerLine - currentOwnLine) > 1){ // widesword の布石
