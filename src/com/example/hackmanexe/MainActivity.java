@@ -1,7 +1,5 @@
 package com.example.hackmanexe;
 
-import com.example.hackmanexe.R;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Point;

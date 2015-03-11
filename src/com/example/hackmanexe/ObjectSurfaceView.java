@@ -18,7 +18,6 @@ import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
-import com.example.hackmanexe.fieldobject.Ghosler;
 import com.example.hackmanexe.fieldobject.Player;
 import com.example.hackmanexe.fieldobject.Swordin;
 
@@ -49,8 +48,9 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
 		// エネミーフィールドにエネミーオブジェクトの生成
-		// Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11], player);
-		Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[11],player);
+		// Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11],
+		// player);
+		Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
@@ -208,8 +208,8 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	 *
 	 * @param paint
 	 */
-	private void doDraw(Paint paint) {
-		Canvas canvas = holder.lockCanvas();
+	private void doDraw(final Paint paint) {
+		final Canvas canvas = holder.lockCanvas();
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
 			for (FieldObject o : objectList) {
