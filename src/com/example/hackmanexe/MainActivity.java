@@ -3,6 +3,7 @@ package com.example.hackmanexe;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.R;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -28,7 +29,16 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		DrawerLayout dl = (DrawerLayout) findViewById(R.id.drawer_layout);
+//		ActionBarDrawerToggle abdt = new ActionBarDrawerToggle(this, dl, R.string.drawer_open, R.string.drawer_close) {
+//			@Override
+//			public void onDrawerClosed(View view) {
+//			}
+//
+//			@Override
+//			public void onDrawerOpened(View drawerView) {
+//			}
+//		};
 		// 画面サイズの取得
 		Point point = getWindowSize();
 
@@ -70,9 +80,9 @@ public class MainActivity extends Activity {
 		frameLayout.addView(objectSurfaceView);
 
 		// カスタムゲージを描画するSeekBar
-		//costomGaugeSeekBar = (SeekBar)findViewById(R.id.costom_gauge);
-		costomGaugeSeekBar  = new SeekBar(this);
-		FrameLayout.LayoutParams layoutParamsCostomGauge = new FrameLayout.LayoutParams((int)width/2, (int)height/15, Gravity.CENTER_HORIZONTAL);
+		// costomGaugeSeekBar = (SeekBar)findViewById(R.id.costom_gauge);
+		costomGaugeSeekBar = new SeekBar(this);
+		FrameLayout.LayoutParams layoutParamsCostomGauge = new FrameLayout.LayoutParams((int) width / 2, (int) height / 15, Gravity.CENTER_HORIZONTAL);
 		costomGaugeSeekBar.setLayoutParams(layoutParamsCostomGauge);
 		costomGaugeSeekBar.setMax(1000);
 		costomGaugeSeekBar.setClickable(false);
@@ -83,15 +93,14 @@ public class MainActivity extends Activity {
 			private int progressValue = 0;
 			@Override
 			public void run() {
-				if(progressValue < 1000){
-				costomGaugeSeekBar.setProgress(progressValue);
-				progressValue = progressValue + 1;
-				}else if(progressValue == 1000){
-					//ゲージが溜まった時の処理
+				if (progressValue < 1000) {
+					costomGaugeSeekBar.setProgress(progressValue);
+					progressValue = progressValue + 1;
+				} else if (progressValue == 1000) {
+					// ゲージが溜まった時の処理
 				}
 			}
-		},0, 10);
-
+		}, 0, 10);
 
 		// 攻撃範囲を描画するView
 		for (int i = 0; i < 18; i++) {

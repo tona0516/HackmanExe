@@ -4,5 +4,7 @@
     <string name="app_name">HackmanExe</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer.close">close</string>
 
 </resources>
