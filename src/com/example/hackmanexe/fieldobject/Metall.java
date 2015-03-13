@@ -21,7 +21,6 @@ public class Metall extends Enemy {
 	private int prePlayerLine = -1;
 	private int preOwnLine = -1;
 	private Metall metall;
-	private Timer timer;
 	private Shockwave shockWave =null;
 	private Player player;
 	private MainActivity mainActivity;

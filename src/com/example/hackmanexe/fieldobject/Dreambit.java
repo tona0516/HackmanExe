@@ -9,14 +9,13 @@ public class Dreambit extends Enemy {
 
 	private static final int HP = 200;
 	private Player player;
-	private Timer t;
 
 	public Dreambit(PanelInfo panelinfo, Player _player) {
 		super(panelinfo, HP);
 		this.player = _player;
 
-		t = new Timer();
-		t.scheduleAtFixedRate(new TimerTask() {
+		timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				int playerLine = player.getCurrentPanelInfo().getLine(); // scope error can't fixed...
@@ -32,9 +31,9 @@ public class Dreambit extends Enemy {
 	@Override
 	public void deathProcess() {
 		super.deathProcess();
-		if (t != null) {
-			t.cancel();
-			t = null;
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
 		}
 	}
 

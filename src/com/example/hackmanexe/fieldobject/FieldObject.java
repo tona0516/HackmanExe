@@ -24,6 +24,7 @@ abstract public class FieldObject {
 	protected float x, y;
 	protected Timer smoothMovementTimer;
 	protected DummyObject dummyObject;
+	protected Timer timer;
 
 	public FieldObject(PanelInfo currentPanelInfo, int HP) {
 		this.currentPanelInfo = currentPanelInfo;
@@ -36,6 +37,10 @@ abstract public class FieldObject {
 
 	public PanelInfo getCurrentPanelInfo() {
 		return currentPanelInfo;
+	}
+
+	public Timer getTimer() {
+		return timer;
 	}
 
 	public int getHP() {

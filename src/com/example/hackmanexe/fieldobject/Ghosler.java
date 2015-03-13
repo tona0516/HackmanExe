@@ -3,9 +3,6 @@ package com.example.hackmanexe.fieldobject;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
-import android.util.Log;
 
 import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
@@ -23,8 +20,8 @@ public class Ghosler extends Enemy {
 	//private int prePlayerLine = -1;
 	//private int preOwnLine = -1;
 	private Ghosler ghosler;
-	private Timer timer1, timer2;
-	
+	private Timer timer2;
+
 	private Player player;
 	private MainActivity mainActivity;
 
@@ -40,7 +37,7 @@ public class Ghosler extends Enemy {
 		mainActivity = _mainActivity;
 
 		// 動作アルゴリズム
-		timer1 = new Timer();
+		timer = new Timer();
 		timer1Task(); // 代わりにタイマー1をセット
 		//timer2 = new Timer();
 		//changeTimer(); // Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
@@ -51,8 +48,8 @@ public class Ghosler extends Enemy {
 	 * ランダム移動動作を行うタイマーをセット
 	 */
 	private void timer1Task() {
-		timer1 = new Timer();
-		timer1.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
+		timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
@@ -66,7 +63,7 @@ public class Ghosler extends Enemy {
 				else{
 					sameLineTime = 0;
 				}
-				
+
 				if(sameLineTime >= 3){
 					sameLineTime = 0;
 					escapeWarp(pi);
@@ -126,9 +123,9 @@ public class Ghosler extends Enemy {
 	@Override
 	public void deathProcess() {
 		super.deathProcess();
-		if (timer1 != null) {
-			timer1.cancel();
-			timer1 = null;
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
 		}
 		/*if (timer2 != null) {
 			timer2.cancel();
@@ -145,7 +142,7 @@ public class Ghosler extends Enemy {
 		int[] list = new int[2]; //
 		int listnum = 0;
 		int index;
-		
+
 		for(int i = -2; i <= 2; i++){
 			index = pi.getIndex() + (i * 6);
 			if(index < 18 && 2 < index && index != pi.getIndex()){
@@ -157,7 +154,7 @@ public class Ghosler extends Enemy {
 		Random random = new Random();
 		int listind = random.nextInt(listnum); // 移動可能な方向の数が、乱数の候補の数
 		int warpind = list[listind]; // 方向を決定
-		
+
 		warp(warpind);
 	}
 

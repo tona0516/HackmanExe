@@ -66,7 +66,7 @@ public class Swordin extends Enemy {
 					}
 					else if(swordin.getCurrentPanelInfo().getRow()
 							== swordin.getCurrentPanelInfo().getFrontrowindex()+1){ // こいつが最前列にいるなら
-						
+
 						try {
 							TimeUnit.MILLISECONDS.sleep(1000);
 						} catch (InterruptedException e) {

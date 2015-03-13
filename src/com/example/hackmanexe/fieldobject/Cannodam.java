@@ -15,7 +15,6 @@ public class Cannodam extends Enemy {
 	private MainActivity mainActivity;
 	private Cannodam cannodam;
 	private CannoTarget ct;
-	Timer timer;
 
 	public Cannodam(MainActivity _mainActivity, PanelInfo _panelInfo, int _HP) {
 		super(_panelInfo, _HP);

@@ -8,13 +8,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.PaladinSword;
-import com.example.hackmanexe.action.StoneCube;
-import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
@@ -144,13 +144,12 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onUpFlickOnRightSide() {
-		player.addAction(new Sword(mainActivity, player)); // ソード
+		player.addAction(new PaladinSword(mainActivity, player)); // パラディンソード
 		player.action();
 	}
 
 	private void onDownFlickOnRightSide() {
-		// player.addAction(new LongSword(mainActivity, player)); // ロングソード
-		player.addAction(new StoneCube(player));
+		player.addAction(new LongSword(mainActivity, player)); // ロングソード
 		player.action();
 	}
 
@@ -160,8 +159,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onLeftFlickOnRightSide() {
-		player.addAction(new PaladinSword(mainActivity, player)); // パラディンソード
-		player.action();
+		MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); //チップ選択画面を表示
 	}
 
 	private void onTapOnRightSide() {

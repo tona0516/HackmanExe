@@ -12,7 +12,8 @@ import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.Rabbiling;
 
 /**
- * メットールクラス 移動はできる。攻撃はまだ
+ * ラビリークラス
+ * このフィールドオブジェクトだけFieldObjectのTimerを使っていないので注意！
  *
  * @author meem
  *
