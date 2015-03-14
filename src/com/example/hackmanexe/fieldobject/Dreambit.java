@@ -9,6 +9,7 @@ public class Dreambit extends Enemy {
 
 	private static final int HP = 200;
 	private Player player;
+	private Timer timer;
 
 	public Dreambit(PanelInfo panelinfo, Player _player) {
 		super(panelinfo, HP);
@@ -35,6 +36,18 @@ public class Dreambit extends Enemy {
 			timer.cancel();
 			timer = null;
 		}
+	}
+
+	@Override
+	public void pause() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void restart() {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 
 }

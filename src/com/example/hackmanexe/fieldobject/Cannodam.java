@@ -15,6 +15,7 @@ public class Cannodam extends Enemy {
 	private MainActivity mainActivity;
 	private Cannodam cannodam;
 	private CannoTarget ct;
+	private Timer timer;
 
 	public Cannodam(MainActivity _mainActivity, PanelInfo _panelInfo, int _HP) {
 		super(_panelInfo, _HP);
@@ -41,6 +42,18 @@ public class Cannodam extends Enemy {
 			timer.cancel();
 			timer = null;
 		}
+	}
+
+	@Override
+	public void pause() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void restart() {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 
 }

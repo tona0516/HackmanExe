@@ -195,4 +195,16 @@ public class Rabbily extends Enemy {
 		}
 	}
 
+	@Override
+	public void pause() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void restart() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
 }

@@ -22,7 +22,10 @@ public class MainActivity extends Activity {
 	public static SurfaceView[] t = new SurfaceView[18]; // 攻撃範囲を描画するViewをパネル数作成
 	public static SurfaceView[] t2 = new SurfaceView[18]; // 攻撃範囲を描画するViewをパネル数作成
 	private SeekBar costomGaugeSeekBar;
+	private Timer costomGaugeTimer;
+	private TimerTask tt;
 	public static DrawerLayout drawerLayout;
+	private FrameLayout frameLayout;
 
 	/**
 	 * ここから実行
@@ -57,9 +60,9 @@ public class MainActivity extends Activity {
 		DrawingPosition.prepareDrawing(point.x, point.y);
 
 		// 描画を行うViewを加える
-		setView((FrameLayout) findViewById(R.id.root_layout), point.x, point.y);
+		frameLayout = (FrameLayout) findViewById(R.id.root_layout);
+		setView(frameLayout, point.x, point.y);
 	}
-
 	/**
 	 *
 	 * @return 画面の縦横サイズ
@@ -100,8 +103,8 @@ public class MainActivity extends Activity {
 		costomGaugeSeekBar.setClickable(false);
 		costomGaugeSeekBar.setThumb(null);
 		frameLayout.addView(costomGaugeSeekBar);
-		Timer costomGaugetimer = new Timer();
-		costomGaugetimer.scheduleAtFixedRate(new TimerTask() {
+		costomGaugeTimer = new Timer();
+		tt = new TimerTask() {
 			private int progressValue = 0;
 			@Override
 			public void run() {
@@ -112,7 +115,8 @@ public class MainActivity extends Activity {
 					// ゲージが溜まった時の処理
 				}
 			}
-		}, 0, 10);
+		};
+		costomGaugeTimer.scheduleAtFixedRate(tt, 0, 10);
 		// 攻撃範囲を描画するView
 		for (int i = 0; i < 18; i++) {
 			t[i] = new SurfaceView(this);

@@ -8,8 +8,10 @@ import com.example.hackmanexe.PanelInfo;
  * @author meem
  */
 abstract public class Enemy extends FieldObject {
-
 	public Enemy(PanelInfo _panelInfo, int _HP) {
 		super(_panelInfo, _HP);
 	}
+
+	abstract public void pause();
+	abstract public void restart();
 }

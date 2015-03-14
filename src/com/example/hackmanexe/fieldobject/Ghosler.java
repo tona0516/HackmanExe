@@ -27,6 +27,7 @@ public class Ghosler extends Enemy {
 
 	//private int phase = 1;
 	private int sameLineTime = 0;
+	private Timer timer1;
 
 	public Ghosler(MainActivity _mainActivity, PanelInfo _panelInfo,
 			Player _player) {
@@ -37,7 +38,7 @@ public class Ghosler extends Enemy {
 		mainActivity = _mainActivity;
 
 		// 動作アルゴリズム
-		timer = new Timer();
+		timer1 = new Timer();
 		timer1Task(); // 代わりにタイマー1をセット
 		//timer2 = new Timer();
 		//changeTimer(); // Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
@@ -48,8 +49,8 @@ public class Ghosler extends Enemy {
 	 * ランダム移動動作を行うタイマーをセット
 	 */
 	private void timer1Task() {
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
+		timer1 = new Timer();
+		timer1.scheduleAtFixedRate(new TimerTask() { // 毎秒ごとに実行
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
@@ -123,9 +124,9 @@ public class Ghosler extends Enemy {
 	@Override
 	public void deathProcess() {
 		super.deathProcess();
-		if (timer != null) {
-			timer.cancel();
-			timer = null;
+		if (timer1 != null) {
+			timer1.cancel();
+			timer1 = null;
 		}
 		/*if (timer2 != null) {
 			timer2.cancel();
@@ -156,6 +157,18 @@ public class Ghosler extends Enemy {
 		int warpind = list[listind]; // 方向を決定
 
 		warp(warpind);
+	}
+
+	@Override
+	public void pause() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void restart() {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 
 	/**

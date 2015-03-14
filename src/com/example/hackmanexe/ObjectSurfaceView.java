@@ -16,10 +16,11 @@ import android.view.SurfaceView;
 import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.PaladinSword;
 import com.example.hackmanexe.action.WideSword;
+import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
-import com.example.hackmanexe.fieldobject.Swordin;
 
 /**
  * オブジェクトを描画するクラス 実質のメインクラス
@@ -36,6 +37,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	private SurfaceHolder holder;
 	public static Field field;
 	public static ArrayList<FieldObject> objectList;
+	public static ArrayList<Enemy> enemyList;
 	private MainActivity mainActivity;
 
 	public ObjectSurfaceView(Context context, MainActivity mainActivity,
@@ -47,16 +49,14 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		field = new Field();
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
-		// エネミーフィールドにエネミーオブジェクトの生成
-		// Ghosler ghosler = new Ghosler(mainActivity, field.getPanelInfo()[11],
-		// player);
-		Swordin swordin = new Swordin(mainActivity, field.getPanelInfo()[11], player);
+		Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		objectList = new ArrayList<FieldObject>();
+		enemyList = new ArrayList<Enemy>();
 		objectList.add(player);
-		// objectList.add(ghosler);
-		objectList.add(swordin);
+		objectList.add(metall);
+		enemyList.add(metall);
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -159,7 +159,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onLeftFlickOnRightSide() {
-		MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); //チップ選択画面を表示
+		MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
 	}
 
 	private void onTapOnRightSide() {

@@ -21,12 +21,13 @@ public class Metall extends Enemy {
 	private int prePlayerLine = -1;
 	private int preOwnLine = -1;
 	private Metall metall;
-	private Shockwave shockWave =null;
+	private Shockwave shockWave = null;
 	private Player player;
 	private MainActivity mainActivity;
+	private Timer timer;
 
 	public Metall(MainActivity _mainActivity, PanelInfo _panelInfo,
-			 Player _player) {
+			Player _player) {
 		super(_panelInfo, HP);
 		metall = this;
 		player = _player;
@@ -35,31 +36,7 @@ public class Metall extends Enemy {
 		// 動作アルゴリズム
 		// 1秒毎に処理
 		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				// 自分・プレイヤーの位置を取得
-				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
-				int currentOwnLine = metall.getCurrentPanelInfo().getLine();
-				if (shockWave == null || !shockWave.isActing()) {
-					if (prePlayerLine == currentPlayerLine
-							&& preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
-						// 攻撃！
-						shockWave = new Shockwave(mainActivity, metall);
-						metall.addAction(shockWave);
-						metall.action();
-					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
-						moveUp();
-						Log.d(this.toString(), "up");
-					} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
-						moveDown();
-						Log.d(this.toString(), "down");
-					}
-					prePlayerLine = currentPlayerLine;
-					preOwnLine = currentOwnLine;
-				}
-			}
-		}, 2000, 1000);
+		timer.scheduleAtFixedRate(new BehaviorPatternTask(), 2000, 1000);
 	}
 
 	@Override
@@ -68,6 +45,47 @@ public class Metall extends Enemy {
 		if (timer != null) {
 			timer.cancel();
 			timer = null;
+		}
+	}
+
+	@Override
+	public void pause() {
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
+	}
+
+	@Override
+	public void restart() {
+		if (timer == null) {
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new BehaviorPatternTask(), 2000, 1000);
+		}
+	}
+
+	private class BehaviorPatternTask extends TimerTask {
+		@Override
+		public void run() {
+			// 自分・プレイヤーの位置を取得
+			int currentPlayerLine = player.getCurrentPanelInfo().getLine();
+			int currentOwnLine = metall.getCurrentPanelInfo().getLine();
+			if (shockWave == null || !shockWave.isActing()) {
+				if (prePlayerLine == currentPlayerLine && preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
+					// 攻撃！
+					shockWave = new Shockwave(mainActivity, metall);
+					metall.addAction(shockWave);
+					metall.action();
+				} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
+					moveUp();
+					Log.d(this.toString(), "up");
+				} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
+					moveDown();
+					Log.d(this.toString(), "down");
+				}
+				prePlayerLine = currentPlayerLine;
+				preOwnLine = currentOwnLine;
+			}
 		}
 	}
 }
