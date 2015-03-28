@@ -8,9 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -36,23 +34,23 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerLayout.setDrawerListener(new DrawerListener() {
-			@Override
-			public void onDrawerStateChanged(int newState) {
-			}
-
-			@Override
-			public void onDrawerSlide(View drawerView, float slideOffset) {
-			}
-
-			@Override
-			public void onDrawerOpened(View drawerView) {
-			}
-
-			@Override
-			public void onDrawerClosed(View drawerView) {
-			}
-		});
+//		drawerLayout.setDrawerListener(new DrawerListener() {
+//			@Override
+//			public void onDrawerStateChanged(int newState) {
+//			}
+//
+//			@Override
+//			public void onDrawerSlide(View drawerView, float slideOffset) {
+//			}
+//
+//			@Override
+//			public void onDrawerOpened(View drawerView) {
+//			}
+//
+//			@Override
+//			public void onDrawerClosed(View drawerView) {
+//			}
+//		});
 		// 画面サイズの取得
 		Point point = getWindowSize();
 
@@ -96,27 +94,29 @@ public class MainActivity extends Activity {
 		frameLayout.addView(objectSurfaceView);
 
 		// カスタムゲージを描画するSeekBar
-		costomGaugeSeekBar = new SeekBar(this);
-		FrameLayout.LayoutParams layoutParamsCostomGauge = new FrameLayout.LayoutParams((int) width / 2, (int) height / 15, Gravity.CENTER_HORIZONTAL);
-		costomGaugeSeekBar.setLayoutParams(layoutParamsCostomGauge);
-		costomGaugeSeekBar.setMax(1000);
-		costomGaugeSeekBar.setClickable(false);
-		costomGaugeSeekBar.setThumb(null);
-		frameLayout.addView(costomGaugeSeekBar);
-		costomGaugeTimer = new Timer();
-		tt = new TimerTask() {
-			private int progressValue = 0;
-			@Override
-			public void run() {
-				if (progressValue < 1000) {
-					costomGaugeSeekBar.setProgress(progressValue);
-					progressValue = progressValue + 1;
-				} else if (progressValue == 1000) {
-					// ゲージが溜まった時の処理
-				}
-			}
-		};
-		costomGaugeTimer.scheduleAtFixedRate(tt, 0, 10);
+		// costomGaugeSeekBar = new SeekBar(this);
+		// FrameLayout.LayoutParams layoutParamsCostomGauge = new
+		// FrameLayout.LayoutParams((int) width / 2, (int) height / 15,
+		// Gravity.CENTER_HORIZONTAL);
+		// costomGaugeSeekBar.setLayoutParams(layoutParamsCostomGauge);
+		// costomGaugeSeekBar.setMax(1000);
+		// costomGaugeSeekBar.setClickable(false);
+		// costomGaugeSeekBar.setThumb(null);
+		// frameLayout.addView(costomGaugeSeekBar);
+		// costomGaugeTimer = new Timer();
+		// tt = new TimerTask() {
+		// private int progressValue = 0;
+		// @Override
+		// public void run() {
+		// if (progressValue < 1000) {
+		// costomGaugeSeekBar.setProgress(progressValue);
+		// progressValue = progressValue + 1;
+		// } else if (progressValue == 1000) {
+		// // ゲージが溜まった時の処理
+		// }
+		// }
+		// };
+		// costomGaugeTimer.scheduleAtFixedRate(tt, 0, 10);
 		// 攻撃範囲を描画するView
 		for (int i = 0; i < 18; i++) {
 			t[i] = new SurfaceView(this);

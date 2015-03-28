@@ -8,13 +8,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.PaladinSword;
+import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
@@ -159,7 +159,9 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onLeftFlickOnRightSide() {
-		MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
+		player.addAction(new Sword(mainActivity, player)); // ワイドソード
+		player.action();
+		// MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
 	}
 
 	private void onTapOnRightSide() {
