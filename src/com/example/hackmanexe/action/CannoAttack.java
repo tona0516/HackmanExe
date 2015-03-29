@@ -3,12 +3,12 @@ package com.example.hackmanexe.action;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.MainActivity;
-import com.example.hackmanexe.fieldobject.FieldObject;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+
+import com.example.hackmanexe.AttackRangeManager;
+import com.example.hackmanexe.fieldobject.FieldObject;
 
 public class CannoAttack extends AbsolutePositionAttack {
 
@@ -30,10 +30,10 @@ public class CannoAttack extends AbsolutePositionAttack {
 						aa.setDuration(msec);
 						while (iterator.hasNext()) {
 							int index = Integer.valueOf(iterator.next());
-							MainActivity.t[index].setVisibility(View.VISIBLE);
+							AttackRangeManager.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
-							MainActivity.t[index].startAnimation(aa);
-							MainActivity.t[index].setVisibility(View.INVISIBLE);
+							AttackRangeManager.t[index].startAnimation(aa);
+							AttackRangeManager.t[index].setVisibility(View.INVISIBLE);
 						}
 					}
 				});

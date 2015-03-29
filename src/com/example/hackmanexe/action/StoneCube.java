@@ -1,6 +1,6 @@
 package com.example.hackmanexe.action;
 
-import com.example.hackmanexe.ObjectSurfaceView;
+import com.example.hackmanexe.ObjectManager;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
@@ -15,15 +15,15 @@ public class StoneCube extends SupportAction {
 	@Override
 	public void support() {
 		if (fieldObject instanceof Player && fieldObject.getCurrentPanelInfo().getRight().getObject() == null)
-			ObjectSurfaceView.objectList.add(new StoneCubeObject(fieldObject.getCurrentPanelInfo().getRight()));
+			ObjectManager.getInstance().getObjectList().add(new StoneCubeObject(fieldObject.getCurrentPanelInfo().getRight()));
 		else if (fieldObject instanceof Enemy && fieldObject.getCurrentPanelInfo().getLeft().getObject() == null)
-			ObjectSurfaceView.objectList.add(new StoneCubeObject(fieldObject.getCurrentPanelInfo().getLeft()));
+			ObjectManager.getInstance().getObjectList().add(new StoneCubeObject(fieldObject.getCurrentPanelInfo().getLeft()));
 	}
 
 	private class StoneCubeObject extends FieldItem {
 		public StoneCubeObject(PanelInfo p) {
 			super(p, 200);
-			ObjectSurfaceView.objectList.add(this);
+			ObjectManager.getInstance().getObjectList().add(this);
 		}
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.VirusBattleActivity;
 import com.example.hackmanexe.PanelInfo;
 
 /**
@@ -23,19 +23,19 @@ public class Ghosler extends Enemy {
 	private Timer timer2;
 
 	private Player player;
-	private MainActivity mainActivity;
+	private VirusBattleActivity virusBattleActivity;
 
 	//private int phase = 1;
 	private int sameLineTime = 0;
 	private Timer timer1;
 
-	public Ghosler(MainActivity _mainActivity, PanelInfo _panelInfo,
+	public Ghosler(VirusBattleActivity _mainActivity, PanelInfo _panelInfo,
 			Player _player) {
 		super(_panelInfo, HP);
 
 		ghosler = this;
 		player = _player;
-		mainActivity = _mainActivity;
+		virusBattleActivity = _mainActivity;
 
 		// 動作アルゴリズム
 		timer1 = new Timer();

@@ -3,7 +3,7 @@ package com.example.hackmanexe.fieldobject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.VirusBattleActivity;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.CannoTarget;
 /**
@@ -12,22 +12,22 @@ import com.example.hackmanexe.action.CannoTarget;
  */
 public class Cannodam extends Enemy {
 
-	private MainActivity mainActivity;
+	private VirusBattleActivity virusBattleActivity;
 	private Cannodam cannodam;
 	private CannoTarget ct;
 	private Timer timer;
 
-	public Cannodam(MainActivity _mainActivity, PanelInfo _panelInfo, int _HP) {
+	public Cannodam(VirusBattleActivity _mainActivity, PanelInfo _panelInfo, int _HP) {
 		super(_panelInfo, _HP);
 		cannodam = this;
-		mainActivity = _mainActivity;
+		virusBattleActivity = _mainActivity;
 
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				if (ct == null || !ct.isActing()) {
-					ct = new CannoTarget(mainActivity, cannodam);
+					ct = new CannoTarget(virusBattleActivity, cannodam);
 					cannodam.addAction(ct);
 					cannodam.action();
 				}

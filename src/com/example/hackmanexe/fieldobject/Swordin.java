@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.VirusBattleActivity;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.LongSword;
 import com.example.hackmanexe.action.WideSword;
@@ -14,7 +14,7 @@ public class Swordin extends Enemy {
 	private final static int HP = 90;
 	private Player player;
 	private Timer timer;
-	private MainActivity mainactivity;
+	private VirusBattleActivity mainactivity;
 	private Swordin swordin;
 	private LongSword ls = null;
 	private WideSword ws = null;
@@ -34,7 +34,7 @@ public class Swordin extends Enemy {
 	 * to describe this object on View
 	 */
 
-	public Swordin(MainActivity _mainactivity, PanelInfo _panelinfo, Player _player){
+	public Swordin(VirusBattleActivity _mainactivity, PanelInfo _panelinfo, Player _player){
 		super(_panelinfo, HP);
 		this.mainactivity = _mainactivity;
 		this.player = _player;

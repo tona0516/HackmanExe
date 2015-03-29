@@ -2,6 +2,7 @@ package com.example.hackmanexe;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,35 +29,32 @@ import com.example.hackmanexe.fieldobject.Player;
  * @author meem
  *
  */
-public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class VirusBattleObjectSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 	private float width, height;
 	private float downX, downY, upX, upY; // タッチ座標,離れた座標
 	private final int flickSensitivity = 20;
 	private Player player;
 	private Thread thread;
 	private SurfaceHolder holder;
-	public static Field field;
-	public static ArrayList<FieldObject> objectList;
-	public static ArrayList<Enemy> enemyList;
-	private MainActivity mainActivity;
+	private ArrayList<Enemy> enemyList;
+	private Activity activity;
 
-	public ObjectSurfaceView(Context context, MainActivity mainActivity,
+	public VirusBattleObjectSurfaceView(Context context, Activity activity,
 			float width, float height) {
 		super(context);
-		setup(mainActivity, width, height);
+		setup(activity, width, height);
 
-		// 3×6のフィールドオブジェクトの生成
-		field = new Field();
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
-		player = new Player(mainActivity, field.getPanelInfo()[7], 320);
-		Metall metall = new Metall(mainActivity, field.getPanelInfo()[11], player);
+		player = new Player(activity, Field.getInstance().getPanelInfo()[7], 320);
+		Metall metall = new Metall(activity, Field.getInstance().getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
-		objectList = new ArrayList<FieldObject>();
 		enemyList = new ArrayList<Enemy>();
-		objectList.add(player);
-		objectList.add(metall);
+		ObjectManager.getInstance().setPlayer(player);
+		ObjectManager.getInstance().getObjectList().add(player);
+		ObjectManager.getInstance().getObjectList().add(metall);
 		enemyList.add(metall);
+
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -72,6 +70,12 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread = null;
+		// タイマー消さないと生き続ける・・・
+		for (Enemy e : enemyList) {
+			if (e != null) {
+				e.deathProcess();
+			}
+		}
 	}
 
 	/**
@@ -129,10 +133,10 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		return true;
 	}
 
-	private void setup(MainActivity mainActivity, float width, float height) {
+	private void setup(Activity activity2, float width, float height) {
 		this.width = width;
 		this.height = height;
-		this.mainActivity = mainActivity;
+		this.activity = activity2;
 		// 半透明を設定
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		// コールバック登録
@@ -144,22 +148,22 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 	}
 
 	private void onUpFlickOnRightSide() {
-		player.addAction(new PaladinSword(mainActivity, player)); // パラディンソード
+		player.addAction(new PaladinSword(activity, player)); // パラディンソード
 		player.action();
 	}
 
 	private void onDownFlickOnRightSide() {
-		player.addAction(new LongSword(mainActivity, player)); // ロングソード
+		player.addAction(new LongSword(activity, player)); // ロングソード
 		player.action();
 	}
 
 	private void onRightFlickOnRightSide() {
-		player.addAction(new WideSword(mainActivity, player)); // ワイドソード
+		player.addAction(new WideSword(activity, player)); // ワイドソード
 		player.action();
 	}
 
 	private void onLeftFlickOnRightSide() {
-		player.addAction(new Sword(mainActivity, player)); // ワイドソード
+		player.addAction(new Sword(activity, player)); // ソード
 		player.action();
 		// MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
 	}
@@ -212,7 +216,7 @@ public class ObjectSurfaceView extends SurfaceView implements SurfaceHolder.Call
 		final Canvas canvas = holder.lockCanvas();
 		if (canvas != null) {
 			canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // 透明色で塗りつぶす
-			for (FieldObject o : objectList) {
+			for (FieldObject o : ObjectManager.getInstance().getObjectList()) {
 				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
 					paint.setStyle(Paint.Style.STROKE);

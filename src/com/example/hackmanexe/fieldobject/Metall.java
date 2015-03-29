@@ -3,9 +3,8 @@ package com.example.hackmanexe.fieldobject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.util.Log;
+import android.app.Activity;
 
-import com.example.hackmanexe.MainActivity;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.Shockwave;
 
@@ -23,15 +22,15 @@ public class Metall extends Enemy {
 	private Metall metall;
 	private Shockwave shockWave = null;
 	private Player player;
-	private MainActivity mainActivity;
+	private Activity activity;
 	private Timer timer;
 
-	public Metall(MainActivity _mainActivity, PanelInfo _panelInfo,
+	public Metall(Activity activity, PanelInfo _panelInfo,
 			Player _player) {
 		super(_panelInfo, HP);
 		metall = this;
 		player = _player;
-		mainActivity = _mainActivity;
+		this.activity = activity;
 
 		// 動作アルゴリズム
 		// 1秒毎に処理
@@ -73,15 +72,13 @@ public class Metall extends Enemy {
 			if (shockWave == null || !shockWave.isActing()) {
 				if (prePlayerLine == currentPlayerLine && preOwnLine == currentOwnLine) { // 1秒前と立ち位置が変わってなければ
 					// 攻撃！
-					shockWave = new Shockwave(mainActivity, metall);
+					shockWave = new Shockwave(activity, metall);
 					metall.addAction(shockWave);
 					metall.action();
 				} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
 					moveUp();
-					Log.d(this.toString(), "up");
 				} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
 					moveDown();
-					Log.d(this.toString(), "down");
 				}
 				prePlayerLine = currentPlayerLine;
 				preOwnLine = currentOwnLine;

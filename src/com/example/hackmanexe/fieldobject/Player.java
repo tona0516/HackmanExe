@@ -1,6 +1,7 @@
 package com.example.hackmanexe.fieldobject;
 
-import com.example.hackmanexe.MainActivity;
+import android.app.Activity;
+
 import com.example.hackmanexe.PanelInfo;
 
 /**
@@ -11,12 +12,12 @@ import com.example.hackmanexe.PanelInfo;
  */
 public class Player extends FieldObject {
 
-	private MainActivity mainActivity;
+	private Activity activity;
 
-	public Player(MainActivity _mainActivity, PanelInfo _currentFrameInfo,
+	public Player(Activity activity, PanelInfo _currentFrameInfo,
 			int _HP) {
 		super(_currentFrameInfo, _HP);
-		this.mainActivity = _mainActivity;
+		this.activity = activity;
 	}
 
 	@Override

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.hackmanexe.ObjectSurfaceView;
+import com.example.hackmanexe.Field;
+import com.example.hackmanexe.ObjectManager;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.AbsolutePositionAttack;
 import com.example.hackmanexe.action.Action;
@@ -89,7 +90,7 @@ abstract public class FieldObject {
 	}
 
 	public void deathProcess() {
-		ObjectSurfaceView.objectList.remove(this);
+		ObjectManager.getInstance().getObjectList().remove(this);
 		this.getCurrentPanelInfo().setObject(null); // 死ぬときはパネル上から自分の存在を消す
 	}
 
@@ -325,7 +326,7 @@ abstract public class FieldObject {
 	public boolean warp(int panelIndex) {
 		if (!(panelIndex > -1 && panelIndex < 18)) // 不正な値ならはじく
 			return false;
-		PanelInfo p = ObjectSurfaceView.field.getPanelInfo()[panelIndex]; // 移動先のpanelInfoを取得
+		PanelInfo p = Field.getInstance().getPanelInfo()[panelIndex]; // 移動先のpanelInfoを取得
 		if (p == null) // nullでもはじく
 			return false;
 		if (p.getObject() != null) // 移動先に何かいてもはじく

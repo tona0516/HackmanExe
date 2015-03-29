@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.util.Log;
 
-import com.example.hackmanexe.MainActivity;
+import com.example.hackmanexe.VirusBattleActivity;
 import com.example.hackmanexe.PanelInfo;
 import com.example.hackmanexe.action.Rabbiling;
 
@@ -28,18 +28,18 @@ public class Rabbily extends Enemy {
 	private Timer timer1, timer2;
 	private Rabbiling rabbiling;
 	private Player player;
-	private MainActivity mainActivity;
+	private VirusBattleActivity virusBattleActivity;
 
 	private int phase = 1;
 	private int moveTime = 0;
 
-	public Rabbily(MainActivity _mainActivity, PanelInfo _panelInfo,
+	public Rabbily(VirusBattleActivity _mainActivity, PanelInfo _panelInfo,
 			Player _player) {
 		super(_panelInfo, HP);
 
 		rabbily = this;
 		player = _player;
-		mainActivity = _mainActivity;
+		virusBattleActivity = _mainActivity;
 
 		// 動作アルゴリズム
 		timer1 = new Timer();
@@ -95,7 +95,7 @@ public class Rabbily extends Enemy {
 							e.printStackTrace();
 						}
 						// 攻撃!!
-						rabbiling = new Rabbiling(mainActivity, rabbily);
+						rabbiling = new Rabbiling(virusBattleActivity, rabbily);
 						rabbily.addAction(rabbiling);
 						rabbily.action();
 						moveTime = 0; // 移動回数をリセットして

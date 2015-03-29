@@ -4,16 +4,25 @@ package com.example.hackmanexe;
  * @author meem バトルフィールドの情報を保持するクラス
  */
 public class Field {
-	private PanelInfo[] panelInfo = new PanelInfo[18];
+	private static PanelInfo[] panelInfo = new PanelInfo[18];
+	private static Field instance;
 
-	public Field() {
-		// FrameInfoオブジェクトの初期化
-		for (int i = 0; i < 18; i++) {
-			// パネルオブジェクトの生成
-			panelInfo[i] = new PanelInfo(i);
+	private Field() {
+		instance = null;
+	}
+
+	public static Field getInstance() {
+		if (instance == null) {
+			instance = new Field();
+			// FrameInfoオブジェクトの初期化
+			for (int i = 0; i < 18; i++) {
+				// パネルオブジェクトの生成
+				panelInfo[i] = new PanelInfo(i);
+			}
+			// 各パネルを繋げる
+			instance.makeNode();
 		}
-		// 各パネルを繋げる
-		makeNode();
+		return instance;
 	}
 
 	public void setPlayerFrameInfo(PanelInfo[] panelInfo) {
@@ -54,7 +63,7 @@ public class Field {
 		panelInfo[14].setUp(panelInfo[8]);
 		panelInfo[14].setLeft(panelInfo[13]);
 
-		//敵エリアの初期ノード設定
+		// 敵エリアの初期ノード設定
 		panelInfo[0 + 3].setRight(panelInfo[1 + 3]);
 		panelInfo[0 + 3].setDown(panelInfo[6 + 3]);
 		panelInfo[1 + 3].setLeft(panelInfo[0 + 3]);
@@ -80,7 +89,7 @@ public class Field {
 		panelInfo[14 + 3].setUp(panelInfo[8 + 3]);
 		panelInfo[14 + 3].setLeft(panelInfo[13 + 3]);
 
-		//プレイヤー・敵エリア境界のノード
+		// プレイヤー・敵エリア境界のノード
 		panelInfo[2].setRight(panelInfo[3]);
 		panelInfo[8].setRight(panelInfo[9]);
 		panelInfo[14].setRight(panelInfo[15]);
@@ -88,7 +97,7 @@ public class Field {
 		panelInfo[9].setLeft(panelInfo[8]);
 		panelInfo[15].setLeft(panelInfo[14]);
 
-		//所属エリア設定
+		// 所属エリア設定
 		panelInfo[0].setBelong(1);
 		panelInfo[1].setBelong(1);
 		panelInfo[2].setBelong(1);
@@ -114,5 +123,9 @@ public class Field {
 			panelInfo[i].setDrawX(DrawingPosition.area.centerPoint[i].x);
 			panelInfo[i].setDrawY(DrawingPosition.area.centerPoint[i].y);
 		}
+	}
+
+	public void clear() {
+		instance = null;
 	}
 }

@@ -2,7 +2,7 @@ package com.example.hackmanexe.action;
 
 import android.app.Activity;
 
-import com.example.hackmanexe.ObjectSurfaceView;
+import com.example.hackmanexe.Field;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
@@ -35,7 +35,7 @@ abstract class AttackAction extends Action{
 	 *            パネルインデックス 当たり判定メソッド
 	 */
 	protected boolean judgeConfliction(int index) {
-		FieldObject o = ObjectSurfaceView.field.getPanelInfo()[index].getObject();
+		FieldObject o = Field.getInstance().getPanelInfo()[index].getObject();
 		// 攻撃者が自分自身の攻撃に当たらないようにする処理
 		if ((o instanceof Enemy || o instanceof FieldItem) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムにあたれば
 			calculateHP(o);
