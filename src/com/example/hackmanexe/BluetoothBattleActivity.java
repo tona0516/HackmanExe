@@ -1,8 +1,10 @@
 package com.example.hackmanexe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -155,18 +158,20 @@ public class BluetoothBattleActivity extends Activity {
 					byte[] writeBuf = (byte[]) msg.obj;
 					// construct a string from the buffer
 					String writeMessage = new String(writeBuf);
-					//Log.d("Message", writeMessage);
+					// Log.d("Message", writeMessage);
 					break;
 				case MESSAGE_READ :
 					byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
 					String readMessage = new String(readBuf, 0, msg.arg1);
-					//Log.d("Message", readMessage);
+					// Log.d("Message", readMessage);
 					// 受信した値から相手プレイヤーの位置を反映
-					if (Integer.valueOf(readMessage) >= 0 && Integer.valueOf(readMessage) <= 17 && ObjectManager.getInstance().getOpponent() != null) {
-						int oldIndex = Integer.valueOf(readMessage); //文字列検査してないので今後実装
-						int newIndex = convertPanelIndex(oldIndex);
-						Log.d("移動真偽", ""+ObjectManager.getInstance().getOpponent().warp(newIndex));
+					if(isNumber(readMessage)){
+						int oldIndex = Integer.parseInt(readMessage);
+						if(oldIndex >= 0 && oldIndex <= 17 && ObjectManager.getInstance().getOpponent() != null){
+							int newIndex = convertPanelIndex(oldIndex);
+							ObjectManager.getInstance().getOpponent().warp(newIndex);
+						}
 					}
 					break;
 				case MESSAGE_DEVICE_NAME :
@@ -180,6 +185,15 @@ public class BluetoothBattleActivity extends Activity {
 			}
 		}
 	};
+
+	private boolean isNumber(String message){
+		try {
+			 Integer.parseInt(message);
+			return true;
+		} catch (NumberFormatException nfex) {
+			return false;
+		}
+	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (D)
@@ -330,5 +344,37 @@ public class BluetoothBattleActivity extends Activity {
 			default :
 				return -1;
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// 確認ダイアログの生成
+			AlertDialog.Builder alertDlg = new AlertDialog.Builder(this);
+			alertDlg.setTitle("選択");
+
+			alertDlg.setPositiveButton("終了", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Okボタン処理
+					finish();
+				}
+			});
+			alertDlg.setNeutralButton("いいえ", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Cancel ボタンクリック処理
+				}
+			});
+			alertDlg.setNegativeButton("Bluetooth接続", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					openOptionsMenu();
+				}
+			});
+
+			// 表示
+			alertDlg.create().show();
+			return true;
+		}
+		return false;
 	}
 }

@@ -96,6 +96,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 			case MotionEvent.ACTION_UP : // 画面から離れた時
 				upX = event.getX();
 				upY = event.getY();
+
 				// 上下左右の判定
 				if (Math.abs(downX - upX) - Math.abs(downY - upY) > flickSensitivity) { // 左右の移動量が多い
 					if (downX > upX) {
@@ -131,6 +132,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 					else
 						onTapOnRightSide();
 				}
+			case MotionEvent.ACTION_MOVE : // ドラッグしている時
 				break;
 			default :
 				break;
@@ -202,7 +204,6 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	}
 
 	private void onTapOnLeftSide() {
-
 	}
 
 	/**
@@ -236,7 +237,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 						float bottom = DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
 						canvas.drawRect(left, top, right, bottom, paint);
 					} else {
-						canvas.drawCircle(o.getX(), o.getY(), 100, paint);
+						canvas.drawCircle(o.getX(), o.getY(), width/20, paint);
 					}
 					paint.setStyle(Paint.Style.FILL);
 					paint.setTextSize(100);
