@@ -20,6 +20,12 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.hackmanexe.action.LongSword;
+import com.example.hackmanexe.action.PaladinSword;
+import com.example.hackmanexe.action.Sword;
+import com.example.hackmanexe.action.WideSword;
+import com.example.hackmanexe.fieldobject.Opponent;
+
 public class BluetoothBattleActivity extends Activity {
 	private FrameLayout frameLayout;
 
@@ -78,6 +84,192 @@ public class BluetoothBattleActivity extends Activity {
 			return;
 		}
 	}
+
+	/**
+	 *
+	 * @return 画面の縦横サイズ
+	 */
+	private Point getWindowSize() {
+		Point p = new Point();
+		WindowManager wm = getWindowManager();
+		Display disp = wm.getDefaultDisplay();
+		disp.getSize(p);
+		return p;
+	}
+
+	/**
+	 * 各種Viewの追加
+	 *
+	 * @param frameLayout
+	 * @param width
+	 *            画面横サイズ
+	 * @param height
+	 *            画面縦サイズ
+	 */
+	private void setView(FrameLayout frameLayout, float width, float height) {
+		// エリアの区切り線を描画するView
+		FieldView fieldView;
+		fieldView = new FieldView(this, width, height);
+		frameLayout.addView(fieldView);
+
+		// エリア上のオブジェクト(プレイヤー、敵)を描画するView
+		BluetoothBattleObjectSurfaceView bluetoothBattleObjectSurfaceView;
+		bluetoothBattleObjectSurfaceView = new BluetoothBattleObjectSurfaceView(this, this, width, height);
+		frameLayout.addView(bluetoothBattleObjectSurfaceView);
+
+		AttackRangeDrawManager arm = new AttackRangeDrawManager(this, frameLayout, width, height);
+	}
+
+	/**
+	 * バックボタンが押下された時の処理
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// 確認ダイアログの生成
+			AlertDialog.Builder alertDlg = new AlertDialog.Builder(this);
+			alertDlg.setTitle("選択");
+
+			alertDlg.setPositiveButton("終了", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Okボタン処理
+					finish();
+				}
+			});
+			alertDlg.setNeutralButton("いいえ", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Cancel ボタンクリック処理
+				}
+			});
+			alertDlg.setNegativeButton("Bluetooth接続", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					openOptionsMenu();
+				}
+			});
+
+			// 表示
+			alertDlg.create().show();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 受信した情報から相手プレイヤーの動作を同期する
+	 *
+	 * @param readMessage
+	 */
+	private void synchronize(String readMessage) {
+		String[] opponentInfo = readMessage.split(",");
+		Opponent opponent = ObjectManager.getInstance().getOpponent();
+
+		// null検査
+		if (opponent == null)
+			return;
+
+		// 相手の位置の同期
+		if (isNumber(opponentInfo[0])) {
+			int oldIndex = Integer.parseInt(opponentInfo[0]);
+			if (oldIndex >= 0 && oldIndex <= 17) {
+				int newIndex = convertPanelIndex(oldIndex);
+				opponent.warp(newIndex);
+			}
+		}
+
+		// 相手のHPの同期
+		if (isNumber(opponentInfo[1])) {
+			int hp = Integer.parseInt(opponentInfo[1]);
+			opponent.setHP(hp);
+		}
+
+		// 相手の攻撃の同期
+		switch (opponentInfo[2]) {
+			case "PaladinSword" :
+				opponent.addAction(new PaladinSword(this, opponent));
+				opponent.action();
+				break;
+			case "WideSword" :
+				opponent.addAction(new WideSword(this, opponent));
+				opponent.action();
+				break;
+			case "LongSword" :
+				opponent.addAction(new LongSword(this, opponent));
+				opponent.action();
+				break;
+			case "Sword" :
+				opponent.addAction(new Sword(this, opponent));
+				opponent.action();
+				break;
+			default :
+				break;
+		}
+	}
+
+	/**
+	 *
+	 * @param message
+	 * @return 整数化が可能→true
+	 */
+	private boolean isNumber(String message) {
+		try {
+			Integer.parseInt(message);
+			return true;
+		} catch (NumberFormatException nfex) {
+			return false;
+		}
+	}
+
+	/**
+	 *
+	 * @param oldIndex
+	 * @return 変換したパネルインデックス
+	 * @see 実際のパネルインデックスを見かけ上のものに変換する 解析的にできないものか・・・
+	 */
+	private int convertPanelIndex(int oldIndex) {
+		switch (oldIndex) {
+			case 0 :
+				return 5;
+			case 1 :
+				return 4;
+			case 2 :
+				return 3;
+			case 3 :
+				return 2;
+			case 4 :
+				return 1;
+			case 5 :
+				return 0;
+			case 6 :
+				return 11;
+			case 7 :
+				return 10;
+			case 8 :
+				return 9;
+			case 9 :
+				return 8;
+			case 10 :
+				return 7;
+			case 11 :
+				return 6;
+			case 12 :
+				return 17;
+			case 13 :
+				return 16;
+			case 14 :
+				return 15;
+			case 15 :
+				return 14;
+			case 16 :
+				return 13;
+			case 17 :
+				return 12;
+			default :
+				return -1;
+		}
+	}
+
+	// ----------以下Bluetooth関連----------
 
 	@Override
 	public void onStart() {
@@ -164,15 +356,8 @@ public class BluetoothBattleActivity extends Activity {
 					byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
 					String readMessage = new String(readBuf, 0, msg.arg1);
-					// Log.d("Message", readMessage);
-					// 受信した値から相手プレイヤーの位置を反映
-					if(isNumber(readMessage)){
-						int oldIndex = Integer.parseInt(readMessage);
-						if(oldIndex >= 0 && oldIndex <= 17 && ObjectManager.getInstance().getOpponent() != null){
-							int newIndex = convertPanelIndex(oldIndex);
-							ObjectManager.getInstance().getOpponent().warp(newIndex);
-						}
-					}
+					Log.d("Message", readMessage);
+					synchronize(readMessage);
 					break;
 				case MESSAGE_DEVICE_NAME :
 					// save the connected device's name
@@ -185,15 +370,6 @@ public class BluetoothBattleActivity extends Activity {
 			}
 		}
 	};
-
-	private boolean isNumber(String message){
-		try {
-			 Integer.parseInt(message);
-			return true;
-		} catch (NumberFormatException nfex) {
-			return false;
-		}
-	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (D)
@@ -259,121 +435,6 @@ public class BluetoothBattleActivity extends Activity {
 				// Ensure this device is discoverable by others
 				ensureDiscoverable();
 				return true;
-		}
-		return false;
-	}
-	/**
-	 *
-	 * @return 画面の縦横サイズ
-	 */
-	private Point getWindowSize() {
-		Point p = new Point();
-		WindowManager wm = getWindowManager();
-		Display disp = wm.getDefaultDisplay();
-		disp.getSize(p);
-		return p;
-	}
-
-	/**
-	 * 各種Viewの追加
-	 *
-	 * @param frameLayout
-	 * @param width
-	 *            画面横サイズ
-	 * @param height
-	 *            画面縦サイズ
-	 */
-	private void setView(FrameLayout frameLayout, float width, float height) {
-		// エリアの区切り線を描画するView
-		FieldView fieldView;
-		fieldView = new FieldView(this, width, height);
-		frameLayout.addView(fieldView);
-
-		// エリア上のオブジェクト(プレイヤー、敵)を描画するView
-		BluetoothBattleObjectSurfaceView bluetoothBattleObjectSurfaceView;
-		bluetoothBattleObjectSurfaceView = new BluetoothBattleObjectSurfaceView(this, this, width, height);
-		frameLayout.addView(bluetoothBattleObjectSurfaceView);
-
-		AttackRangeManager arm = new AttackRangeManager(this, frameLayout, width, height);
-	}
-
-	/**
-	 *
-	 * @param oldIndex
-	 * @return 変換したパネルインデックス
-	 * @see 実際のパネルインデックスを見かけ上のものに変換する 解析的にできないものか・・・
-	 */
-	private int convertPanelIndex(int oldIndex) {
-		switch (oldIndex) {
-			case 0 :
-				return 5;
-			case 1 :
-				return 4;
-			case 2 :
-				return 3;
-			case 3 :
-				return 2;
-			case 4 :
-				return 1;
-			case 5 :
-				return 0;
-			case 6 :
-				return 11;
-			case 7 :
-				return 10;
-			case 8 :
-				return 9;
-			case 9 :
-				return 8;
-			case 10 :
-				return 7;
-			case 11 :
-				return 6;
-			case 12 :
-				return 17;
-			case 13 :
-				return 16;
-			case 14 :
-				return 15;
-			case 15 :
-				return 14;
-			case 16 :
-				return 13;
-			case 17 :
-				return 12;
-			default :
-				return -1;
-		}
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// 確認ダイアログの生成
-			AlertDialog.Builder alertDlg = new AlertDialog.Builder(this);
-			alertDlg.setTitle("選択");
-
-			alertDlg.setPositiveButton("終了", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					// Okボタン処理
-					finish();
-				}
-			});
-			alertDlg.setNeutralButton("いいえ", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					// Cancel ボタンクリック処理
-				}
-			});
-			alertDlg.setNegativeButton("Bluetooth接続", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					openOptionsMenu();
-				}
-			});
-
-			// 表示
-			alertDlg.create().show();
-			return true;
 		}
 		return false;
 	}

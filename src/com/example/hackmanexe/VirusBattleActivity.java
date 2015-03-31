@@ -60,7 +60,7 @@ public class VirusBattleActivity extends Activity {
 		virusBattleObjectSurfaceView = new VirusBattleObjectSurfaceView(this, this, width, height);
 		frameLayout.addView(virusBattleObjectSurfaceView);
 
-		AttackRangeManager arm = new AttackRangeManager(this, frameLayout, width, height);
+		AttackRangeDrawManager arm = new AttackRangeDrawManager(this, frameLayout, width, height);
 	}
 
 	@Override

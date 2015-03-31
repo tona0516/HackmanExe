@@ -20,6 +20,7 @@ import com.example.hackmanexe.action.Sword;
 import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Opponent;
 import com.example.hackmanexe.fieldobject.Player;
 
 /**
@@ -33,10 +34,12 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	private float downX, downY, upX, upY; // タッチ座標,離れた座標
 	private final int flickSensitivity = 20;
 	private Player player;
-	private Player opponent;
+	private Opponent opponent;
 	private Thread thread;
 	private SurfaceHolder holder;
 	private Activity activity;
+	private String attackcommand = "null";
+	private Timer sendTimer;
 
 	public BluetoothBattleObjectSurfaceView(Context context, Activity activity,
 			float width, float height) {
@@ -45,7 +48,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(activity, Field.getInstance().getPanelInfo()[7], 320);
-		opponent = new Player(activity, Field.getInstance().getPanelInfo()[10], 320);
+		opponent = new Opponent(activity, Field.getInstance().getPanelInfo()[10], 320);
 
 		// オブジェクトリストに加える(描画時に使用)
 		ObjectManager.getInstance().setPlayer(player);
@@ -54,17 +57,25 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 		ObjectManager.getInstance().getObjectList().add(opponent);
 
 		// 自分の位置を相手に送信するTimer
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
+		sendTimer = new Timer();
+		sendTimer.scheduleAtFixedRate(new TimerTask() {
+			StringBuilder sb = new StringBuilder();
 			@Override
 			public void run() {
 				if (BluetoothBattleActivity.mChatService != null) {
 					if (BluetoothBattleActivity.mChatService.getState() == 3) {// 通信可能状態になったら
-						sendMessage("" + player.getCurrentPanelInfo().getIndex());
+						sb.append(player.getCurrentPanelInfo().getIndex());
+						sb.append(",");
+						sb.append(player.getHP());
+						sb.append(",");
+						sb.append(attackcommand);
+						sendMessage(sb.toString());
+						sb.setLength(0);
+						attackcommand = "null";
 					}
 				}
 			}
-		}, 0, 10);
+		}, 0, 1000);
 
 	}
 	@Override
@@ -81,6 +92,10 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread = null;
+		if (sendTimer != null) {
+			sendTimer.cancel();
+			sendTimer = null;
+		}
 	}
 
 	/**
@@ -157,25 +172,25 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	private void onUpFlickOnRightSide() {
 		player.addAction(new PaladinSword(activity, player)); // パラディンソード
 		player.action();
-		// sendMessage("Paladin");
+		attackcommand = "PaladinSword"; // 各攻撃クラスに識別子を属性として持たせたほうがいいかも
 	}
 
 	private void onDownFlickOnRightSide() {
 		player.addAction(new LongSword(activity, player)); // ロングソード
 		player.action();
-		// sendMessage("Long");
+		attackcommand = "LongSword";
 	}
 
 	private void onRightFlickOnRightSide() {
 		player.addAction(new WideSword(activity, player)); // ワイドソード
 		player.action();
-		// sendMessage("Wide");
+		attackcommand = "WideSword";
 	}
 
 	private void onLeftFlickOnRightSide() {
 		player.addAction(new Sword(activity, player)); // ソード
 		player.action();
-		// sendMessage("Sword");
+		attackcommand = "Sword";
 		// MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
 	}
 
@@ -237,7 +252,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 						float bottom = DrawingPosition.area.centerPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
 						canvas.drawRect(left, top, right, bottom, paint);
 					} else {
-						canvas.drawCircle(o.getX(), o.getY(), width/20, paint);
+						canvas.drawCircle(o.getX(), o.getY(), width / 20, paint);
 					}
 					paint.setStyle(Paint.Style.FILL);
 					paint.setTextSize(100);
@@ -249,16 +264,18 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 		}
 	}
 
-	private void sendMessage(String message) {
+	private boolean sendMessage(String message) {
 		// Check that we're actually connected before trying anything
 		if (BluetoothBattleActivity.mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
-			return;
+			return false;
 		}
 		// Check that there's actually something to send
 		if (message.length() > 0) {
 			// Get the message bytes and tell the BluetoothChatService to write
 			byte[] send = message.getBytes();
 			BluetoothBattleActivity.mChatService.write(send);
+			return true;
 		}
+		return false;
 	}
 }

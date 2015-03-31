@@ -6,6 +6,7 @@ import com.example.hackmanexe.Field;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Opponent;
 import com.example.hackmanexe.fieldobject.Player;
 
 /**
@@ -13,7 +14,7 @@ import com.example.hackmanexe.fieldobject.Player;
  *
  * @author meem
  */
-abstract class AttackAction extends Action{
+abstract class AttackAction extends Action {
 	protected int power; // 攻撃力
 	protected long interval; // 攻撃範囲が移動するスピード
 	protected Activity activity; // UIを描画するActivity
@@ -37,10 +38,10 @@ abstract class AttackAction extends Action{
 	protected boolean judgeConfliction(int index) {
 		FieldObject o = Field.getInstance().getPanelInfo()[index].getObject();
 		// 攻撃者が自分自身の攻撃に当たらないようにする処理
-		if ((o instanceof Enemy || o instanceof FieldItem) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムにあたれば
+		if ((o instanceof Enemy || o instanceof FieldItem || o instanceof Opponent) && fieldObject instanceof Player) { // 攻撃者がプレイヤーで敵orアイテムor相手プレイヤーにあたれば
 			calculateHP(o);
 			return true;
-		} else if ((o instanceof Player || o instanceof FieldItem) && fieldObject instanceof Enemy) { // 攻撃者が敵でプレイヤーorアイテムにあたれば
+		} else if ((o instanceof Player || o instanceof FieldItem) && (fieldObject instanceof Enemy || fieldObject instanceof Opponent)) { // 攻撃者が敵or相手プレイヤーでプレイヤーorアイテムにあたれば
 			calculateHP(o);
 			return true;
 		}

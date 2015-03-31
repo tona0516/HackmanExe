@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.view.View;
 
-import com.example.hackmanexe.AttackRangeManager;
+import com.example.hackmanexe.AttackRangeDrawManager;
 import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
@@ -43,16 +43,16 @@ public class CannoTarget extends RelativePositionAttack {
 					@Override
 					public void run() {
 						if (!iterator.hasNext() || lockOnFlag) {
-							AttackRangeManager.t2[prePanelIndex].setVisibility(View.INVISIBLE);
+							AttackRangeDrawManager.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							if (timer != null) {
 								timer.cancel();
 								timer = null;
 							}
 						} else if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
-								AttackRangeManager.t2[prePanelIndex].setVisibility(View.INVISIBLE);
+								AttackRangeDrawManager.t2[prePanelIndex].setVisibility(View.INVISIBLE);
 							int index = Integer.valueOf(iterator.next());
-							AttackRangeManager.t2[index].setVisibility(View.VISIBLE);
+							AttackRangeDrawManager.t2[index].setVisibility(View.VISIBLE);
 							if (judgeConfliction(index)) {
 								lockOnFlag = true;
 							}

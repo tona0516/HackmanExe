@@ -7,7 +7,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
-import com.example.hackmanexe.AttackRangeManager;
+import com.example.hackmanexe.AttackRangeDrawManager;
 import com.example.hackmanexe.fieldobject.FieldObject;
 
 public class CannoAttack extends AbsolutePositionAttack {
@@ -30,10 +30,10 @@ public class CannoAttack extends AbsolutePositionAttack {
 						aa.setDuration(msec);
 						while (iterator.hasNext()) {
 							int index = Integer.valueOf(iterator.next());
-							AttackRangeManager.t[index].setVisibility(View.VISIBLE);
+							AttackRangeDrawManager.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
-							AttackRangeManager.t[index].startAnimation(aa);
-							AttackRangeManager.t[index].setVisibility(View.INVISIBLE);
+							AttackRangeDrawManager.t[index].startAnimation(aa);
+							AttackRangeDrawManager.t[index].setVisibility(View.INVISIBLE);
 						}
 					}
 				});

@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
-import com.example.hackmanexe.AttackRangeManager;
+import com.example.hackmanexe.AttackRangeDrawManager;
 import com.example.hackmanexe.fieldobject.FieldObject;
 
 /**
@@ -55,7 +55,7 @@ public class AbsolutePositionAttack extends AttackAction {
 					public void run() {
 						if (!iterator.hasNext()) {
 							if (prePanelIndex != -1)
-								AttackRangeManager.t[prePanelIndex].setVisibility(View.INVISIBLE);
+								AttackRangeDrawManager.t[prePanelIndex].setVisibility(View.INVISIBLE);
 							if (timer != null) {
 								timer.cancel();
 								timer = null;
@@ -63,9 +63,9 @@ public class AbsolutePositionAttack extends AttackAction {
 						}
 						if (iterator.hasNext()) {
 							if (prePanelIndex != -1)
-								AttackRangeManager.t[prePanelIndex].setVisibility(View.INVISIBLE);
+								AttackRangeDrawManager.t[prePanelIndex].setVisibility(View.INVISIBLE);
 							int index = Integer.valueOf(iterator.next());
-							AttackRangeManager.t[index].setVisibility(View.VISIBLE);
+							AttackRangeDrawManager.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
 							prePanelIndex = index;
 						}
@@ -87,10 +87,10 @@ public class AbsolutePositionAttack extends AttackAction {
 						aa.setDuration(msec);
 						while (iterator.hasNext()) {
 							int index = Integer.valueOf(iterator.next());
-							AttackRangeManager.t[index].setVisibility(View.VISIBLE);
+							AttackRangeDrawManager.t[index].setVisibility(View.VISIBLE);
 							judgeConfliction(index);
-							AttackRangeManager.t[index].startAnimation(aa);
-							AttackRangeManager.t[index].setVisibility(View.INVISIBLE);
+							AttackRangeDrawManager.t[index].startAnimation(aa);
+							AttackRangeDrawManager.t[index].setVisibility(View.INVISIBLE);
 						}
 					}
 				});

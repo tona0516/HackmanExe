@@ -3,13 +3,14 @@ package com.example.hackmanexe;
 import java.util.ArrayList;
 
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Opponent;
 import com.example.hackmanexe.fieldobject.Player;
 
 public class ObjectManager {
 
 	private static ArrayList<FieldObject> objectList;
 	private static Player player;
-	private static Player opponent;
+	private static Opponent opponent;
 	private static ObjectManager instance;
 
 	private ObjectManager() {
@@ -39,11 +40,11 @@ public class ObjectManager {
 		ObjectManager.player = player;
 	}
 
-	public Player getOpponent() {
+	public Opponent getOpponent() {
 		return opponent;
 	}
 
-	public void setOpponent(Player opponent) {
+	public void setOpponent(Opponent opponent) {
 		ObjectManager.opponent = opponent;
 	}
 

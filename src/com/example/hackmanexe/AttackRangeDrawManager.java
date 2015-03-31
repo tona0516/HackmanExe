@@ -12,11 +12,11 @@ import android.widget.FrameLayout;
  * @author meem activityが複数になったので、このクラスを経由してt,t2を参照させる
  */
 
-public class AttackRangeManager {
+public class AttackRangeDrawManager {
 	public static SurfaceView[] t = new SurfaceView[18]; // 攻撃範囲を描画するViewをパネル数作成
 	public static SurfaceView[] t2 = new SurfaceView[18]; // 攻撃範囲を描画するViewをパネル数作成
 
-	public AttackRangeManager(Activity activity, FrameLayout frameLayout,
+	public AttackRangeDrawManager(Activity activity, FrameLayout frameLayout,
 			float width, float height) {
 		for (int i = 0; i < 18; i++) {
 			t[i] = new SurfaceView(activity);
