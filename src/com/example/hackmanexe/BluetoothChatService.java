@@ -271,6 +271,7 @@ public class BluetoothChatService {
 	 * Indicate that the connection attempt failed and notify the UI Activity.
 	 */
 	private void connectionFailed() {
+		BluetoothBattleActivity.isRequest = false;
 		// Send a failure message back to the Activity
 		Message msg = mHandler.obtainMessage(BluetoothBattleActivity.MESSAGE_TOAST);
 		Bundle bundle = new Bundle();
@@ -286,6 +287,7 @@ public class BluetoothChatService {
 	 * Indicate that the connection was lost and notify the UI Activity.
 	 */
 	private void connectionLost() {
+		BluetoothBattleActivity.isRequest = false;
 		// Send a failure message back to the Activity
 		Message msg = mHandler.obtainMessage(BluetoothBattleActivity.MESSAGE_TOAST);
 		Bundle bundle = new Bundle();

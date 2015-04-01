@@ -1,7 +1,6 @@
 package com.example.hackmanexe;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,7 +37,7 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	private Thread thread;
 	private SurfaceHolder holder;
 	private Activity activity;
-	private String attackcommand = "null";
+	public static String attackcommand = "null";
 	private Timer sendTimer;
 
 	public BluetoothBattleObjectSurfaceView(Context context, Activity activity,
@@ -57,25 +56,25 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 		ObjectManager.getInstance().getObjectList().add(opponent);
 
 		// 自分の位置を相手に送信するTimer
-		sendTimer = new Timer();
-		sendTimer.scheduleAtFixedRate(new TimerTask() {
-			StringBuilder sb = new StringBuilder();
-			@Override
-			public void run() {
-				if (BluetoothBattleActivity.mChatService != null) {
-					if (BluetoothBattleActivity.mChatService.getState() == 3) {// 通信可能状態になったら
-						sb.append(player.getCurrentPanelInfo().getIndex());
-						sb.append(",");
-						sb.append(player.getHP());
-						sb.append(",");
-						sb.append(attackcommand);
-						sendMessage(sb.toString());
-						sb.setLength(0);
-						attackcommand = "null";
-					}
-				}
-			}
-		}, 0, 1000);
+//		sendTimer = new Timer();
+//		sendTimer.scheduleAtFixedRate(new TimerTask() {
+//			StringBuilder sb = new StringBuilder();
+//			@Override
+//			public void run() {
+//				if (BluetoothBattleActivity.mChatService != null) {
+//					if (BluetoothBattleActivity.mChatService.getState() == 3) {// 通信可能状態になったら
+//						sb.append(player.getCurrentPanelInfo().getIndex());
+//						sb.append(",");
+//						sb.append(player.getHP());
+//						sb.append(",");
+//						sb.append(attackcommand);
+//						sendMessage(sb.toString());
+//						sb.setLength(0);
+//						attackcommand = "null";
+//					}
+//				}
+//			}
+//		}, 0, 1000);
 
 	}
 	@Override
@@ -262,20 +261,5 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 			}
 			holder.unlockCanvasAndPost(canvas);
 		}
-	}
-
-	private boolean sendMessage(String message) {
-		// Check that we're actually connected before trying anything
-		if (BluetoothBattleActivity.mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
-			return false;
-		}
-		// Check that there's actually something to send
-		if (message.length() > 0) {
-			// Get the message bytes and tell the BluetoothChatService to write
-			byte[] send = message.getBytes();
-			BluetoothBattleActivity.mChatService.write(send);
-			return true;
-		}
-		return false;
 	}
 }

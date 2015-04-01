@@ -56,6 +56,9 @@ public class BluetoothBattleActivity extends Activity {
 	// Member object for the chat services
 	public static BluetoothChatService mChatService = null;
 
+	public static boolean isMaster = false;
+	public static boolean isRequest = false;
+
 	/**
 	 * ここから実行
 	 */
@@ -161,6 +164,19 @@ public class BluetoothBattleActivity extends Activity {
 	 * @param readMessage
 	 */
 	private void synchronize(String readMessage) {
+		if (readMessage.equals("first")) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
+			sb.append(",");
+			sb.append(ObjectManager.getInstance().getPlayer().getHP());
+			sb.append(",");
+			sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
+			sendMessage(sb.toString());
+			sb.setLength(0);
+			BluetoothBattleObjectSurfaceView.attackcommand = "null";
+			return;
+		}
+
 		String[] opponentInfo = readMessage.split(",");
 		Opponent opponent = ObjectManager.getInstance().getOpponent();
 
@@ -204,6 +220,31 @@ public class BluetoothBattleActivity extends Activity {
 			default :
 				break;
 		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
+		sb.append(",");
+		sb.append(ObjectManager.getInstance().getPlayer().getHP());
+		sb.append(",");
+		sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
+		sendMessage(sb.toString());
+		sb.setLength(0);
+		BluetoothBattleObjectSurfaceView.attackcommand = "null";
+	}
+
+	private boolean sendMessage(String message) {
+		// Check that we're actually connected before trying anything
+		if (BluetoothBattleActivity.mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+			return false;
+		}
+		// Check that there's actually something to send
+		if (message.length() > 0) {
+			// Get the message bytes and tell the BluetoothChatService to write
+			byte[] send = message.getBytes();
+			BluetoothBattleActivity.mChatService.write(send);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -363,6 +404,10 @@ public class BluetoothBattleActivity extends Activity {
 					// save the connected device's name
 					mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
 					Toast.makeText(getApplicationContext(), "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+					if (isRequest) {
+						isMaster = true;
+						synchronize("first");
+					}
 					break;
 				case MESSAGE_TOAST :
 					Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
@@ -425,11 +470,13 @@ public class BluetoothBattleActivity extends Activity {
 				// Launch the DeviceListActivity to see devices and do scan
 				serverIntent = new Intent(this, DeviceListActivity.class);
 				startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+				isRequest = true;
 				return true;
 			case R.id.insecure_connect_scan :
 				// Launch the DeviceListActivity to see devices and do scan
 				serverIntent = new Intent(this, DeviceListActivity.class);
 				startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+				isRequest = true;
 				return true;
 			case R.id.discoverable :
 				// Ensure this device is discoverable by others
