@@ -58,7 +58,7 @@ public class BluetoothBattleActivity extends Activity {
 
 	public static boolean isMaster = false;
 	public static boolean isRequest = false;
-
+	public static Activity activity;
 	/**
 	 * ここから実行
 	 */
@@ -66,6 +66,7 @@ public class BluetoothBattleActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		activity = this;
 
 		// 画面サイズの取得
 		Point point = getWindowSize();
@@ -164,18 +165,20 @@ public class BluetoothBattleActivity extends Activity {
 	 * @param readMessage
 	 */
 	private void synchronize(String readMessage) {
-		if (readMessage.equals("first")) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
-			sb.append(",");
-			sb.append(ObjectManager.getInstance().getPlayer().getHP());
-			sb.append(",");
-			sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
-			sendMessage(sb.toString());
-			sb.setLength(0);
-			BluetoothBattleObjectSurfaceView.attackcommand = "null";
+
+		//自分の情報を送信
+		StringBuilder sb = new StringBuilder();
+		sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
+		sb.append(",");
+		sb.append(ObjectManager.getInstance().getPlayer().getHP());
+		sb.append(",");
+		sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
+		sendMessage(sb.toString());
+		sb.setLength(0);
+		BluetoothBattleObjectSurfaceView.attackcommand = "null";
+
+		if (readMessage.equals("first"))
 			return;
-		}
 
 		String[] opponentInfo = readMessage.split(",");
 		Opponent opponent = ObjectManager.getInstance().getOpponent();
@@ -220,16 +223,6 @@ public class BluetoothBattleActivity extends Activity {
 			default :
 				break;
 		}
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
-		sb.append(",");
-		sb.append(ObjectManager.getInstance().getPlayer().getHP());
-		sb.append(",");
-		sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
-		sendMessage(sb.toString());
-		sb.setLength(0);
-		BluetoothBattleObjectSurfaceView.attackcommand = "null";
 	}
 
 	private boolean sendMessage(String message) {
@@ -397,7 +390,7 @@ public class BluetoothBattleActivity extends Activity {
 					byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
 					String readMessage = new String(readBuf, 0, msg.arg1);
-					Log.d("Message", readMessage);
+					//Log.d("Message", readMessage);
 					synchronize(readMessage);
 					break;
 				case MESSAGE_DEVICE_NAME :
