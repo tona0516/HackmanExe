@@ -58,6 +58,7 @@ public class BluetoothChatService {
 	private ConnectThread mConnectThread;
 	private ConnectedThread mConnectedThread;
 	private int mState;
+	private Context mContext;
 
 	// Constants that indicate the current connection state
 	public static final int STATE_NONE = 0; // we're doing nothing
@@ -80,6 +81,7 @@ public class BluetoothChatService {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
 		mState = STATE_NONE;
 		mHandler = handler;
+		mContext = context;
 	}
 
 	/**
@@ -288,6 +290,7 @@ public class BluetoothChatService {
 	 */
 	private void connectionLost() {
 		BluetoothBattleActivity.isRequest = false;
+
 		// Send a failure message back to the Activity
 		Message msg = mHandler.obtainMessage(BluetoothBattleActivity.MESSAGE_TOAST);
 		Bundle bundle = new Bundle();
@@ -297,6 +300,8 @@ public class BluetoothChatService {
 
 		// Start the service over to restart listening mode
 		BluetoothChatService.this.start();
+
+		BluetoothBattleActivity.activity.finish();
 	}
 
 	/**

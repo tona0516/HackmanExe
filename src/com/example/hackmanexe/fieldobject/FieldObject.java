@@ -20,7 +20,7 @@ import com.example.hackmanexe.action.SupportAction;
  */
 abstract public class FieldObject {
 	protected PanelInfo currentPanelInfo;
-	protected int HP;
+	protected volatile int HP;
 	protected ArrayList<Action> actionList;
 	protected float x, y;
 	protected Timer smoothMovementTimer;
@@ -39,11 +39,11 @@ abstract public class FieldObject {
 		return currentPanelInfo;
 	}
 
-	public int getHP() {
+	public synchronized int getHP() {
 		return HP;
 	}
 
-	public void setHP(int HP) {
+	public synchronized void setHP(int HP) {
 		this.HP = HP;
 		if (this.HP == 0) {
 			deathProcess();

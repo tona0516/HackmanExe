@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -244,6 +245,11 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
 					paint.setStyle(Paint.Style.STROKE);
+
+					if(o instanceof Opponent){
+						Log.d("opponentHP", ""+o.getHP());
+					}
+
 					if (o instanceof FieldItem) {
 						float left = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x + width / 24;
 						float top = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;
