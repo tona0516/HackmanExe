@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+
 import com.example.hackmanexe.Field;
 import com.example.hackmanexe.ObjectManager;
 import com.example.hackmanexe.PanelInfo;
@@ -103,6 +105,8 @@ abstract public class FieldObject {
 			return true;
 		else if ((destination.isEnemyPanel() && this instanceof Enemy)) // 移動先がエネミーパネルかつ自分がエネミー
 			return true;
+		else if ((destination.isEnemyPanel() && this instanceof Opponent)) // 移動先がエネミーパネルかつ自分がエネミー
+			return true;
 		else if ((this instanceof FieldItem)) // 自分がアイテムなら
 			return true;
 		else
@@ -161,6 +165,7 @@ abstract public class FieldObject {
 	public boolean moveUpSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
+		Log.d("dummyCheck", "ok");
 		final PanelInfo p = currentPanelInfo.getUp();
 		if (canMove(p)) {
 			dummyObject = new DummyObject(p);
@@ -201,6 +206,7 @@ abstract public class FieldObject {
 	public boolean moveDownSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
+		Log.d("dummyCheck", "ok");
 		final PanelInfo p = currentPanelInfo.getDown();
 		if (canMove(p)) {
 			dummyObject = new DummyObject(p);
@@ -241,6 +247,7 @@ abstract public class FieldObject {
 	public boolean moveRightSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
+		Log.d("dummyCheck", "ok");
 		final PanelInfo p = currentPanelInfo.getRight();
 		if (canMove(p)) {
 			dummyObject = new DummyObject(p);
@@ -281,6 +288,7 @@ abstract public class FieldObject {
 	public boolean moveLeftSmoothly(long durationMillis) {
 		if (dummyObject != null)
 			return false;
+		Log.d("dummyCheck", "ok");
 		final PanelInfo p = currentPanelInfo.getLeft();
 		if (canMove(p)) {
 			dummyObject = new DummyObject(p);

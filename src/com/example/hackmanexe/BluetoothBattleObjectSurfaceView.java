@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -38,7 +37,8 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	private Thread thread;
 	private SurfaceHolder holder;
 	private Activity activity;
-	public static String attackcommand = "null";
+	public static String attackCommand = "null";
+	public static String moveCommand = "null";
 	private Timer sendTimer;
 
 	public BluetoothBattleObjectSurfaceView(Context context, Activity activity,
@@ -55,28 +55,6 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 		ObjectManager.getInstance().setOpponent(opponent);
 		ObjectManager.getInstance().getObjectList().add(player);
 		ObjectManager.getInstance().getObjectList().add(opponent);
-
-		// 自分の位置を相手に送信するTimer
-//		sendTimer = new Timer();
-//		sendTimer.scheduleAtFixedRate(new TimerTask() {
-//			StringBuilder sb = new StringBuilder();
-//			@Override
-//			public void run() {
-//				if (BluetoothBattleActivity.mChatService != null) {
-//					if (BluetoothBattleActivity.mChatService.getState() == 3) {// 通信可能状態になったら
-//						sb.append(player.getCurrentPanelInfo().getIndex());
-//						sb.append(",");
-//						sb.append(player.getHP());
-//						sb.append(",");
-//						sb.append(attackcommand);
-//						sendMessage(sb.toString());
-//						sb.setLength(0);
-//						attackcommand = "null";
-//					}
-//				}
-//			}
-//		}, 0, 1000);
-
 	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -172,25 +150,25 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	private void onUpFlickOnRightSide() {
 		player.addAction(new PaladinSword(activity, player)); // パラディンソード
 		player.action();
-		attackcommand = "PaladinSword"; // 各攻撃クラスに識別子を属性として持たせたほうがいいかも
+		attackCommand = "PaladinSword"; // 各攻撃クラスに識別子を属性として持たせたほうがいいかも
 	}
 
 	private void onDownFlickOnRightSide() {
 		player.addAction(new LongSword(activity, player)); // ロングソード
 		player.action();
-		attackcommand = "LongSword";
+		attackCommand = "LongSword";
 	}
 
 	private void onRightFlickOnRightSide() {
 		player.addAction(new WideSword(activity, player)); // ワイドソード
 		player.action();
-		attackcommand = "WideSword";
+		attackCommand = "WideSword";
 	}
 
 	private void onLeftFlickOnRightSide() {
 		player.addAction(new Sword(activity, player)); // ソード
 		player.action();
-		attackcommand = "Sword";
+		attackCommand = "Sword";
 		// MainActivity.drawerLayout.openDrawer(Gravity.RIGHT); // チップ選択画面を表示
 	}
 
@@ -199,23 +177,31 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 	}
 
 	private void onUpFlickOnLeftSide() {
-		player.moveUp();
-		// player.moveUpSmoothly(250);
+		// player.moveUp();
+		player.moveUpSmoothly(250);
+		// moveCommand = "moveUp";
+		moveCommand = "moveUpSmoothly";
 	}
 
 	private void onDownFlickOnLeftSide() {
-		player.moveDown();
-		// player.moveDownSmoothly(250);
+		// player.moveDown();
+		player.moveDownSmoothly(250);
+		// moveCommand = "moveDown";
+		moveCommand = "moveDownSmoothly";
 	}
 
 	private void onRightFlickOnLeftSide() {
-		player.moveRight();
-		// player.moveRightSmoothly(250);
+		// player.moveRight();
+		player.moveRightSmoothly(250);
+		// moveCommand = "moveRight";
+		moveCommand = "moveRightSmoothly";
 	}
 
 	private void onLeftFlickOnLeftSide() {
-		player.moveLeft();
-		// player.moveLeftSmoothly(250);
+		// player.moveLeft();
+		player.moveLeftSmoothly(250);
+		// moveCommand = "moveLeft";
+		moveCommand = "moveLeftSmoothly";
 	}
 
 	private void onTapOnLeftSide() {
@@ -245,11 +231,6 @@ public class BluetoothBattleObjectSurfaceView extends SurfaceView implements Sur
 				if (o != null) { // これやっとかないとnull参照して落ちる
 					paint.reset();
 					paint.setStyle(Paint.Style.STROKE);
-
-					if(o instanceof Opponent){
-						Log.d("opponentHP", ""+o.getHP());
-					}
-
 					if (o instanceof FieldItem) {
 						float left = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].x + width / 24;
 						float top = DrawingPosition.area.upperLeftPoint[o.getCurrentPanelInfo().getIndex()].y + height / 12;

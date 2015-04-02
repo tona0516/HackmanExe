@@ -290,7 +290,6 @@ public class BluetoothChatService {
 	 */
 	private void connectionLost() {
 		BluetoothBattleActivity.isRequest = false;
-
 		// Send a failure message back to the Activity
 		Message msg = mHandler.obtainMessage(BluetoothBattleActivity.MESSAGE_TOAST);
 		Bundle bundle = new Bundle();

@@ -56,9 +56,9 @@ public class BluetoothBattleActivity extends Activity {
 	// Member object for the chat services
 	public static BluetoothChatService mChatService = null;
 
-	public static boolean isMaster = false;
-	public static boolean isRequest = false;
 	public static Activity activity;
+	public static boolean isRequest = false;
+	public static boolean isMaster = false;
 	/**
 	 * ここから実行
 	 */
@@ -165,17 +165,18 @@ public class BluetoothBattleActivity extends Activity {
 	 * @param readMessage
 	 */
 	private void synchronize(String readMessage) {
-
-		//自分の情報を送信
+		// 自分の情報を送信
 		StringBuilder sb = new StringBuilder();
-		sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
+		// sb.append(ObjectManager.getInstance().getPlayer().getCurrentPanelInfo().getIndex());
+		sb.append(BluetoothBattleObjectSurfaceView.moveCommand);
 		sb.append(",");
 		sb.append(ObjectManager.getInstance().getPlayer().getHP());
 		sb.append(",");
-		sb.append(BluetoothBattleObjectSurfaceView.attackcommand);
+		sb.append(BluetoothBattleObjectSurfaceView.attackCommand);
 		sendMessage(sb.toString());
 		sb.setLength(0);
-		BluetoothBattleObjectSurfaceView.attackcommand = "null";
+		BluetoothBattleObjectSurfaceView.attackCommand = "null";
+		BluetoothBattleObjectSurfaceView.moveCommand = "null";
 
 		if (readMessage.equals("first"))
 			return;
@@ -187,13 +188,45 @@ public class BluetoothBattleActivity extends Activity {
 		if (opponent == null)
 			return;
 
-		// 相手の位置の同期
-		if (isNumber(opponentInfo[0])) {
-			int oldIndex = Integer.parseInt(opponentInfo[0]);
-			if (oldIndex >= 0 && oldIndex <= 17) {
-				int newIndex = convertPanelIndex(oldIndex);
-				opponent.warp(newIndex);
-			}
+		// // 相手の位置の同期
+		// if (isNumber(opponentInfo[0])) {
+		// int oldIndex = Integer.parseInt(opponentInfo[0]);
+		// if (oldIndex >= 0 && oldIndex <= 17) {
+		// int newIndex = convertPanelIndex(oldIndex);
+		// opponent.warp(newIndex);
+		// }
+		// }
+
+		Log.d("moveCommand", opponentInfo[0]);
+
+		// 線対称なので左右は逆方向へ移動
+		switch (opponentInfo[0]) {
+			case "moveUp" :
+				opponent.moveUp();
+				break;
+			case "moveDown" :
+				opponent.moveDown();
+				break;
+			case "moveRight" :
+				opponent.moveLeft();
+				break;
+			case "moveLeft" :
+				opponent.moveRight();
+				break;
+			case "moveUpSmoothly" :
+				opponent.moveUpSmoothly(250);
+				break;
+			case "moveDownSmoothly" :
+				opponent.moveDownSmoothly(250);
+				break;
+			case "moveRightSmoothly" :
+				opponent.moveLeftSmoothly(250);
+				break;
+			case "moveLeftSmoothly" :
+				opponent.moveRightSmoothly(250);
+				break;
+			default :
+				break;
 		}
 
 		// 相手のHPの同期
@@ -226,6 +259,10 @@ public class BluetoothBattleActivity extends Activity {
 	}
 
 	private boolean sendMessage(String message) {
+
+		if (BluetoothBattleActivity.mChatService == null) {
+			return false;
+		}
 		// Check that we're actually connected before trying anything
 		if (BluetoothBattleActivity.mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
 			return false;
@@ -390,7 +427,7 @@ public class BluetoothBattleActivity extends Activity {
 					byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
 					String readMessage = new String(readBuf, 0, msg.arg1);
-					//Log.d("Message", readMessage);
+					// Log.d("Message", readMessage);
 					synchronize(readMessage);
 					break;
 				case MESSAGE_DEVICE_NAME :
