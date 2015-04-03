@@ -20,6 +20,7 @@ import com.example.hackmanexe.action.WideSword;
 import com.example.hackmanexe.fieldobject.Enemy;
 import com.example.hackmanexe.fieldobject.FieldItem;
 import com.example.hackmanexe.fieldobject.FieldObject;
+import com.example.hackmanexe.fieldobject.Ghosler;
 import com.example.hackmanexe.fieldobject.Metall;
 import com.example.hackmanexe.fieldobject.Player;
 
@@ -46,14 +47,15 @@ public class VirusBattleObjectSurfaceView extends SurfaceView implements Surface
 
 		// プレイヤーフィールド中央にプレイヤーオブジェクトの生成
 		player = new Player(activity, Field.getInstance().getPanelInfo()[7], 320);
-		Metall metall = new Metall(activity, Field.getInstance().getPanelInfo()[11], player);
+		//Metall metall = new Metall(activity, Field.getInstance().getPanelInfo()[11], player);
+		Ghosler ghosler = new Ghosler(activity, Field.getInstance().getPanelInfo()[11], player);
 
 		// オブジェクトリストに加える(描画時に使用)
 		enemyList = new ArrayList<Enemy>();
 		ObjectManager.getInstance().setPlayer(player);
 		ObjectManager.getInstance().getObjectList().add(player);
-		ObjectManager.getInstance().getObjectList().add(metall);
-		enemyList.add(metall);
+		ObjectManager.getInstance().getObjectList().add(ghosler);
+		enemyList.add(ghosler);
 
 	}
 	@Override

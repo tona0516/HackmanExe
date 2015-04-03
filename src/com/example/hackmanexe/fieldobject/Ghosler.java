@@ -3,9 +3,15 @@ package com.example.hackmanexe.fieldobject;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import android.app.Activity;
+import android.util.Log;
 
 import com.example.hackmanexe.VirusBattleActivity;
 import com.example.hackmanexe.PanelInfo;
+import com.example.hackmanexe.action.Punch;
+import com.example.hackmanexe.action.Shockwave;
 
 /**
  * メットールクラス 移動はできる。攻撃はまだ
@@ -20,28 +26,32 @@ public class Ghosler extends Enemy {
 	//private int prePlayerLine = -1;
 	//private int preOwnLine = -1;
 	private Ghosler ghosler;
+	private Player player;
+	private Activity activity;
+	private Punch punch = null;
+
+	private int sameLineTime = 0;
+	private int waitTime1 = 0;
+	private int waitTime2 = 0;
+	private int phase = 0;
+	private int preOwnIndex = 0;
+	
+	private Timer timer1;
 	private Timer timer2;
 
-	private Player player;
-	private VirusBattleActivity virusBattleActivity;
-
-	//private int phase = 1;
-	private int sameLineTime = 0;
-	private Timer timer1;
-
-	public Ghosler(VirusBattleActivity _mainActivity, PanelInfo _panelInfo,
+	public Ghosler(Activity _mainActivity, PanelInfo _panelInfo,
 			Player _player) {
 		super(_panelInfo, HP);
 
 		ghosler = this;
 		player = _player;
-		virusBattleActivity = _mainActivity;
+		activity = _mainActivity;
 
 		// 動作アルゴリズム
 		timer1 = new Timer();
-		timer1Task(); // 代わりにタイマー1をセット
-		//timer2 = new Timer();
-		//changeTimer(); // Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
+		//timer1Task();
+		timer2 = new Timer();
+		changeTimer(); // Timerを切り替えるメソッド（ここでは1に切り替えを行っている）
 
 	}
 
@@ -54,6 +64,7 @@ public class Ghosler extends Enemy {
 			@Override
 			public void run() {
 				// 自分・プレイヤーの位置を取得
+				int currentPlayerIndex = player.currentPanelInfo.getIndex();
 				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
 				int currentOwnLine = ghosler.getCurrentPanelInfo().getLine();
 				PanelInfo pi = ghosler.getCurrentPanelInfo();
@@ -70,10 +81,12 @@ public class Ghosler extends Enemy {
 					escapeWarp(pi);
 				}
 				//}
-
-				//if (moveTime >= 5) { // 一定回数移動したら
-					//changeTimer(); // 追跡＆攻撃動作に切り替え
-				//}
+				if (waitTime1 >= 60) { // 一定時間待機したら、消失＆攻撃に移行
+					waitTime1 = 0;
+					changeTimer();
+				}
+				waitTime1++;
+				
 			}
 		}, 1000, 100);
 	}
@@ -81,45 +94,35 @@ public class Ghosler extends Enemy {
 	/**
 	 * 追跡動作と攻撃動作を行うタイマーをセット
 	 */
-	/*private void timer2Task() {
+	private void timer2Task() {
 		timer2 = new Timer();
-		timer2.scheduleAtFixedRate(new TimerTask() { // 0.3秒ごとに実行
+		timer2.scheduleAtFixedRate(new TimerTask() { // 0.5秒ごとに実行
 			@Override
 			public void run() {
-				// 自分・プレイヤーの位置を取得
-				int currentPlayerLine = player.getCurrentPanelInfo().getLine();
-				int currentOwnLine = rabbily.getCurrentPanelInfo().getLine();
-				PanelInfo pi = rabbily.getCurrentPanelInfo();
-
-				if (rabbiling == null || !rabbiling.isActing()) {
-					if (currentPlayerLine == currentOwnLine) { // 相手が同じラインに居れば
-						try {
-							TimeUnit.MILLISECONDS.sleep(150); // 振りかぶって（少し待って）
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						// 攻撃!!
-						rabbiling = new Rabbiling(mainActivity, rabbily);
-						rabbily.addAction(rabbiling);
-						rabbily.action();
-						moveTime = 0; // 移動回数をリセットして
-						changeTimer(); // ランダム移動動作に切り替え
-
-					} else if (currentPlayerLine < currentOwnLine) { // 自身より上にプレイヤーいたら
-						moveUp();
-						Log.d(this.toString(), "up");
-					} else if (currentPlayerLine > currentOwnLine) {// 下にいたら
-						moveDown();
-						Log.d(this.toString(), "down");
+				if(phase == 0){
+					preOwnIndex = ghosler.currentPanelInfo.getIndex();	//現在位置を攻撃前の位置として保存
+					phase++;
+					if(!warp(player.currentPanelInfo.getRight().getIndex())){	//目の前に移動
+						changeTimer();
 					}
-					prePlayerLine = currentPlayerLine;
-					preOwnLine = currentOwnLine;
 				}
+				if(waitTime2 >= 5 && phase == 1){
+					punch = new Punch(activity, ghosler);
+					ghosler.addAction(punch);
+					ghosler.action();	//攻撃!
+					phase++;
+				}
+				if(phase==2){
+					warp(preOwnIndex);
+					waitTime2 = 0;
+					phase = 0;
+					changeTimer();
+				}
+				waitTime2++;
 			}
-		}, 300, 300);
+		}, 0, 500);
 
-	}*/
+	}
 
 	@Override
 	public void deathProcess() {
@@ -128,10 +131,10 @@ public class Ghosler extends Enemy {
 			timer1.cancel();
 			timer1 = null;
 		}
-		/*if (timer2 != null) {
+		if (timer2 != null) {
 			timer2.cancel();
 			timer2 = null;
-		}*/
+		}
 	}
 
 	/**
@@ -174,7 +177,7 @@ public class Ghosler extends Enemy {
 	/**
 	 * 実行するタイマーの切り替えを行う
 	 */
-	/*private void changeTimer() {
+	private void changeTimer() {
 		if (timer2 != null) { // タイマー2が起動しているなら
 			timer2.cancel(); // タイマー2をキャンセル
 			timer2 = null; // タイマー2を未セット状態に
@@ -185,7 +188,7 @@ public class Ghosler extends Enemy {
 			timer1 = new Timer();
 			timer2Task();
 		}
-	}*/
+	}
 
 }
 
