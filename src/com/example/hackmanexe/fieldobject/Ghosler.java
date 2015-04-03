@@ -106,13 +106,13 @@ public class Ghosler extends Enemy {
 						changeTimer();
 					}
 				}
-				if(waitTime2 >= 5 && phase == 1){
+				if(waitTime2 >= 6 && phase == 1){
 					punch = new Punch(activity, ghosler);
 					ghosler.addAction(punch);
 					ghosler.action();	//攻撃!
 					phase++;
 				}
-				if(phase==2){
+				if(waitTime2 >= 7 && phase==2){
 					warp(preOwnIndex);
 					waitTime2 = 0;
 					phase = 0;
